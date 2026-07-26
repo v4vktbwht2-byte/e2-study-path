@@ -1,0 +1,62 @@
+.topBar {
+  position: sticky;
+  z-index: 20;
+  top: 0;
+  padding-top: var(--safe-area-top);
+  border-bottom: 1px solid var(--color-border);
+  background: color-mix(in srgb, var(--color-surface) 94%, transparent);
+  backdrop-filter: blur(12px);
+}
+
+.inner {
+  display: flex;
+  width: 100%;
+  max-width: var(--content-max-width);
+  min-height: 3.5rem;
+  align-items: center;
+  gap: var(--space-2);
+  margin: 0 auto;
+  padding: var(--space-2) max(var(--space-4), var(--safe-area-right)) var(--space-2)
+    max(var(--space-4), var(--safe-area-left));
+}
+
+.heading {
+  min-width: 0;
+  flex: 1 1 auto;
+}
+
+.title {
+  margin: 0;
+  color: var(--color-text);
+  font-size: var(--font-size-lg);
+  line-height: var(--line-height-compact);
+}
+
+.subtitle {
+  overflow: hidden;
+  color: var(--color-text-muted);
+  font-size: var(--font-size-sm);
+  line-height: var(--line-height-compact);
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.leading,
+.actions {
+  display: flex;
+  flex: 0 0 auto;
+  align-items: center;
+  gap: var(--space-1);
+}
+
+.leading > :is(a, button),
+.actions > :is(a, button) {
+  min-width: var(--tap-target-min);
+  min-height: var(--tap-target-min);
+}
+
+@supports not (backdrop-filter: blur(1px)) {
+  .topBar {
+    background: var(--color-surface);
+  }
+}

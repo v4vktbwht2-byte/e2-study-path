@@ -1,0 +1,41 @@
+.topActions {
+  display: flex;
+  align-items: center;
+  gap: var(--space-1, 4px);
+}
+
+.topLink {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 44px;
+  min-height: 44px;
+  padding-inline: var(--space-2, 8px);
+  border-radius: 10px;
+  color: var(--color-primary-strong);
+  font-size: 0.875rem;
+  font-weight: 700;
+  text-decoration: none;
+}
+
+.topLink:hover {
+  background: var(--color-surface-muted);
+}
+
+.loading {
+  display: grid;
+  min-height: 12rem;
+  place-items: center;
+  color: var(--color-text-muted);
+  text-align: center;
+}
+
+@media (max-width: 21rem) {
+  .topActions {
+    gap: 0;
+  }
+
+  .topLink {
+    padding-inline: 4px;
+  }
+}

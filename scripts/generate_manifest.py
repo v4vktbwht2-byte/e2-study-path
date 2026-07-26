@@ -27,6 +27,8 @@ def is_excluded(path: Path) -> bool:
 
     if path.resolve() in EXCLUDED:
         return True
+    if path.name.endswith(".tsbuildinfo"):
+        return True
     relative_parts = path.relative_to(ROOT).parts
     return any(part in EXCLUDED_DIRECTORY_NAMES for part in relative_parts)
 

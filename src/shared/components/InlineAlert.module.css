@@ -1,0 +1,83 @@
+.alert {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  gap: var(--space-3);
+  padding: var(--space-3) var(--space-4);
+  border: 1px solid;
+  border-radius: var(--radius-button);
+}
+
+.info {
+  border-color: var(--color-info);
+  background: var(--color-info-surface);
+}
+
+.success {
+  border-color: var(--color-success);
+  background: var(--color-success-surface);
+}
+
+.warning {
+  border-color: var(--color-warning);
+  background: var(--color-warning-surface);
+}
+
+.danger {
+  border-color: var(--color-danger);
+  background: var(--color-danger-surface);
+}
+
+.icon {
+  display: inline-flex;
+  width: 1.5rem;
+  height: 1.5rem;
+  align-items: center;
+  justify-content: center;
+  margin-top: 0.1rem;
+  border: 2px solid currentcolor;
+  border-radius: 50%;
+  color: var(--color-text);
+  font-size: var(--font-size-sm);
+  font-weight: 800;
+  line-height: 1;
+}
+
+.body {
+  min-width: 0;
+}
+
+.title {
+  margin-bottom: var(--space-1);
+  font-weight: 800;
+  line-height: var(--line-height-compact);
+}
+
+.content {
+  color: var(--color-text);
+}
+
+.content > :first-child {
+  margin-top: 0;
+}
+
+.content > :last-child {
+  margin-bottom: 0;
+}
+
+.actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+  margin-top: var(--space-3);
+}
+
+.srOnly {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}

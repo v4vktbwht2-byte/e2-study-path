@@ -78,6 +78,7 @@ def source_files(pattern: str) -> list[Path]:
         path
         for path in ROOT.rglob(pattern)
         if path.is_file()
+        and not path.name.endswith(".tsbuildinfo")
         and not any(
             part in EXCLUDED_DIRECTORY_NAMES
             for part in path.relative_to(ROOT).parts

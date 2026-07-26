@@ -6,14 +6,14 @@
   "additionalProperties": false,
   "required": ["schemaVersion", "exportedAt", "appVersion", "data"],
   "properties": {
-    "schemaVersion": { "type": "string" },
+    "schemaVersion": { "type": "string", "pattern": "^[0-9]+\\.[0-9]+\\.[0-9]+$" },
     "exportedAt": { "type": "string", "format": "date-time" },
-    "appVersion": { "type": "string" },
+    "appVersion": { "type": "string", "pattern": "^[0-9]+\\.[0-9]+\\.[0-9]+$" },
     "contentVersions": { "type": "object", "additionalProperties": { "type": "string" } },
     "data": {
       "type": "object",
       "additionalProperties": false,
-      "required": ["profiles", "settings", "reviewStates", "mastery", "lessonProgress", "attempts", "sessions", "writingSubmissions"],
+      "required": ["profiles", "settings", "reviewStates", "mastery", "lessonProgress", "attempts", "sessions", "dailyPlans", "writingSubmissions"],
       "properties": {
         "profiles": { "type": "array", "items": { "type": "object" } },
         "settings": { "type": "array", "items": { "type": "object" } },

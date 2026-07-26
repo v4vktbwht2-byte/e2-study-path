@@ -20,7 +20,8 @@
   ],
   "properties": {
     "id": { "type": "string", "minLength": 3 },
-    "schemaVersion": { "type": "string" },
+    "schemaVersion": { "type": "string", "pattern": "^[0-9]+\\.[0-9]+\\.[0-9]+$" },
+    "contentRevision": { "type": "integer", "minimum": 1, "default": 1 },
     "type": {
       "type": "string",
       "enum": [

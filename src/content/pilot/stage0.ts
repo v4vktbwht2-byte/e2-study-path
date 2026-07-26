@@ -1,0 +1,543 @@
+import { createUnitContent, type UnitContentSeed } from "./factories";
+
+const stage0Seeds = [
+  {
+    stage: 0,
+    unitId: "S0-U1",
+    order: 1,
+    titleJa: "アルファベットを見分ける",
+    descriptionJa: "大文字と小文字、文字の並びをゆっくり確認します。",
+    objectivesJa: [
+      "大文字と小文字の組み合わせを見分けられる",
+      "基本的なアルファベット順を答えられる",
+    ],
+    explanationJa:
+      "英語ではAからZまでの26文字を使います。同じ文字に大文字と小文字があります。最初は形を見分けられれば十分です。",
+    examples: [
+      { en: "A a", ja: "大文字のAと小文字のa" },
+      { en: "B b", ja: "大文字のBと小文字のb" },
+    ],
+    recallJa:
+      "画面の答えを隠し、A・B・Cの小文字を声に出すか、キーボードで入力してみましょう。",
+    summaryJa:
+      "大文字と小文字は形が違っても同じ文字です。少しずつ組み合わせを覚えれば大丈夫です。",
+    topicTags: ["alphabet", "letter-recognition"],
+    exercises: [
+      {
+        prompt: "小文字の a と同じ文字の大文字を選んでください。",
+        choices: ["A", "D", "P", "R"],
+        answer: 0,
+        explanation: "a の大文字は A です。",
+        hint: "先がとがった形の文字です。",
+        diagnostic: { area: "alphabet", level: "foundation" },
+      },
+      {
+        prompt: "大文字の B と同じ文字の小文字を選んでください。",
+        choices: ["d", "b", "p", "q"],
+        answer: 1,
+        explanation: "B の小文字は b です。縦線の右下に丸みがあります。",
+        hint: "b と d の向きに注目しましょう。",
+      },
+      {
+        prompt: "A, B, C の次に来る文字を選んでください。",
+        choices: ["E", "G", "D", "F"],
+        answer: 2,
+        explanation: "アルファベット順では A, B, C, D と続きます。",
+        hint: "ABCの歌の続きを思い出してみましょう。",
+      },
+      {
+        prompt: "文字の名前が「エム」の大文字を選んでください。",
+        choices: ["N", "M", "W", "H"],
+        answer: 1,
+        explanation: "M の文字名は「エム」です。",
+        hint: "Nは「エヌ」、Mは「エム」です。",
+      },
+      {
+        prompt: "英語の母音字だけを集めた組を選んでください。",
+        choices: ["A, E, I, O, U", "B, C, D, E, F", "M, N, O, P, Q", "V, W, X, Y, Z"],
+        answer: 0,
+        explanation: "基本の母音字は A, E, I, O, U の5文字です。",
+        hint: "Aから始まる5文字の組を見てください。",
+      },
+    ],
+  },
+  {
+    stage: 0,
+    unitId: "S0-U2",
+    order: 2,
+    titleJa: "文字と音のまとまりに気づく",
+    descriptionJa: "短い単語を聞き、最初の音や単語全体を見分けます。",
+    objectivesJa: [
+      "短い英単語を音のまとまりとして聞ける",
+      "同じ文字で始まる単語に気づける",
+    ],
+    explanationJa:
+      "単語は文字を一つずつ読むだけでなく、音のまとまりとして聞きます。完璧な発音より、違いに気づくことを目標にします。",
+    examples: [
+      { en: "map", ja: "地図" },
+      { en: "sun", ja: "太陽" },
+    ],
+    recallJa:
+      "map と sun を一度ずつ声に出し、最初の音がどの文字か思い出してみましょう。",
+    summaryJa:
+      "短い単語は、最初の音と単語全体のまとまりを意識すると聞き分けやすくなります。",
+    topicTags: ["letter-sound", "listening-entry"],
+    prerequisiteUnitId: "S0-U1",
+    exercises: [
+      {
+        type: "listenAndChoose",
+        stimulus: "map",
+        prompt: "聞こえた単語を選んでください。",
+        choices: ["map", "cap", "dog", "sun"],
+        answer: 0,
+        explanation: "聞こえた単語は map です。日本語では「地図」です。",
+        hint: "最初に m の音が聞こえます。",
+        targetSkills: ["listening", "vocabulary"],
+        targetMasteryDimensions: ["listening", "recognition"],
+      },
+      {
+        type: "listenAndChoose",
+        stimulus: "sun",
+        prompt: "聞こえた単語を選んでください。",
+        choices: ["pen", "cat", "sun", "map"],
+        answer: 2,
+        explanation: "聞こえた単語は sun です。日本語では「太陽」です。",
+        hint: "最初に s の音が聞こえます。",
+        targetSkills: ["listening", "vocabulary"],
+        targetMasteryDimensions: ["listening", "recognition"],
+        diagnostic: { area: "basicListening", level: "foundation" },
+      },
+      {
+        prompt: "cat と同じ c で始まる単語を選んでください。",
+        choices: ["cup", "dog", "map", "pen"],
+        answer: 0,
+        explanation: "cat と cup は、どちらも文字 c で始まります。",
+        hint: "単語の最初の文字を見ましょう。",
+      },
+      {
+        prompt: "文字 p, e, n を順に並べてできる単語を選んでください。",
+        choices: ["pan", "pen", "pin", "pet"],
+        answer: 1,
+        explanation: "p, e, n を順に読むと pen になります。",
+        hint: "真ん中の文字は e です。",
+      },
+      {
+        prompt: "dog の最後の文字を選んでください。",
+        choices: ["d", "o", "g", "b"],
+        answer: 2,
+        explanation: "dog は d, o, g の順なので、最後の文字は g です。",
+        hint: "単語を左から右へ見ましょう。",
+      },
+    ],
+  },
+  {
+    stage: 0,
+    unitId: "S0-U3",
+    order: 3,
+    titleJa: "数字・曜日・時刻を読む",
+    descriptionJa: "生活でよく使う数字、曜日、ちょうどの時刻を覚えます。",
+    objectivesJa: ["0から12までの基本的な数字を読める", "曜日と簡単な時刻を理解できる"],
+    explanationJa:
+      "数字と曜日は、予定や買い物でよく使います。まずは短い形から覚え、数字と英語を結び付けます。",
+    examples: [
+      { en: "three", ja: "3" },
+      { en: "It is seven o'clock.", ja: "7時です。" },
+    ],
+    recallJa: "1から5までを英語で言い、今日の曜日を英語で言えるか試してみましょう。",
+    summaryJa:
+      "数字は one, two, three のように表し、ちょうどの時刻には o'clock を使えます。",
+    topicTags: ["numbers", "weekdays", "time"],
+    prerequisiteUnitId: "S0-U2",
+    exercises: [
+      {
+        prompt: "数字の 3 を表す英語を選んでください。",
+        choices: ["two", "three", "five", "eight"],
+        answer: 1,
+        explanation: "3 は英語で three です。",
+        hint: "one, two の次です。",
+        diagnostic: { area: "basicVocabulary", level: "foundation" },
+      },
+      {
+        prompt: "twelve が表す数字を選んでください。",
+        choices: ["2", "10", "12", "20"],
+        answer: 2,
+        explanation: "twelve は 12 を表します。",
+        hint: "時計の文字盤で一番上にある数字です。",
+      },
+      {
+        prompt: "Sunday の次の曜日を選んでください。",
+        choices: ["Monday", "Friday", "Saturday", "Wednesday"],
+        answer: 0,
+        explanation: "日曜日 Sunday の次は月曜日 Monday です。",
+        hint: "月曜日の英語を探しましょう。",
+      },
+      {
+        prompt: "It is seven o'clock. に合う時刻を選んでください。",
+        choices: ["6:00", "7:00", "7:30", "8:00"],
+        answer: 1,
+        explanation: "seven o'clock は、ちょうど7時という意味です。",
+        hint: "seven は7、o'clock はちょうどの時刻です。",
+      },
+      {
+        prompt: "Friday の日本語を選んでください。",
+        choices: ["火曜日", "木曜日", "金曜日", "日曜日"],
+        answer: 2,
+        explanation: "Friday は金曜日です。",
+        hint: "週末の一日前の平日です。",
+      },
+    ],
+  },
+  {
+    stage: 0,
+    unitId: "S0-U4",
+    order: 4,
+    titleJa: "短いあいさつを使う",
+    descriptionJa: "会ったとき、お礼、謝るときの基本表現を練習します。",
+    objectivesJa: ["場面に合うあいさつを選べる", "お礼や謝罪への短い返事ができる"],
+    explanationJa:
+      "あいさつは短いままで十分伝わります。相手や場面を思い浮かべながら、Hello、Thank you、Sorryを使い分けます。",
+    examples: [
+      { en: "Hello, Yuki.", ja: "こんにちは、ユキさん。" },
+      { en: "Thank you.", ja: "ありがとう。" },
+    ],
+    recallJa:
+      "「おはよう」「ありがとう」「すみません」を英語で一つずつ思い出してみましょう。",
+    summaryJa:
+      "会ったときは Hello、朝は Good morning、お礼は Thank you、謝るときは Sorry が基本です。",
+    topicTags: ["greetings", "polite-phrases"],
+    prerequisiteUnitId: "S0-U3",
+    exercises: [
+      {
+        prompt: "人に会ったときの「こんにちは」に合う英語を選んでください。",
+        choices: ["Hello.", "Good night.", "Sorry.", "No."],
+        answer: 0,
+        explanation: "Hello. は、人に会ったときの基本的なあいさつです。",
+        hint: "会話を始めるときの言葉です。",
+      },
+      {
+        prompt: "朝、人に会ったときのあいさつを選んでください。",
+        choices: ["Good evening.", "Good morning.", "Good night.", "Goodbye."],
+        answer: 1,
+        explanation: "朝のあいさつは Good morning. です。",
+        hint: "morning は「朝」です。",
+      },
+      {
+        prompt: "Thank you. と言われたときの自然な返事を選んでください。",
+        choices: ["You're welcome.", "I'm sorry.", "Good night.", "Excuse me."],
+        answer: 0,
+        explanation: "You're welcome. は、お礼に対する「どういたしまして」です。",
+        hint: "お礼を受け取る表現です。",
+      },
+      {
+        prompt: "Sorry. と言われたときのやさしい返事を選んでください。",
+        choices: ["That's okay.", "Thank you.", "Good morning.", "Please."],
+        answer: 0,
+        explanation: "That's okay. は「大丈夫です」という返事です。",
+        hint: "相手を安心させる言葉です。",
+      },
+      {
+        prompt: "人に声をかける前の「すみません」を選んでください。",
+        choices: ["Yes.", "Please.", "Excuse me.", "Hello goodbye."],
+        answer: 2,
+        explanation: "Excuse me. は、人に声をかけるときの「すみません」です。",
+        hint: "道を尋ねる前にも使います。",
+      },
+    ],
+  },
+  {
+    stage: 0,
+    unitId: "S0-U5",
+    order: 5,
+    titleJa: "人・物・場所の基本語を知る",
+    descriptionJa: "family、school、homeなど、身近な名詞を覚えます。",
+    objectivesJa: [
+      "身近な人・物・場所の単語を理解できる",
+      "単数と複数の形の違いに気づける",
+    ],
+    explanationJa:
+      "身の回りのものを英語と結び付けます。物が二つ以上あるとき、book が books のように変わることにも気づきましょう。",
+    examples: [
+      { en: "my family", ja: "私の家族" },
+      { en: "two books", ja: "2冊の本" },
+    ],
+    recallJa:
+      "自分の家、学校、本を思い浮かべ、home、school、book と英語で言ってみましょう。",
+    summaryJa:
+      "family は家族、school は学校、home は家です。複数の本は books と表せます。",
+    topicTags: ["basic-nouns", "people-objects-places"],
+    prerequisiteUnitId: "S0-U4",
+    exercises: [
+      {
+        prompt: "family の意味を選んでください。",
+        choices: ["家族", "学校", "食べ物", "公園"],
+        answer: 0,
+        explanation: "family は「家族」という意味です。",
+        hint: "一緒に暮らす人たちを表します。",
+      },
+      {
+        prompt: "school の意味を選んでください。",
+        choices: ["駅", "家", "学校", "店"],
+        answer: 2,
+        explanation: "school は「学校」という意味です。",
+        hint: "勉強する場所です。",
+      },
+      {
+        prompt: "home の意味を選んでください。",
+        choices: ["家", "本", "水", "友達"],
+        answer: 0,
+        explanation: "home は「家」や「家庭」という意味です。",
+        hint: "帰る場所を思い浮かべましょう。",
+      },
+      {
+        prompt: "本が2冊あるときの英語を選んでください。",
+        choices: ["two book", "two books", "book twoes", "books one"],
+        answer: 1,
+        explanation: "二つ以上の本は book に s を付けて books とします。",
+        hint: "数字のtwoの後ろでは複数形にします。",
+        targetSkills: ["grammar", "vocabulary"],
+      },
+      {
+        prompt: "food の意味を選んでください。",
+        choices: ["飲み物", "食べ物", "建物", "動物"],
+        answer: 1,
+        explanation: "food は「食べ物」という意味です。",
+        hint: "毎日の食事に関係する言葉です。",
+      },
+    ],
+  },
+  {
+    stage: 0,
+    unitId: "S0-U6",
+    order: 6,
+    titleJa: "I・youとbe動詞を使う",
+    descriptionJa: "I am、You are、This is の最小文を作ります。",
+    objectivesJa: [
+      "I am と You are を使い分けられる",
+      "This is で近くの物を紹介できる",
+    ],
+    explanationJa:
+      "I は「私」、you は「あなた」です。I の後ろは am、you の後ろは are を使います。近くの物には This is を使えます。",
+    examples: [
+      { en: "I am Hana.", ja: "私はハナです。" },
+      { en: "This is a pen.", ja: "これはペンです。" },
+    ],
+    recallJa:
+      "自分の名前を使って I am ... と言い、近くの物を指して This is ... と言ってみましょう。",
+    summaryJa:
+      "I am、You are、This is を一つのまとまりとして覚えると、短い文をすぐ作れます。",
+    topicTags: ["pronouns", "be-verb-entry"],
+    prerequisiteUnitId: "S0-U5",
+    exercises: [
+      {
+        prompt: "I ___ Mai. の空所に入る語を選んでください。",
+        choices: ["am", "is", "are", "be"],
+        answer: 0,
+        explanation: "主語が I のときは am を使い、I am Mai. とします。",
+        hint: "I と組み合わせるbe動詞です。",
+        targetSkills: ["grammar"],
+        targetMasteryDimensions: ["recall", "context"],
+      },
+      {
+        prompt: "You ___ kind. の空所に入る語を選んでください。",
+        choices: ["am", "is", "are", "do"],
+        answer: 2,
+        explanation: "主語が you のときは are を使い、You are kind. とします。",
+        hint: "you と組み合わせるbe動詞です。",
+        targetSkills: ["grammar"],
+        targetMasteryDimensions: ["recall", "context"],
+      },
+      {
+        prompt: "This ___ a pen. の空所に入る語を選んでください。",
+        choices: ["am", "is", "are", "do"],
+        answer: 1,
+        explanation: "This の後ろは is を使い、This is a pen. とします。",
+        hint: "一つの物を示すThisと組み合わせます。",
+        targetSkills: ["grammar"],
+        targetMasteryDimensions: ["recall", "context"],
+      },
+      {
+        prompt: "「私はケンです。」に合う英文を選んでください。",
+        choices: ["I is Ken.", "You are Ken.", "I am Ken.", "This am Ken."],
+        answer: 2,
+        explanation: "「私は」は I、「です」は am なので、I am Ken. です。",
+        hint: "Iの後ろはamです。",
+        targetSkills: ["grammar", "reading"],
+        targetMasteryDimensions: ["recall", "context"],
+      },
+      {
+        prompt: "近くのりんごを示す文として正しいものを選んでください。",
+        choices: [
+          "This is an apple.",
+          "I am an apple.",
+          "You apple.",
+          "This are apple.",
+        ],
+        answer: 0,
+        explanation: "近くの一つの物を示すときは This is ... を使います。",
+        hint: "「これは〜です」の形を選びましょう。",
+        targetSkills: ["grammar", "reading"],
+        targetMasteryDimensions: ["context"],
+      },
+    ],
+  },
+  {
+    stage: 0,
+    unitId: "S0-U7",
+    order: 7,
+    titleJa: "短い質問をする",
+    descriptionJa: "Are you、Is this、What is this を使って尋ねます。",
+    objectivesJa: [
+      "YesかNoで答える短い質問を理解できる",
+      "物の名前をWhat is thisで尋ねられる",
+    ],
+    explanationJa:
+      "be動詞を文の先頭に置くと、短い質問を作れます。分からない物は What is this? と尋ねられます。",
+    examples: [
+      { en: "Are you ready?", ja: "準備はできていますか。" },
+      { en: "What is this?", ja: "これは何ですか。" },
+    ],
+    recallJa:
+      "目の前の物を一つ選び、What is this? と質問してから、It is ... で答えてみましょう。",
+    summaryJa:
+      "Are you ...?、Is this ...?、What is this? は、そのまま使える短い質問の形です。",
+    topicTags: ["basic-questions", "be-verb-questions"],
+    prerequisiteUnitId: "S0-U6",
+    exercises: [
+      {
+        prompt: "Are you ready? への肯定の返事を選んでください。",
+        choices: ["Yes, I am.", "Yes, it is.", "I a ready.", "No, this is."],
+        answer: 0,
+        explanation: "Are you ...? に肯定するときは Yes, I am. と答えられます。",
+        hint: "質問のyouを、返事ではIに変えます。",
+        targetSkills: ["grammar", "reading"],
+        targetMasteryDimensions: ["context", "recall"],
+      },
+      {
+        prompt: "Is this a book? への肯定の返事を選んでください。",
+        choices: ["Yes, I am.", "Yes, it is.", "Yes, you are.", "It book."],
+        answer: 1,
+        explanation: "Is this ...? で物を尋ねたときは Yes, it is. と答えます。",
+        hint: "物を受ける代名詞itを使います。",
+        targetSkills: ["grammar", "reading"],
+        targetMasteryDimensions: ["context", "recall"],
+      },
+      {
+        prompt: "What is this? に合う答えを選んでください。",
+        choices: ["It is a pen.", "I am fine.", "Yes, I am.", "Good morning."],
+        answer: 0,
+        explanation: "What is this? は物の名前を尋ねるので、It is a pen. が合います。",
+        hint: "「これは何？」への答えです。",
+        targetSkills: ["grammar", "reading"],
+        targetMasteryDimensions: ["context"],
+      },
+      {
+        prompt: "「あなたは学生ですか。」に合う英文を選んでください。",
+        choices: [
+          "You are a student.",
+          "Are you a student?",
+          "Is you a student?",
+          "What a student?",
+        ],
+        answer: 1,
+        explanation: "youを使う質問は are を先頭に置き、Are you a student? とします。",
+        hint: "質問ではareを文の先頭に置きます。",
+        targetSkills: ["grammar"],
+        targetMasteryDimensions: ["recall", "context"],
+      },
+      {
+        prompt: "英語の質問文の最後に置く記号を選んでください。",
+        choices: [".", ",", "?", "!"],
+        answer: 2,
+        explanation: "質問文の最後には疑問符 ? を置きます。",
+        hint: "日本語の「？」と同じ働きです。",
+        targetSkills: ["grammar", "writing"],
+        targetMasteryDimensions: ["recognition"],
+      },
+    ],
+  },
+  {
+    stage: 0,
+    unitId: "S0-U8",
+    order: 8,
+    titleJa: "短い自己紹介をつなぐ",
+    descriptionJa: "名前、出身、好きなものを短い会話で伝えます。",
+    objectivesJa: [
+      "名前と出身を短い英文で伝えられる",
+      "聞き取れないときに、もう一度お願いできる",
+    ],
+    explanationJa:
+      "自己紹介は短い文を一つずつつなげれば十分です。分からないときは Please say it again. と頼めます。",
+    examples: [
+      { en: "I am Aoi. I am from Japan.", ja: "私はアオイです。日本出身です。" },
+      { en: "I like music.", ja: "私は音楽が好きです。" },
+    ],
+    recallJa:
+      "自分の名前、出身、好きなものを、I am ...、I am from ...、I like ... の3文で言ってみましょう。",
+    summaryJa:
+      "短い文をつなげれば自己紹介になります。聞き取れないときは、もう一度お願いして大丈夫です。",
+    topicTags: ["mini-dialogue", "self-introduction"],
+    prerequisiteUnitId: "S0-U7",
+    exercises: [
+      {
+        type: "readingQuestion",
+        stimulus: "Hello. I am Emi. I am from Japan.",
+        prompt: "Emiさんの出身を選んでください。",
+        choices: ["Japan", "Canada", "Australia", "India"],
+        answer: 0,
+        explanation: "I am from Japan. とあるので、Emiさんは日本出身です。",
+        hint: "fromの後ろの国名を探しましょう。",
+        targetSkills: ["reading"],
+        targetMasteryDimensions: ["context"],
+      },
+      {
+        type: "listenAndChoose",
+        stimulus: "I am from Canada.",
+        prompt: "話している人の出身を選んでください。",
+        choices: ["Japan", "Canada", "France", "Brazil"],
+        answer: 1,
+        explanation: "I am from Canada. は「私はカナダ出身です」という意味です。",
+        hint: "fromの後ろに国名が聞こえます。",
+        targetSkills: ["listening"],
+        targetMasteryDimensions: ["listening", "context"],
+      },
+      {
+        prompt: "Nice to meet you. に合う日本語を選んでください。",
+        choices: ["おやすみなさい", "はじめまして", "ごめんなさい", "分かりません"],
+        answer: 1,
+        explanation: "Nice to meet you. は、初めて会ったときの「はじめまして」です。",
+        hint: "自己紹介の最後によく使います。",
+      },
+      {
+        prompt: "What do you like? への自然な答えを選んでください。",
+        choices: ["I like music.", "I am Tokyo.", "This is yes.", "Good night you."],
+        answer: 0,
+        explanation: "好きなものを尋ねられたので、I like music. が自然です。",
+        hint: "likeを使って好きなものを答えます。",
+        targetSkills: ["reading", "speaking"],
+        targetMasteryDimensions: ["context", "recall"],
+      },
+      {
+        prompt: "聞き取れなかったときに、もう一度お願いする表現を選んでください。",
+        choices: [
+          "Please say it again.",
+          "I like it.",
+          "This is a pen.",
+          "Good morning.",
+        ],
+        answer: 0,
+        explanation:
+          "Please say it again. は「もう一度言ってください」という表現です。",
+        hint: "againは「もう一度」です。",
+        targetSkills: ["listening", "speaking"],
+        targetMasteryDimensions: ["context", "recall"],
+      },
+    ],
+  },
+] satisfies readonly UnitContentSeed[];
+
+const generatedStage0Content = stage0Seeds.map(createUnitContent);
+
+export const stage0Lessons = generatedStage0Content.map(({ lesson }) => lesson);
+export const stage0Exercises = generatedStage0Content.flatMap(
+  ({ exercises }) => exercises,
+);

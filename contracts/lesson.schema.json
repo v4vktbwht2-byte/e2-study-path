@@ -18,7 +18,8 @@
   ],
   "properties": {
     "id": { "type": "string", "minLength": 3 },
-    "schemaVersion": { "type": "string" },
+    "schemaVersion": { "type": "string", "pattern": "^[0-9]+\\.[0-9]+\\.[0-9]+$" },
+    "contentRevision": { "type": "integer", "minimum": 1, "default": 1 },
     "stage": { "type": "integer", "minimum": 0, "maximum": 6 },
     "unitId": { "type": "string", "minLength": 1 },
     "order": { "type": "integer", "minimum": 1 },
@@ -32,7 +33,7 @@
       "items": {
         "type": "object",
         "additionalProperties": false,
-        "required": ["id", "type", "titleJa"],
+        "required": ["id", "type", "titleJa", "estimatedMinutes"],
         "properties": {
           "id": { "type": "string" },
           "type": { "type": "string", "enum": ["explanation", "examples", "exercise", "recall", "speaking", "summary"] },

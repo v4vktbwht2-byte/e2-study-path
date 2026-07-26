@@ -19,8 +19,8 @@
   ],
   "properties": {
     "id": { "type": "string", "minLength": 3 },
-    "schemaVersion": { "type": "string" },
-    "contentVersion": { "type": "string" },
+    "schemaVersion": { "type": "string", "pattern": "^[0-9]+\\.[0-9]+\\.[0-9]+$" },
+    "contentVersion": { "type": "string", "pattern": "^[0-9]+\\.[0-9]+\\.[0-9]+$" },
     "locale": { "const": "ja-JP" },
     "title": { "type": "string" },
     "description": { "type": "string" },
@@ -35,6 +35,11 @@
     },
     "vocabulary": { "type": "array", "items": { "$ref": "vocabulary-item.schema.json" } },
     "lessons": { "type": "array", "items": { "$ref": "lesson.schema.json" } },
-    "exercises": { "type": "array", "items": { "$ref": "exercise.schema.json" } }
+    "exercises": { "type": "array", "items": { "$ref": "exercise.schema.json" } },
+    "practiceSets": {
+      "type": "array",
+      "items": { "$ref": "practice-set.schema.json" },
+      "default": []
+    }
   }
 }

@@ -1,0 +1,165 @@
+.page {
+  width: min(100%, 52rem);
+  margin: 0 auto;
+  padding: var(--space-4);
+}
+
+.pageHeader {
+  display: grid;
+  gap: var(--space-2);
+  margin-block-end: var(--space-6);
+}
+
+.pageHeader h1,
+.pageHeader p,
+.stageCard h2,
+.stageCard p,
+.lessonCard h2,
+.lessonCard p,
+.recommendation h2,
+.recommendation p {
+  margin: 0;
+}
+
+.eyebrow,
+.stageNumber,
+.lessonOrder {
+  color: var(--color-primary-strong);
+  font-size: var(--font-size-sm);
+  font-weight: 800;
+  letter-spacing: 0.04em;
+}
+
+.recommendation {
+  display: grid;
+  gap: var(--space-3);
+  margin-block-end: var(--space-6);
+  border-color: var(--color-primary);
+  background: var(--color-info-surface);
+}
+
+.stageList,
+.lessonList {
+  display: grid;
+  gap: var(--space-4);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.stageCard,
+.lessonCard {
+  display: grid;
+  gap: var(--space-4);
+}
+
+.stageCard.current {
+  border-color: var(--color-primary);
+  box-shadow: 0 0 0 2px color-mix(in srgb, var(--color-primary) 20%, transparent);
+}
+
+.cardHeader {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: var(--space-3);
+}
+
+.cardHeader > :first-child {
+  min-width: 0;
+}
+
+.badges {
+  display: flex;
+  flex: 0 1 auto;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  gap: var(--space-1);
+}
+
+.currentBadge,
+.recommendedBadge,
+.statusBadge {
+  display: inline-flex;
+  min-height: 1.75rem;
+  align-items: center;
+  border-radius: 999px;
+  padding: var(--space-1) var(--space-2);
+  font-size: var(--font-size-sm);
+  font-weight: 700;
+  line-height: 1.2;
+}
+
+.currentBadge {
+  background: var(--color-primary);
+  color: var(--color-on-primary);
+}
+
+.recommendedBadge {
+  background: var(--color-warning-surface);
+  color: var(--color-warning);
+}
+
+.statusBadge {
+  background: var(--color-surface-muted);
+  color: var(--color-text);
+}
+
+.role,
+.meta {
+  color: var(--color-text-muted);
+}
+
+.nextLesson {
+  padding: var(--space-3);
+  border-radius: var(--radius-sm);
+  background: var(--color-surface-muted);
+}
+
+.objectiveList {
+  display: grid;
+  gap: var(--space-1);
+  margin: 0;
+  padding-inline-start: var(--space-6);
+}
+
+.advice {
+  padding: var(--space-3);
+  border-left: 4px solid var(--color-warning);
+  background: var(--color-warning-surface);
+}
+
+.recommendedText {
+  color: var(--color-primary-strong);
+  font-weight: 800;
+}
+
+.lessonCard.recommendedLesson {
+  border-color: var(--color-primary);
+}
+
+@media (max-width: 30rem) {
+  .page {
+    padding: var(--space-3);
+  }
+
+  .cardHeader {
+    display: grid;
+  }
+
+  .badges {
+    justify-content: flex-start;
+  }
+
+  .stageCard > button,
+  .lessonCard > button,
+  .recommendation > button {
+    width: 100%;
+  }
+}
+
+@media (max-width: 20rem) {
+  .page {
+    padding-inline: var(--space-2);
+  }
+}

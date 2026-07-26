@@ -1,0 +1,30 @@
+.card {
+  min-width: 0;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-card);
+  box-shadow: var(--shadow-card);
+}
+
+.default {
+  background: var(--color-surface);
+}
+
+.muted {
+  background: var(--color-surface-muted);
+}
+
+.none {
+  padding: 0;
+}
+
+.small {
+  padding: var(--space-3);
+}
+
+.medium {
+  padding: var(--space-4);
+}
+
+.large {
+  padding: var(--space-6);
+}

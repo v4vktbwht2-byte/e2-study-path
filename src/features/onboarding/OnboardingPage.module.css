@@ -1,0 +1,177 @@
+.page {
+  display: grid;
+  width: min(100%, 44rem);
+  gap: var(--space-6);
+  margin-inline: auto;
+}
+
+.header {
+  display: grid;
+  gap: var(--space-3);
+}
+
+.step,
+.lead,
+.help {
+  margin: 0;
+}
+
+.step {
+  color: var(--color-primary-strong);
+  font-size: var(--font-size-sm);
+  font-weight: 800;
+}
+
+.heading {
+  margin: 0;
+  font-size: clamp(1.65rem, 7vw, 2.5rem);
+  line-height: 1.25;
+  outline: none;
+}
+
+.heading:focus-visible {
+  border-radius: var(--radius-sm);
+  box-shadow: 0 0 0 3px var(--focus-ring);
+}
+
+.hero,
+.form {
+  display: grid;
+  gap: var(--space-4);
+}
+
+.lead {
+  font-size: var(--font-size-lg);
+  font-weight: 650;
+}
+
+.points {
+  display: grid;
+  gap: var(--space-2);
+  margin: 0;
+  padding-inline-start: 1.4rem;
+}
+
+.fieldset {
+  min-width: 0;
+  margin: 0;
+  padding: 0;
+  border: 0;
+}
+
+.fieldset > legend,
+.sectionTitle {
+  margin: 0 0 var(--space-3);
+  font-size: var(--font-size-lg);
+  font-weight: 800;
+  line-height: var(--line-height-compact);
+}
+
+.choiceGrid {
+  display: grid;
+  gap: var(--space-3);
+}
+
+.choice,
+.compactChoice {
+  display: flex;
+  min-width: 0;
+  min-height: var(--tap-target-min);
+  align-items: flex-start;
+  gap: var(--space-3);
+  padding: var(--space-3);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-button);
+  background: var(--color-surface);
+  cursor: pointer;
+}
+
+.choice:has(input:checked),
+.compactChoice:has(input:checked) {
+  border-color: var(--color-primary);
+  background: var(--color-info-surface);
+}
+
+.choice input,
+.compactChoice input {
+  width: 1.25rem;
+  height: 1.25rem;
+  flex: 0 0 auto;
+  margin: 0.15rem 0 0;
+}
+
+.choice span {
+  display: grid;
+  min-width: 0;
+  gap: var(--space-1);
+}
+
+.choice small,
+.field small,
+.help {
+  color: var(--color-text-muted);
+}
+
+.minutesGrid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--space-2);
+  margin-top: var(--space-3);
+}
+
+.compactChoice {
+  align-items: center;
+}
+
+.field {
+  display: grid;
+  min-width: 0;
+  gap: var(--space-2);
+  margin-top: var(--space-4);
+  font-weight: 700;
+}
+
+.field input,
+.field select {
+  width: 100%;
+  min-height: var(--tap-target-min);
+  padding: var(--space-2) var(--space-3);
+  border: 1px solid var(--color-border-strong);
+  border-radius: var(--radius-button);
+  background: var(--color-surface);
+}
+
+.field input:disabled {
+  cursor: not-allowed;
+  opacity: 0.65;
+}
+
+.actions {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  gap: var(--space-2);
+}
+
+.centered {
+  display: grid;
+  min-height: 12rem;
+  place-items: center;
+  text-align: center;
+}
+
+@media (max-width: 30rem) {
+  .actions > * {
+    flex: 1 1 100%;
+  }
+}
+
+@media (min-width: 36rem) {
+  .choiceGrid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .minutesGrid {
+    grid-template-columns: repeat(5, minmax(0, 1fr));
+  }
+}

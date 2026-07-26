@@ -1,0 +1,257 @@
+.page {
+  display: grid;
+  width: min(100%, 48rem);
+  gap: var(--space-4);
+  margin: 0 auto;
+  padding: var(--space-4);
+}
+
+.lessonHeader {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: var(--space-4);
+}
+
+.lessonHeader h1,
+.lessonHeader p,
+.sectionHeader h2,
+.sectionHeader p,
+.bodyText p,
+.exercise h3,
+.exercise p,
+.skipArea p {
+  margin: 0;
+}
+
+.eyebrow,
+.sectionKind {
+  color: var(--color-primary-strong);
+  font-size: var(--font-size-sm);
+  font-weight: 800;
+  letter-spacing: 0.04em;
+}
+
+.sectionCard {
+  display: grid;
+  gap: var(--space-4);
+  padding: var(--space-6);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-card);
+  background: var(--color-surface);
+  box-shadow: var(--shadow-card);
+}
+
+.sectionHeader {
+  display: grid;
+  gap: var(--space-1);
+}
+
+.estimated,
+.instructions {
+  color: var(--color-text-muted);
+  font-size: var(--font-size-sm);
+}
+
+.goalList {
+  display: grid;
+  gap: var(--space-3);
+  margin: 0;
+  padding-inline-start: var(--space-6);
+  font-size: var(--font-size-lg);
+}
+
+.bodyText {
+  display: grid;
+  gap: var(--space-3);
+}
+
+.examples {
+  display: grid;
+  gap: var(--space-3);
+}
+
+.examples figure {
+  display: grid;
+  gap: var(--space-2);
+  margin: 0;
+  padding: var(--space-4);
+  border-left: 4px solid var(--color-primary);
+  border-radius: var(--radius-sm);
+  background: var(--color-info-surface);
+}
+
+.examples blockquote {
+  margin: 0;
+  font-size: var(--font-size-lg);
+  font-weight: 700;
+}
+
+.examples figcaption {
+  color: var(--color-text-muted);
+}
+
+.exercise {
+  display: grid;
+  gap: var(--space-4);
+  padding-block-start: var(--space-4);
+  border-block-start: 1px solid var(--color-border);
+}
+
+.sourceMaterial {
+  padding: var(--space-4);
+  border-left: 4px solid var(--color-primary);
+  border-radius: var(--radius-sm);
+  background: var(--color-info-surface);
+  white-space: pre-wrap;
+}
+
+.fallbackSpeech {
+  display: block;
+  margin-block-start: var(--space-2);
+  font-weight: 700;
+}
+
+.choiceGroup {
+  display: grid;
+  gap: var(--space-2);
+  margin: 0;
+  padding: 0;
+  border: 0;
+}
+
+.choice {
+  display: flex;
+  min-height: var(--tap-target-min);
+  align-items: center;
+  gap: var(--space-3);
+  padding: var(--space-3);
+  border: 1px solid var(--color-border-strong);
+  border-radius: var(--radius-button);
+  background: var(--color-surface);
+  cursor: pointer;
+}
+
+.choice:has(input:checked) {
+  border-color: var(--color-primary);
+  background: var(--color-info-surface);
+}
+
+.choice input {
+  width: 1.25rem;
+  height: 1.25rem;
+  flex: 0 0 auto;
+}
+
+.answerField {
+  display: grid;
+  gap: var(--space-2);
+  font-weight: 700;
+}
+
+.answerField input,
+.answerField textarea {
+  width: 100%;
+  min-height: var(--tap-target-min);
+  border: 1px solid var(--color-border-strong);
+  border-radius: var(--radius-button);
+  padding: var(--space-3);
+  background: var(--color-surface);
+  font-weight: 400;
+}
+
+.answerField textarea {
+  resize: vertical;
+}
+
+.hints {
+  padding: var(--space-3);
+  border-left: 4px solid var(--color-warning);
+  background: var(--color-warning-surface);
+}
+
+.hints ol {
+  margin-block: var(--space-2) 0;
+  padding-inline-start: var(--space-6);
+}
+
+.hintTitle {
+  font-weight: 800;
+}
+
+.exerciseActions,
+.navigation {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: var(--space-3);
+}
+
+.savedStatus {
+  align-self: center;
+  color: var(--color-success);
+  font-weight: 800;
+}
+
+.navigation {
+  position: sticky;
+  z-index: 1;
+  bottom: calc(var(--safe-area-bottom) + var(--space-2));
+  padding: var(--space-3);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-card);
+  background: var(--color-surface);
+  box-shadow: var(--shadow-card);
+}
+
+.skipArea {
+  display: grid;
+  justify-items: start;
+  gap: var(--space-2);
+  color: var(--color-text-muted);
+}
+
+.srOnly {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+@media (max-width: 30rem) {
+  .page {
+    padding: var(--space-3);
+  }
+
+  .lessonHeader {
+    display: grid;
+  }
+
+  .sectionCard {
+    padding: var(--space-4);
+  }
+
+  .navigation > button,
+  .exerciseActions > button {
+    flex: 1 1 8rem;
+  }
+
+  .lessonHeader > button,
+  .skipArea > button {
+    width: 100%;
+  }
+}
+
+@media (max-width: 20rem) {
+  .page {
+    padding-inline: var(--space-2);
+  }
+
+  .sectionCard {
+    padding: var(--space-3);
+  }
+}

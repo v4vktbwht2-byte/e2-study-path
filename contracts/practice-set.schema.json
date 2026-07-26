@@ -1,0 +1,50 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://example.local/schemas/practice-set.schema.json",
+  "title": "PracticeSet",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "id",
+    "schemaVersion",
+    "type",
+    "stage",
+    "titleJa",
+    "descriptionJa",
+    "estimatedMinutes",
+    "payload",
+    "source"
+  ],
+  "properties": {
+    "id": { "type": "string", "minLength": 3 },
+    "schemaVersion": {
+      "type": "string",
+      "pattern": "^[0-9]+\\.[0-9]+\\.[0-9]+$"
+    },
+    "contentRevision": { "type": "integer", "minimum": 1, "default": 1 },
+    "type": {
+      "type": "string",
+      "enum": ["reading", "listening", "summary", "opinion", "speaking", "mock"]
+    },
+    "stage": { "type": "integer", "minimum": 0, "maximum": 6 },
+    "titleJa": { "type": "string", "minLength": 1 },
+    "descriptionJa": { "type": "string", "minLength": 1 },
+    "estimatedMinutes": { "type": "integer", "minimum": 1, "maximum": 120 },
+    "payload": { "type": "object" },
+    "tags": {
+      "type": "array",
+      "items": { "type": "string", "minLength": 1 },
+      "default": []
+    },
+    "source": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["type", "author"],
+      "properties": {
+        "type": { "const": "original" },
+        "author": { "type": "string", "minLength": 1 },
+        "note": { "type": "string" }
+      }
+    }
+  }
+}

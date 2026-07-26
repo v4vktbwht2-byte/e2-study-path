@@ -20,6 +20,41 @@
 - Vitest、Testing Library、Playwrightによる検証
 - モバイルファースト、キーボード操作、アクセシビリティ配慮
 
+## ローカル起動
+
+必要環境は Node.js 24.13.1（`.nvmrc`に記録）とnpm 11以降です。
+
+```powershell
+npm ci
+npm run dev
+```
+
+起動後、ターミナルに表示されたローカルURLをブラウザーで開きます。ルーティングはHash Routerを使うため、静的ホスティングでも各画面を直接開けます。
+
+## 品質確認
+
+```powershell
+npm run lint
+npm run typecheck
+npm run test
+npm run test:coverage
+npm run validate:content
+npm run build
+npm run test:e2e
+npm run check
+```
+
+`npm run check` はlint、型検査、単体・コンポーネントテスト、教材検証、production buildを順に実行します。E2Eは別コマンドで実行します。
+
+## ディレクトリ
+
+- `src/domain/`: ReactやIndexedDBに依存しない学習規則
+- `src/infrastructure/`: IndexedDB、教材、音声、PWAの実装
+- `src/features/`: 画面・機能単位のUI
+- `src/shared/`: 共通UI、スタイル、汎用処理
+- `src/content/`: バージョン付きオリジナル教材
+- `e2e/`: Playwrightによる主要フロー検証
+
 ## 主要機能
 
 - 初回診断とおすすめ開始地点
