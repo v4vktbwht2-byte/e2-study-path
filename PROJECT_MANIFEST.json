@@ -1,10 +1,10 @@
 {
   "package": "E2 Study Path Codex Handoff Full Set",
   "packageVersion": "1.0.0",
-  "generatedAt": "2026-07-26T16:22:33+00:00",
-  "manifestPolicy": "The manifest intentionally excludes PROJECT_MANIFEST.json itself.",
-  "fileCountExcludingManifest": 77,
-  "totalSizeBytesExcludingManifest": 187529,
+  "generatedAt": "2026-07-26T21:53:35+00:00",
+  "manifestPolicy": "The manifest tracks repository source files and excludes PROJECT_MANIFEST.json, Git metadata, dependencies, and generated artifacts.",
+  "fileCountExcludingManifest": 78,
+  "totalSizeBytesExcludingManifest": 197244,
   "files": [
     {
       "path": ".gitignore",
@@ -20,36 +20,6 @@
       "path": "CHANGELOG.md",
       "sizeBytes": 102,
       "sha256": "4cf075cd4f776ce7037b63355f9ad481f9c79186060ef593306f560d0cf4f50c"
-    },
-    {
-      "path": "FILE_INDEX.md",
-      "sizeBytes": 3812,
-      "sha256": "861736fe8a31b8cd4dec1ab8510f2404f6429d4bc457d10a9ecc7cbcaf3f67b2"
-    },
-    {
-      "path": "LICENSE_AND_BRANDING.md",
-      "sizeBytes": 1347,
-      "sha256": "215ea0057acef6d215ecfdfe1d8e76a213963a064a9c3dfddc6e164850a31c8d"
-    },
-    {
-      "path": "MASTER_PROMPT.md",
-      "sizeBytes": 6285,
-      "sha256": "13ecacad1db84ea426db4361b9c9a9fff12c04a025c47edbd444b4948969b7c4"
-    },
-    {
-      "path": "PLANS.md",
-      "sizeBytes": 445,
-      "sha256": "ec462ec4e6865ee13c7f56a97a4dca297c24a92c5a6829ff9c53a14bbf6c900f"
-    },
-    {
-      "path": "README.md",
-      "sizeBytes": 2148,
-      "sha256": "c1eab6c87061324bad9950ae3dcc4a6b52d4af9392f9ff47dc1c57f99a0e54f3"
-    },
-    {
-      "path": "START_HERE.md",
-      "sizeBytes": 3683,
-      "sha256": "bbfecc36fe8ce38c4f85b62632cb466b1b99ca5d5eb46fd0e98c99fe95098533"
     },
     {
       "path": "checklists/CODE_REVIEW.md",
@@ -268,18 +238,38 @@
     },
     {
       "path": "docs/19_DECISIONS_AND_OPEN_POINTS.md",
-      "sizeBytes": 1478,
-      "sha256": "17872ebc4903e57fecdb2456c0948b4ae87a8a24c8906f3b4dcf09ba3948cafe"
+      "sizeBytes": 2277,
+      "sha256": "a2510b150847d28fb330b02f0516459ee6ba4304da700e024220e1bc04f46efa"
     },
     {
       "path": "docs/20_IMPLEMENTATION_STATUS.md",
-      "sizeBytes": 1612,
-      "sha256": "a4df8aa0be744823f88b04825c816fd1a1d3154ecba647e99b2a7c26475464f3"
+      "sizeBytes": 2138,
+      "sha256": "d530bb47f57cf6e8035911564055a097b0564dc1daf7c13b788892d6b8a41cee"
     },
     {
       "path": "docs/21_SOURCE_NOTES.md",
       "sizeBytes": 2642,
       "sha256": "ab6c419aecb76f700f15c0c700b2e1030d315c66fbaa364b7844a2c1628c6cb1"
+    },
+    {
+      "path": "docs/backlog.md",
+      "sizeBytes": 1736,
+      "sha256": "1b63c48f0675030467dfb58c11013b43c6edfb1a3b9b20238721162c703709dc"
+    },
+    {
+      "path": "FILE_INDEX.md",
+      "sizeBytes": 3812,
+      "sha256": "861736fe8a31b8cd4dec1ab8510f2404f6429d4bc457d10a9ecc7cbcaf3f67b2"
+    },
+    {
+      "path": "LICENSE_AND_BRANDING.md",
+      "sizeBytes": 1347,
+      "sha256": "215ea0057acef6d215ecfdfe1d8e76a213963a064a9c3dfddc6e164850a31c8d"
+    },
+    {
+      "path": "MASTER_PROMPT.md",
+      "sizeBytes": 6285,
+      "sha256": "13ecacad1db84ea426db4361b9c9a9fff12c04a025c47edbd444b4948969b7c4"
     },
     {
       "path": "planning/BACKLOG.md",
@@ -305,6 +295,11 @@
       "path": "planning/TRACEABILITY.csv",
       "sizeBytes": 1214,
       "sha256": "594afca80128f5731fedff25c3532a24dd8081172232922d12104d119bdc8aa1"
+    },
+    {
+      "path": "PLANS.md",
+      "sizeBytes": 5782,
+      "sha256": "ecc0404e1467d759a1d29691a16294e7fdb968f4dcf826ada985e40b9bffc670"
     },
     {
       "path": "prompts/00_PRE_FLIGHT.md",
@@ -377,19 +372,29 @@
       "sha256": "7fea84940c6bdcc0c8b7eb2e51ff5598e2ed427f3c4b3b64236f7afdb164b5ad"
     },
     {
-      "path": "scripts/README.md",
-      "sizeBytes": 277,
-      "sha256": "64aaf4cb4780abe18d62c48c86040680883628a202d72b6919c5003863ed2758"
+      "path": "README.md",
+      "sizeBytes": 2148,
+      "sha256": "c1eab6c87061324bad9950ae3dcc4a6b52d4af9392f9ff47dc1c57f99a0e54f3"
     },
     {
       "path": "scripts/generate_manifest.py",
-      "sizeBytes": 1628,
-      "sha256": "f83f645609aa97dbe262c1cfce82c932507b2dbae33445faab926439ca76d80e"
+      "sizeBytes": 2177,
+      "sha256": "3389170eeee5f7ae0d8e312b11b99373499af995fd1595c61d60d66e5aa22679"
+    },
+    {
+      "path": "scripts/README.md",
+      "sizeBytes": 546,
+      "sha256": "226383aa1b642aa4b80240066a29f9998ee25b28b7207835262bc164f86d30b5"
     },
     {
       "path": "scripts/verify_handoff.py",
-      "sizeBytes": 6629,
-      "sha256": "0011b3c5cd0544a8f599cdd8d065e6510e99e9a46c085798a13d034db630d947"
+      "sizeBytes": 7128,
+      "sha256": "ad62456fb83fe3513e10efbc82606ce5d2dff8bce37df19a2661aa2815d6bb51"
+    },
+    {
+      "path": "START_HERE.md",
+      "sizeBytes": 3683,
+      "sha256": "bbfecc36fe8ce38c4f85b62632cb466b1b99ca5d5eb46fd0e98c99fe95098533"
     }
   ]
 }

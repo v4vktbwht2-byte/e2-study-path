@@ -4,7 +4,7 @@ Codexは各フェーズ完了時に更新する。
 
 ## Overall
 
-- [ ] Phase 00 Pre-flight
+- [x] Phase 00 Pre-flight
 - [ ] Phase 01 Scaffold and foundation
 - [ ] Phase 02 Domain, DB, content pipeline
 - [ ] Phase 03 Onboarding, diagnostic, curriculum
@@ -52,4 +52,9 @@ Codexは各フェーズ完了時に更新する。
 
 ## Known issues
 
-None recorded yet.
+- iPhone Safari／ホーム画面PWAとスクリーンリーダーは、実装完了後に実機での手動確認が必要。
+- 公開先とソフトウェアライセンスはリポジトリ所有者の最終判断待ち。実装を停止する要因ではない。
+
+## Phase notes
+
+- 2026-07-27 Phase 00: 全仕様・契約・チェックリスト・Phaseプロンプトを監査。Node.js 24.13.1、npm 11.8.0、Git 2.53.0、Python 3.11.9を確認。依存安定版とpeer compatibilityを確認し、Git基準コミットを作成した。

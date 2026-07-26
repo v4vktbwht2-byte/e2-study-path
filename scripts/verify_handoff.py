@@ -13,6 +13,15 @@ import sys
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
+EXCLUDED_DIRECTORY_NAMES = {
+    ".git",
+    ".vite",
+    "coverage",
+    "dist",
+    "node_modules",
+    "playwright-report",
+    "test-results",
+}
 
 REQUIRED_FILES = [
     "START_HERE.md",
@@ -62,6 +71,20 @@ def fail(message: str) -> None:
     print(f"ERROR: {message}", file=sys.stderr)
 
 
+def source_files(pattern: str) -> list[Path]:
+    """List repository source files while excluding generated directories."""
+
+    return sorted(
+        path
+        for path in ROOT.rglob(pattern)
+        if path.is_file()
+        and not any(
+            part in EXCLUDED_DIRECTORY_NAMES
+            for part in path.relative_to(ROOT).parts
+        )
+    )
+
+
 def main() -> int:
     errors: list[str] = []
 
@@ -72,7 +95,7 @@ def main() -> int:
         elif path.stat().st_size == 0:
             errors.append(f"Required file is empty: {relative}")
 
-    json_files = sorted(ROOT.rglob("*.json"))
+    json_files = source_files("*.json")
     for path in json_files:
         try:
             with path.open("r", encoding="utf-8") as handle:
@@ -113,7 +136,7 @@ def main() -> int:
             listed_paths = {entry.get("path") for entry in manifest_entries}
             actual_paths = {
                 path.relative_to(ROOT).as_posix()
-                for path in ROOT.rglob("*")
+                for path in source_files("*")
                 if path.is_file() and path != manifest_path
             }
             missing_from_manifest = actual_paths - listed_paths
@@ -144,7 +167,7 @@ def main() -> int:
         except Exception as exc:  # noqa: BLE001 - CLI validation report
             errors.append(f"Invalid project manifest: {exc}")
 
-    markdown_files = sorted(ROOT.rglob("*.md"))
+    markdown_files = source_files("*.md")
     empty_headings = []
     for path in markdown_files:
         text = path.read_text(encoding="utf-8")

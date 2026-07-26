@@ -14,6 +14,10 @@
 | D-008 | 復習表示は4段階中心 | 根拠の弱い精密百分率を前面に出さない |
 | D-009 | 教材とコードを分離 | 量産・更新・QAを独立させる |
 | D-010 | 公式素材を収録しない | 著作権・誤認防止 |
+| D-011 | TypeScript 6.0.3を使用 | 最新7.0.2は現行typescript-eslint 8.65.0のpeer範囲外。安定版のうち品質ツールと互換な版を採用 |
+| D-012 | 詳細仕様に必要な契約項目をPhase 02でJSON SchemaとZodへ追加 | contentRevision、技能別教材、単語メモ・お気に入り、厳密なbackup等を`additionalProperties: false`の既存契約へ明示し、仕様とruntime検証の不一致を残さない |
+| D-013 | AC-REL-001〜012をすべてRelease必須条件として扱う | 個別の重大度が未定義であるため、安全側で全release-level acceptanceをblockerとする |
+| D-014 | マニフェストはソースのみを追跡 | `.git`、依存、build・test生成物を除外し、実装後もhandoff検証を再現可能にする |
 
 ## Open points for repository owner after Pilot
 
