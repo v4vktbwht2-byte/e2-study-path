@@ -1,0 +1,31 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://example.local/schemas/backup.schema.json",
+  "title": "E2StudyPathBackup",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schemaVersion", "exportedAt", "appVersion", "data"],
+  "properties": {
+    "schemaVersion": { "type": "string" },
+    "exportedAt": { "type": "string", "format": "date-time" },
+    "appVersion": { "type": "string" },
+    "contentVersions": { "type": "object", "additionalProperties": { "type": "string" } },
+    "data": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["profiles", "settings", "reviewStates", "mastery", "lessonProgress", "attempts", "sessions", "writingSubmissions"],
+      "properties": {
+        "profiles": { "type": "array", "items": { "type": "object" } },
+        "settings": { "type": "array", "items": { "type": "object" } },
+        "reviewStates": { "type": "array", "items": { "$ref": "review-state.schema.json" } },
+        "mastery": { "type": "array", "items": { "type": "object" } },
+        "lessonProgress": { "type": "array", "items": { "type": "object" } },
+        "attempts": { "type": "array", "items": { "type": "object" } },
+        "sessions": { "type": "array", "items": { "type": "object" } },
+        "dailyPlans": { "type": "array", "items": { "type": "object" } },
+        "writingSubmissions": { "type": "array", "items": { "type": "object" } },
+        "speakingRecordings": { "type": "array", "items": { "type": "object" } }
+      }
+    }
+  }
+}

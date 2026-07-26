@@ -1,0 +1,40 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://example.local/schemas/content-pack.schema.json",
+  "title": "ContentPack",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "id",
+    "schemaVersion",
+    "contentVersion",
+    "locale",
+    "title",
+    "description",
+    "generatedAt",
+    "source",
+    "vocabulary",
+    "lessons",
+    "exercises"
+  ],
+  "properties": {
+    "id": { "type": "string", "minLength": 3 },
+    "schemaVersion": { "type": "string" },
+    "contentVersion": { "type": "string" },
+    "locale": { "const": "ja-JP" },
+    "title": { "type": "string" },
+    "description": { "type": "string" },
+    "generatedAt": { "type": "string", "format": "date-time" },
+    "source": {
+      "type": "object",
+      "required": ["type", "author"],
+      "properties": {
+        "type": { "const": "original" },
+        "author": { "type": "string" }
+      }
+    },
+    "vocabulary": { "type": "array", "items": { "$ref": "vocabulary-item.schema.json" } },
+    "lessons": { "type": "array", "items": { "$ref": "lesson.schema.json" } },
+    "exercises": { "type": "array", "items": { "$ref": "exercise.schema.json" } }
+  }
+}

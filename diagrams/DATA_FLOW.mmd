@@ -1,0 +1,15 @@
+sequenceDiagram
+  participant U as User
+  participant UI as Exercise UI
+  participant S as Learning Service
+  participant D as Domain Rules
+  participant DB as IndexedDB/Dexie
+
+  U->>UI: Submit answer
+  UI->>S: answer + time + hints + confidence
+  S->>D: score / suggested rating
+  D-->>S: Attempt result + next review + mastery deltas
+  S->>DB: Transaction: attempt, review, mastery, session, plan
+  DB-->>S: Commit success
+  S-->>UI: Feedback + next due
+  UI-->>U: Explanation and rating controls

@@ -1,0 +1,19 @@
+flowchart TD
+  Launch --> FirstRun{Onboarding complete?}
+  FirstRun -->|No| Onboarding
+  Onboarding --> DiagnosticChoice
+  DiagnosticChoice -->|Run| Diagnostic
+  DiagnosticChoice -->|Skip| ManualStage
+  Diagnostic --> Recommendation
+  ManualStage --> Today
+  Recommendation --> Today
+  FirstRun -->|Yes| Today
+  Today --> Review
+  Today --> Lesson
+  Today --> Vocabulary
+  Today --> SkillPractice
+  Review --> Completion
+  Lesson --> Completion
+  Vocabulary --> Completion
+  SkillPractice --> Completion
+  Completion --> Today

@@ -1,0 +1,20 @@
+{
+  "schemaVersion": "1.0.0",
+  "exportedAt": "2026-07-27T00:00:00Z",
+  "appVersion": "0.1.0",
+  "contentVersions": {
+    "sample-core-ja": "0.1.0"
+  },
+  "data": {
+    "profiles": [],
+    "settings": [],
+    "reviewStates": [],
+    "mastery": [],
+    "lessonProgress": [],
+    "attempts": [],
+    "sessions": [],
+    "dailyPlans": [],
+    "writingSubmissions": [],
+    "speakingRecordings": []
+  }
+}

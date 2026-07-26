@@ -1,0 +1,40 @@
+flowchart TB
+  subgraph UI[React UI]
+    Today
+    Course
+    Vocabulary
+    Practice
+    Progress
+  end
+
+  subgraph APP[Application Services]
+    DailyPlanService
+    ReviewSessionService
+    LessonProgressService
+    BackupService
+    ContentPackService
+  end
+
+  subgraph DOMAIN[Pure TypeScript Domain]
+    ReviewScheduler
+    QueuePriority
+    MasteryRules
+    DiagnosticPlacement
+    PlanCapacity
+  end
+
+  subgraph INFRA[Infrastructure]
+    DexieRepositories
+    ContentLoader
+    AudioAdapter
+    RecordingAdapter
+    PWAAdapter
+  end
+
+  UI --> APP
+  APP --> DOMAIN
+  APP --> DexieRepositories
+  APP --> ContentLoader
+  APP --> AudioAdapter
+  APP --> RecordingAdapter
+  UI --> PWAAdapter

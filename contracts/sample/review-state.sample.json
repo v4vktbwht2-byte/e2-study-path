@@ -1,0 +1,15 @@
+{
+  "itemKey": "vocab:vocab-s0-hello-001",
+  "status": "learning",
+  "learningStep": 0,
+  "intervalDays": 0,
+  "easeBias": 1.0,
+  "dueAt": "2026-07-27T00:10:00Z",
+  "firstLearnedAt": "2026-07-27T00:00:00Z",
+  "reviewCount": 1,
+  "lapseCount": 0,
+  "consecutiveSuccesses": 0,
+  "lastRating": "good",
+  "lastResponseTimeMs": 3200,
+  "updatedAt": "2026-07-27T00:00:00Z"
+}

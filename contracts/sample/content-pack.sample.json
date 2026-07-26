@@ -1,0 +1,89 @@
+{
+  "id": "sample-core-ja",
+  "schemaVersion": "1.0.0",
+  "contentVersion": "0.1.0",
+  "locale": "ja-JP",
+  "title": "Sample Core Content",
+  "description": "Small original sample used to implement and test the content pipeline.",
+  "generatedAt": "2026-07-27T00:00:00Z",
+  "source": {
+    "type": "original",
+    "author": "E2 Study Path project"
+  },
+  "vocabulary": [
+    {
+      "id": "vocab-s0-hello-001",
+      "schemaVersion": "1.0.0",
+      "stage": 0,
+      "headword": "hello",
+      "lemma": "hello",
+      "partOfSpeech": "other",
+      "meanings": [
+        { "id": "greeting", "ja": "こんにちは", "register": "neutral" }
+      ],
+      "pronunciation": { "kanaGuide": "ハロー" },
+      "exampleSentences": [
+        { "id": "ex-1", "en": "Hello, I am Mai.", "ja": "こんにちは、私はマイです。", "stage": 0 }
+      ],
+      "collocations": [],
+      "synonyms": ["hi"],
+      "antonyms": [],
+      "confusionGroupIds": [],
+      "tags": ["greeting", "starter"],
+      "cefrHint": "pre-A1",
+      "source": { "type": "original", "author": "E2 Study Path project" }
+    }
+  ],
+  "lessons": [
+    {
+      "id": "lesson-s0-greeting-001",
+      "schemaVersion": "1.0.0",
+      "stage": 0,
+      "unitId": "S0-U4",
+      "order": 1,
+      "titleJa": "hello であいさつする",
+      "descriptionJa": "会ったときの短いあいさつを覚えます。",
+      "objectivesJa": ["hello の意味が分かる"],
+      "prerequisites": [],
+      "sections": [
+        {
+          "id": "intro",
+          "type": "explanation",
+          "titleJa": "会ったときのあいさつ",
+          "bodyJa": "hello は、人に会ったときに使う基本的なあいさつです。",
+          "estimatedMinutes": 1
+        },
+        {
+          "id": "practice",
+          "type": "exercise",
+          "titleJa": "確認",
+          "exerciseIds": ["exercise-s0-hello-meaning-001"],
+          "estimatedMinutes": 1
+        }
+      ],
+      "estimatedMinutes": 2,
+      "reviewItemKeys": ["vocab:vocab-s0-hello-001"],
+      "source": { "type": "original", "author": "E2 Study Path project" }
+    }
+  ],
+  "exercises": [
+    {
+      "id": "exercise-s0-hello-meaning-001",
+      "schemaVersion": "1.0.0",
+      "type": "multipleChoice",
+      "stage": 0,
+      "lessonId": "lesson-s0-greeting-001",
+      "prompt": "hello の意味を選んでください。",
+      "payload": { "choices": ["こんにちは", "さようなら", "ありがとう", "ごめんなさい"] },
+      "answer": 0,
+      "explanation": "hello は、人に会ったときの『こんにちは』というあいさつです。",
+      "hints": ["人に会ったときに使います。"],
+      "targetSkills": ["vocabulary"],
+      "targetMasteryDimensions": ["recognition"],
+      "reviewItemKeys": ["vocab:vocab-s0-hello-001"],
+      "estimatedSeconds": 10,
+      "tags": ["greeting"],
+      "source": { "type": "original", "author": "E2 Study Path project" }
+    }
+  ]
+}

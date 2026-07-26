@@ -1,0 +1,95 @@
+[
+  {
+    "id": "lesson-s0-greeting-001",
+    "schemaVersion": "1.0.0",
+    "stage": 0,
+    "unitId": "S0-U4",
+    "order": 1,
+    "titleJa": "hello であいさつする",
+    "descriptionJa": "会ったときの短いあいさつを覚えます。",
+    "objectivesJa": ["hello の意味が分かる", "自分の名前を短く言える"],
+    "prerequisites": [],
+    "sections": [
+      {
+        "id": "intro",
+        "type": "explanation",
+        "titleJa": "会ったときのあいさつ",
+        "bodyJa": "hello は、人に会ったときに使う基本的なあいさつです。",
+        "estimatedMinutes": 1
+      },
+      {
+        "id": "examples",
+        "type": "examples",
+        "titleJa": "例文",
+        "examples": [
+          { "en": "Hello, I am Mai.", "ja": "こんにちは、私はマイです。" }
+        ],
+        "estimatedMinutes": 1
+      },
+      {
+        "id": "practice",
+        "type": "exercise",
+        "titleJa": "確認",
+        "exerciseIds": ["exercise-s0-hello-meaning-001"],
+        "estimatedMinutes": 1
+      },
+      {
+        "id": "summary",
+        "type": "summary",
+        "titleJa": "まとめ",
+        "bodyJa": "hello は『こんにちは』。Hello, I am ... で名前を言えます。",
+        "estimatedMinutes": 1
+      }
+    ],
+    "estimatedMinutes": 4,
+    "reviewItemKeys": ["vocab:vocab-s0-hello-001"],
+    "source": { "type": "original", "author": "E2 Study Path project" }
+  },
+  {
+    "id": "lesson-s1-be-001",
+    "schemaVersion": "1.0.0",
+    "stage": 1,
+    "unitId": "S1-U1",
+    "order": 1,
+    "titleJa": "I am ... の形",
+    "descriptionJa": "I の後ろで使うbe動詞 am を学びます。",
+    "objectivesJa": ["I am ... の文を読める", "I am ... の文を作れる"],
+    "prerequisites": ["lesson-s0-greeting-001"],
+    "sections": [
+      {
+        "id": "intro",
+        "type": "explanation",
+        "titleJa": "I と am",
+        "bodyJa": "自分について『私は〜です』と言うとき、I am ... の形を使います。",
+        "estimatedMinutes": 2
+      },
+      {
+        "id": "examples",
+        "type": "examples",
+        "titleJa": "例文",
+        "examples": [
+          { "en": "I am Ken.", "ja": "私はケンです。" },
+          { "en": "I am happy.", "ja": "私はうれしいです。" }
+        ],
+        "estimatedMinutes": 2
+      },
+      {
+        "id": "practice",
+        "type": "exercise",
+        "titleJa": "思い出して入力",
+        "exerciseIds": ["exercise-s1-be-am-001"],
+        "estimatedMinutes": 2
+      },
+      {
+        "id": "summary",
+        "type": "summary",
+        "titleJa": "まとめ",
+        "bodyJa": "主語が I のとき、be動詞は am を使います。",
+        "estimatedMinutes": 1
+      }
+    ],
+    "estimatedMinutes": 7,
+    "reviewItemKeys": ["grammar:be-i-am"],
+    "source": { "type": "original", "author": "E2 Study Path project" }
+  }
+]

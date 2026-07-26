@@ -1,0 +1,85 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://example.local/schemas/vocabulary-item.schema.json",
+  "title": "VocabularyItem",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "id",
+    "schemaVersion",
+    "stage",
+    "headword",
+    "lemma",
+    "partOfSpeech",
+    "meanings",
+    "exampleSentences",
+    "tags",
+    "source"
+  ],
+  "properties": {
+    "id": { "type": "string", "minLength": 3 },
+    "schemaVersion": { "type": "string", "pattern": "^[0-9]+\\.[0-9]+\\.[0-9]+$" },
+    "stage": { "type": "integer", "minimum": 0, "maximum": 6 },
+    "headword": { "type": "string", "minLength": 1 },
+    "lemma": { "type": "string", "minLength": 1 },
+    "partOfSpeech": {
+      "type": "string",
+      "enum": ["noun", "verb", "adjective", "adverb", "pronoun", "preposition", "conjunction", "determiner", "phrase", "other"]
+    },
+    "meanings": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["id", "ja"],
+        "properties": {
+          "id": { "type": "string", "minLength": 1 },
+          "ja": { "type": "string", "minLength": 1 },
+          "noteJa": { "type": "string" },
+          "register": { "type": "string", "enum": ["neutral", "formal", "informal", "technical"] }
+        }
+      }
+    },
+    "pronunciation": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "ipa": { "type": "string" },
+        "kanaGuide": { "type": "string" },
+        "audioAsset": { "type": "string" }
+      }
+    },
+    "exampleSentences": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["id", "en", "ja", "stage"],
+        "properties": {
+          "id": { "type": "string" },
+          "en": { "type": "string", "minLength": 1 },
+          "ja": { "type": "string", "minLength": 1 },
+          "stage": { "type": "integer", "minimum": 0, "maximum": 6 }
+        }
+      }
+    },
+    "collocations": { "type": "array", "items": { "type": "string" }, "default": [] },
+    "synonyms": { "type": "array", "items": { "type": "string" }, "default": [] },
+    "antonyms": { "type": "array", "items": { "type": "string" }, "default": [] },
+    "confusionGroupIds": { "type": "array", "items": { "type": "string" }, "default": [] },
+    "tags": { "type": "array", "items": { "type": "string" }, "minItems": 1 },
+    "cefrHint": { "type": "string", "enum": ["pre-A1", "A1", "A2", "B1"] },
+    "source": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["type", "author"],
+      "properties": {
+        "type": { "const": "original" },
+        "author": { "type": "string", "minLength": 1 },
+        "note": { "type": "string" }
+      }
+    }
+  }
+}

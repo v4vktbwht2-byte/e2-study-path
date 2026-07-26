@@ -1,0 +1,12 @@
+flowchart TD
+  Start[Generate daily plan] --> Capacity[Convert target minutes to capacity]
+  Capacity --> Due[Load overdue and due reviews]
+  Due --> Weak[Load weak items]
+  Weak --> Lesson[Load current lesson]
+  Lesson --> New{Review load high?}
+  New -->|Yes| Suppress[Reduce or stop new items]
+  New -->|No| AddNew[Add new vocabulary]
+  Suppress --> Rotate[Add rotating skill block if capacity remains]
+  AddNew --> Rotate
+  Rotate --> Trim[Trim to selected light/standard/thorough/all mode]
+  Trim --> Save[Save plan snapshot]

@@ -1,0 +1,88 @@
+[
+  {
+    "id": "vocab-s0-hello-001",
+    "schemaVersion": "1.0.0",
+    "stage": 0,
+    "headword": "hello",
+    "lemma": "hello",
+    "partOfSpeech": "other",
+    "meanings": [
+      { "id": "greeting", "ja": "こんにちは", "register": "neutral" }
+    ],
+    "pronunciation": { "kanaGuide": "ハロー" },
+    "exampleSentences": [
+      { "id": "ex-1", "en": "Hello, I am Mai.", "ja": "こんにちは、私はマイです。", "stage": 0 }
+    ],
+    "collocations": [],
+    "synonyms": ["hi"],
+    "antonyms": [],
+    "confusionGroupIds": [],
+    "tags": ["greeting", "starter"],
+    "cefrHint": "pre-A1",
+    "source": { "type": "original", "author": "E2 Study Path project" }
+  },
+  {
+    "id": "vocab-s1-study-001",
+    "schemaVersion": "1.0.0",
+    "stage": 1,
+    "headword": "study",
+    "lemma": "study",
+    "partOfSpeech": "verb",
+    "meanings": [
+      { "id": "learn", "ja": "勉強する", "register": "neutral" }
+    ],
+    "pronunciation": { "kanaGuide": "スタディ" },
+    "exampleSentences": [
+      { "id": "ex-1", "en": "I study English every day.", "ja": "私は毎日英語を勉強します。", "stage": 1 }
+    ],
+    "collocations": ["study English", "study hard"],
+    "synonyms": ["learn"],
+    "antonyms": [],
+    "confusionGroupIds": [],
+    "tags": ["school", "daily-action"],
+    "cefrHint": "A1",
+    "source": { "type": "original", "author": "E2 Study Path project" }
+  },
+  {
+    "id": "vocab-s3-environment-001",
+    "schemaVersion": "1.0.0",
+    "stage": 3,
+    "headword": "environment",
+    "lemma": "environment",
+    "partOfSpeech": "noun",
+    "meanings": [
+      { "id": "natural-world", "ja": "環境", "register": "neutral" }
+    ],
+    "exampleSentences": [
+      { "id": "ex-1", "en": "We should protect the environment.", "ja": "私たちは環境を守るべきです。", "stage": 3 }
+    ],
+    "collocations": ["protect the environment", "natural environment"],
+    "synonyms": [],
+    "antonyms": [],
+    "confusionGroupIds": [],
+    "tags": ["environment", "society"],
+    "cefrHint": "A2",
+    "source": { "type": "original", "author": "E2 Study Path project" }
+  },
+  {
+    "id": "vocab-s6-benefit-001",
+    "schemaVersion": "1.0.0",
+    "stage": 6,
+    "headword": "benefit",
+    "lemma": "benefit",
+    "partOfSpeech": "noun",
+    "meanings": [
+      { "id": "advantage", "ja": "利点、恩恵", "register": "neutral" }
+    ],
+    "exampleSentences": [
+      { "id": "ex-1", "en": "One benefit of online classes is flexibility.", "ja": "オンライン授業の利点の一つは柔軟性です。", "stage": 6 }
+    ],
+    "collocations": ["a major benefit", "provide benefits"],
+    "synonyms": ["advantage"],
+    "antonyms": ["disadvantage"],
+    "confusionGroupIds": [],
+    "tags": ["argument", "education"],
+    "cefrHint": "B1",
+    "source": { "type": "original", "author": "E2 Study Path project" }
+  }
+]

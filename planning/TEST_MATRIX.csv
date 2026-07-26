@@ -1,0 +1,13 @@
+area,unit,integration,component,e2e,manual
+Review scheduler,required,optional,none,required,none
+Daily plan,required,optional,required,required,spot
+IndexedDB,required,required,none,required,spot
+Onboarding,placement rules,profile save,required,required,mobile
+Vocabulary,mastery rules,transaction,required,required,content spot
+Reading,scoring,history save,required,required,content review
+Listening,mode rules,audio adapter,required,required,device audio
+Writing,word count,draft save,required,required,content review
+Speaking,timer rules,record store,required,required,permissions/device
+Backup,merge rules,round trip,required,required,file picker
+PWA,cache helpers,service worker,update UI,required,installed device
+Accessibility,helpers,none,axe,required,screen reader

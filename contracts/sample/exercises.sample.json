@@ -1,0 +1,59 @@
+[
+  {
+    "id": "exercise-s0-hello-meaning-001",
+    "schemaVersion": "1.0.0",
+    "type": "multipleChoice",
+    "stage": 0,
+    "lessonId": "lesson-s0-greeting-001",
+    "prompt": "hello の意味を選んでください。",
+    "instructionsJa": "一番近い意味を1つ選びます。",
+    "payload": {
+      "choices": ["こんにちは", "さようなら", "ありがとう", "ごめんなさい"]
+    },
+    "answer": 0,
+    "explanation": "hello は、人に会ったときの『こんにちは』というあいさつです。",
+    "hints": ["人に会ったときに使います。"],
+    "targetSkills": ["vocabulary"],
+    "targetMasteryDimensions": ["recognition"],
+    "reviewItemKeys": ["vocab:vocab-s0-hello-001"],
+    "estimatedSeconds": 10,
+    "tags": ["greeting"],
+    "source": { "type": "original", "author": "E2 Study Path project" }
+  },
+  {
+    "id": "exercise-s1-be-am-001",
+    "schemaVersion": "1.0.0",
+    "type": "cloze",
+    "stage": 1,
+    "lessonId": "lesson-s1-be-001",
+    "prompt": "I ___ Ken. に入る語を入力してください。",
+    "instructionsJa": "I の後ろに来るbe動詞です。",
+    "payload": { "sentence": "I ___ Ken." },
+    "answer": ["am"],
+    "explanation": "主語が I のとき、be動詞は am を使います。",
+    "hints": ["a で始まります。"],
+    "targetSkills": ["grammar", "writing"],
+    "targetMasteryDimensions": ["recall", "context", "spelling"],
+    "reviewItemKeys": ["grammar:be-i-am"],
+    "estimatedSeconds": 20,
+    "tags": ["be-verb"],
+    "source": { "type": "original", "author": "E2 Study Path project" }
+  },
+  {
+    "id": "exercise-s3-environment-cloze-001",
+    "schemaVersion": "1.0.0",
+    "type": "cloze",
+    "stage": 3,
+    "prompt": "We should protect the ___.",
+    "payload": { "sentence": "We should protect the ___." },
+    "answer": ["environment"],
+    "explanation": "protect the environment で『環境を守る』という組み合わせです。",
+    "hints": ["e で始まる11文字の単語です。"],
+    "targetSkills": ["vocabulary", "writing"],
+    "targetMasteryDimensions": ["recall", "spelling", "context"],
+    "reviewItemKeys": ["vocab:vocab-s3-environment-001"],
+    "estimatedSeconds": 25,
+    "tags": ["environment"],
+    "source": { "type": "original", "author": "E2 Study Path project" }
+  }
+]

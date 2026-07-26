@@ -1,0 +1,15 @@
+stateDiagram-v2
+  [*] --> new
+  new --> learning: first exposure
+  learning --> learning: again / hard
+  learning --> review: good completes steps / easy graduates
+  review --> review: hard / good / easy
+  review --> relearning: again
+  relearning --> relearning: again / hard
+  relearning --> review: good / easy completes relearning
+  new --> suspended
+  learning --> suspended
+  review --> suspended
+  relearning --> suspended
+  suspended --> new: reset
+  suspended --> review: resume

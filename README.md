@@ -1,0 +1,50 @@
+# E2 Study Path — Beginner-to-Grade-2 English Learning PWA
+
+> 作業名。英検公式または日本英語検定協会公認の製品ではありません。
+
+英語をほぼ初めて学ぶ人が、段階的に基礎を積み上げ、最終的に英検2級相当の総合力を目指すための自己学習PWAです。
+
+## プロダクトの3本柱
+
+1. **初学者から始められる段階制カリキュラム**
+2. **忘れかけた項目を優先する個人適応型復習**
+3. **単語暗記に集中できる独立モード**
+
+## 初期版の技術方針
+
+- React + TypeScript + Vite
+- PWA、オフライン起動、インストール対応
+- IndexedDB（Dexie）によるローカル保存
+- 外部アカウント・有料API・バックエンドなし
+- コンテンツはバージョン付きJSON
+- Vitest、Testing Library、Playwrightによる検証
+- モバイルファースト、キーボード操作、アクセシビリティ配慮
+
+## 主要機能
+
+- 初回診断とおすすめ開始地点
+- ステージ0〜6の学習マップ
+- 今日の学習メニュー
+- 初学者向けミニレッスン
+- 単語集中モード
+- 間隔反復・苦手優先復習
+- 語彙、文法、読解、リスニング、英作文、スピーキング練習
+- 英検2級形式を参考にしたオリジナル模擬演習
+- 学習記録、弱点分析、復習バックログ救済
+- JSONバックアップ・復元
+- PWA更新通知、オフライン状態表示
+
+## 資料の読み順
+
+1. `START_HERE.md`
+2. `MASTER_PROMPT.md`
+3. `docs/00_PRODUCT_VISION.md`
+4. `docs/01_SCOPE_AND_RELEASES.md`
+5. `docs/02_FUNCTIONAL_REQUIREMENTS.md`
+6. `docs/07_TECHNICAL_ARCHITECTURE.md`
+7. `docs/09_REVIEW_ALGORITHM.md`
+8. `docs/17_ACCEPTANCE_CRITERIA_TRACEABILITY.md`
+
+## 実装と教材制作の区別
+
+この引き継ぎは、アプリ機能を完成させるための仕様とプロンプトを含みます。Codexは動作確認用のオリジナル教材を生成しますが、商用品質の大量教材は別工程です。`prompts/11_CONTENT_EXPANSION.md` と `checklists/CONTENT_QA.md` を使い、少量ずつ検証しながら追加します。

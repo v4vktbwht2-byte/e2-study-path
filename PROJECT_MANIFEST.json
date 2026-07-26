@@ -1,0 +1,395 @@
+{
+  "package": "E2 Study Path Codex Handoff Full Set",
+  "packageVersion": "1.0.0",
+  "generatedAt": "2026-07-26T16:22:33+00:00",
+  "manifestPolicy": "The manifest intentionally excludes PROJECT_MANIFEST.json itself.",
+  "fileCountExcludingManifest": 77,
+  "totalSizeBytesExcludingManifest": 187529,
+  "files": [
+    {
+      "path": ".gitignore",
+      "sizeBytes": 130,
+      "sha256": "6e24082e501fd07009b34e9c7a91bf0d29b324f69332f6caddbd699283f3ae73"
+    },
+    {
+      "path": "AGENTS.md",
+      "sizeBytes": 3235,
+      "sha256": "148b93e8f80d44aebe84f0b1aef91145d75b00946426ce1e70c2e35bc43fd7fe"
+    },
+    {
+      "path": "CHANGELOG.md",
+      "sizeBytes": 102,
+      "sha256": "4cf075cd4f776ce7037b63355f9ad481f9c79186060ef593306f560d0cf4f50c"
+    },
+    {
+      "path": "FILE_INDEX.md",
+      "sizeBytes": 3812,
+      "sha256": "861736fe8a31b8cd4dec1ab8510f2404f6429d4bc457d10a9ecc7cbcaf3f67b2"
+    },
+    {
+      "path": "LICENSE_AND_BRANDING.md",
+      "sizeBytes": 1347,
+      "sha256": "215ea0057acef6d215ecfdfe1d8e76a213963a064a9c3dfddc6e164850a31c8d"
+    },
+    {
+      "path": "MASTER_PROMPT.md",
+      "sizeBytes": 6285,
+      "sha256": "13ecacad1db84ea426db4361b9c9a9fff12c04a025c47edbd444b4948969b7c4"
+    },
+    {
+      "path": "PLANS.md",
+      "sizeBytes": 445,
+      "sha256": "ec462ec4e6865ee13c7f56a97a4dca297c24a92c5a6829ff9c53a14bbf6c900f"
+    },
+    {
+      "path": "README.md",
+      "sizeBytes": 2148,
+      "sha256": "c1eab6c87061324bad9950ae3dcc4a6b52d4af9392f9ff47dc1c57f99a0e54f3"
+    },
+    {
+      "path": "START_HERE.md",
+      "sizeBytes": 3683,
+      "sha256": "bbfecc36fe8ce38c4f85b62632cb466b1b99ca5d5eb46fd0e98c99fe95098533"
+    },
+    {
+      "path": "checklists/CODE_REVIEW.md",
+      "sizeBytes": 1197,
+      "sha256": "8c5b3dc76a064ea700c311991b53d78676ebd5a65fd8f7582c1ad7069722811b"
+    },
+    {
+      "path": "checklists/CONTENT_QA.md",
+      "sizeBytes": 1867,
+      "sha256": "c8683817a1abfd7bf9aa4746b9f5334a3912bc3b9d0da7a4f89749553764e6bd"
+    },
+    {
+      "path": "checklists/DEFINITION_OF_DONE.md",
+      "sizeBytes": 1341,
+      "sha256": "54b83cdd30463eaeb1610800b7ee6900565fe5165f8cabe6778d4252959baf4d"
+    },
+    {
+      "path": "checklists/FINAL_RELEASE_CHECKLIST.md",
+      "sizeBytes": 1161,
+      "sha256": "1b0f41d450a484b7a695c4756d7448a857b3660c65a875b6fee87f3bb4326b7d"
+    },
+    {
+      "path": "checklists/PHASE_GATE.md",
+      "sizeBytes": 481,
+      "sha256": "8add7a775422fcbdf7da98645bd01086306a96ff08acec1e9f7aa5baf69e0f2a"
+    },
+    {
+      "path": "checklists/PWA_MOBILE_QA.md",
+      "sizeBytes": 1136,
+      "sha256": "d5bef0f8eab43ce2403473276e6f15fb2f6f3afc46abc835cc30e2e383d41f07"
+    },
+    {
+      "path": "checklists/SECURITY_PRIVACY_QA.md",
+      "sizeBytes": 636,
+      "sha256": "41a8dadcd9732a11968008acd614c2fc424adc56a54e9f182366f83129e4bcfa"
+    },
+    {
+      "path": "contracts/backup.schema.json",
+      "sizeBytes": 1553,
+      "sha256": "af32ab959de33e09255cb931eb3e7a814b71c4ca3e0e758feb4c8e4d455c0792"
+    },
+    {
+      "path": "contracts/content-pack.schema.json",
+      "sizeBytes": 1193,
+      "sha256": "78c461dda77046a8be99300c7c4a07ff13cca926fa385446f2088e14b6646b84"
+    },
+    {
+      "path": "contracts/exercise.schema.json",
+      "sizeBytes": 2141,
+      "sha256": "ac3bd0e8d89f4ebb437820dc5e9623d1f21d76d3e20f92d6e59028a026a632d6"
+    },
+    {
+      "path": "contracts/lesson.schema.json",
+      "sizeBytes": 2261,
+      "sha256": "ba04e90dd3dc84081710fee3716bc3df48486a74b2f6c021ea1d59d8f39d3488"
+    },
+    {
+      "path": "contracts/review-state.schema.json",
+      "sizeBytes": 1484,
+      "sha256": "f4110ad9285a6796e2771f466f5b380c1f0aef5dab0c769701e3e03dc3076c06"
+    },
+    {
+      "path": "contracts/sample/backup.sample.json",
+      "sizeBytes": 401,
+      "sha256": "b29ad6dddab5f080c25d9eca9494e50cfb9252b527b4964afef6464f6433370b"
+    },
+    {
+      "path": "contracts/sample/content-pack.sample.json",
+      "sizeBytes": 2980,
+      "sha256": "e5543665621940e81e467587f42c6e6c49d2efc81d1c520efad74005971b3b1e"
+    },
+    {
+      "path": "contracts/sample/exercises.sample.json",
+      "sizeBytes": 2337,
+      "sha256": "614d216c1c640a9c3492d92892400e6e8410bbe7525e827ea41f0e4b6ff1897d"
+    },
+    {
+      "path": "contracts/sample/lessons.sample.json",
+      "sizeBytes": 2946,
+      "sha256": "5f0ce81f35fe321b4c0f27b3241d6bcaa02048e2510e6f808237cf1ff246d55d"
+    },
+    {
+      "path": "contracts/sample/review-state.sample.json",
+      "sizeBytes": 369,
+      "sha256": "1319066e46af5c054922aa13fa89ec300000696fb83f0afa051548be0e28325e"
+    },
+    {
+      "path": "contracts/sample/vocabulary.sample.json",
+      "sizeBytes": 2883,
+      "sha256": "7e9a5035b8ea5727029049a2cbdefc5461a8290d0163cb85a06c11edf2866961"
+    },
+    {
+      "path": "contracts/vocabulary-item.schema.json",
+      "sizeBytes": 2870,
+      "sha256": "4a770f57fad2b268445a1ee25e6caca82c740d5018aaa34ac055e73e0d859ea1"
+    },
+    {
+      "path": "diagrams/ARCHITECTURE.mmd",
+      "sizeBytes": 693,
+      "sha256": "195fbbcbdfc559a0f8c20587c827c208a61ca85c476196ca96be2ec6dd45135b"
+    },
+    {
+      "path": "diagrams/DAILY_PLAN.mmd",
+      "sizeBytes": 531,
+      "sha256": "a57a61ab27f6093bfd44d80a80be8641557a8a89bd72ec6151e1780b3ec77edc"
+    },
+    {
+      "path": "diagrams/DATA_FLOW.mmd",
+      "sizeBytes": 499,
+      "sha256": "d91f7be2cfa48256fb971e0a146b4184836bcb555af7d02d765332d78e8016cf"
+    },
+    {
+      "path": "diagrams/REVIEW_STATE_MACHINE.mmd",
+      "sizeBytes": 488,
+      "sha256": "a5a94299f9aafdfae7d46330a7e0a8b0ab04b5e1d5f01873a26414d2eb00c2d9"
+    },
+    {
+      "path": "diagrams/USER_FLOW.mmd",
+      "sizeBytes": 527,
+      "sha256": "ec42d912c9c71c9c3cbf68cc703d3815ef7f2be84662967ebf0224d717609d6b"
+    },
+    {
+      "path": "docs/00_PRODUCT_VISION.md",
+      "sizeBytes": 4329,
+      "sha256": "6394ada6276c2c4bf44e5a8e4cc9b2958d171371cd5d4c2516981edb67c2a6e1"
+    },
+    {
+      "path": "docs/01_SCOPE_AND_RELEASES.md",
+      "sizeBytes": 3259,
+      "sha256": "2a5f58c76e53ef6024bc42e1031f4ecf36cd7949f3967147b23c1b7d8060279f"
+    },
+    {
+      "path": "docs/02_FUNCTIONAL_REQUIREMENTS.md",
+      "sizeBytes": 8963,
+      "sha256": "d0cca723c45104696868846b0e059e252ef77c4cb445a6af246a24e9ffb4fadb"
+    },
+    {
+      "path": "docs/03_CURRICULUM_MAP.md",
+      "sizeBytes": 7157,
+      "sha256": "cb5c866856aa2353a24e4353efc0866534c7099da205ed79709cf937bc44e99b"
+    },
+    {
+      "path": "docs/04_INFORMATION_ARCHITECTURE.md",
+      "sizeBytes": 3147,
+      "sha256": "c35ffe8303f768313a60ea5efac5fed23cd4ba4dd5c4702c0300f5eb3662d0ee"
+    },
+    {
+      "path": "docs/05_SCREEN_SPECIFICATIONS.md",
+      "sizeBytes": 4933,
+      "sha256": "269fefd087aba0d06f3d18e00711a610e8c8283b653d3efe1a6b27325748b154"
+    },
+    {
+      "path": "docs/06_DESIGN_SYSTEM.md",
+      "sizeBytes": 3031,
+      "sha256": "963bd2c5d8ec3747c50f0966bc63e8c6195a3dcc95190f08adb066158f5d1354"
+    },
+    {
+      "path": "docs/07_TECHNICAL_ARCHITECTURE.md",
+      "sizeBytes": 5786,
+      "sha256": "6090f3179d9eba505fc396a525ef861fdaab21dd08add29de4a6fa5b2a4ed01e"
+    },
+    {
+      "path": "docs/08_DATA_MODEL_AND_INDEXEDDB.md",
+      "sizeBytes": 6557,
+      "sha256": "a34142876c014bbbaab8bcc689c12be05f3f4138e8bf8422d8738f9b904ce5bd"
+    },
+    {
+      "path": "docs/09_REVIEW_ALGORITHM.md",
+      "sizeBytes": 7539,
+      "sha256": "b1b27c0fc084e29e44789dec301c19d9df35d3fe819e83ece3387dd7b65b15ed"
+    },
+    {
+      "path": "docs/10_VOCABULARY_MODE.md",
+      "sizeBytes": 3500,
+      "sha256": "801e627c6e77ac8bcc051925da07482128653cfbd4015a7d2469b1e71ae43930"
+    },
+    {
+      "path": "docs/11_LESSON_AND_EXERCISE_ENGINE.md",
+      "sizeBytes": 2882,
+      "sha256": "74528797c6ab0d2a9f9ce0a9e3b902b4c9a890e1477c1ec1da21bf1cb630ad76"
+    },
+    {
+      "path": "docs/12_CONTENT_MODEL_AND_AUTHORING.md",
+      "sizeBytes": 4086,
+      "sha256": "e0938592e201bc6a1f9dbda5347286972f3ab81b819af70f7e0fa8311323425d"
+    },
+    {
+      "path": "docs/13_PWA_OFFLINE_INSTALL_UPDATE.md",
+      "sizeBytes": 3222,
+      "sha256": "01ae4c4961fdc074b71ae578b66c27b1a3cf410e932042dcdc7b709abca2724e"
+    },
+    {
+      "path": "docs/14_ACCESSIBILITY_PRIVACY_SECURITY.md",
+      "sizeBytes": 3260,
+      "sha256": "7de239897de805623eb6df10a79d690e269bf74a265e8f23a723feab253ed233"
+    },
+    {
+      "path": "docs/15_TEST_STRATEGY.md",
+      "sizeBytes": 3414,
+      "sha256": "db2fa54ea1eca546388fb0946b1eed1534d87916fcb891e83f8701932240d040"
+    },
+    {
+      "path": "docs/16_DEPLOYMENT_OPERATIONS.md",
+      "sizeBytes": 1897,
+      "sha256": "56472a182f1dbb77ac3f639b408a250c2cebba6f0b7f5d8cf900e4fa576d68ee"
+    },
+    {
+      "path": "docs/17_ACCEPTANCE_CRITERIA_TRACEABILITY.md",
+      "sizeBytes": 3965,
+      "sha256": "9ac8be81af3a50c0099a3e9fac1dc930dcede16d16c7f9478c0c2171aa0cf72d"
+    },
+    {
+      "path": "docs/18_RISK_REGISTER.md",
+      "sizeBytes": 2264,
+      "sha256": "1a1f7239709ee30be28ffa507867c8c94e3147aa2c945c315fe47f8f222fa542"
+    },
+    {
+      "path": "docs/19_DECISIONS_AND_OPEN_POINTS.md",
+      "sizeBytes": 1478,
+      "sha256": "17872ebc4903e57fecdb2456c0948b4ae87a8a24c8906f3b4dcf09ba3948cafe"
+    },
+    {
+      "path": "docs/20_IMPLEMENTATION_STATUS.md",
+      "sizeBytes": 1612,
+      "sha256": "a4df8aa0be744823f88b04825c816fd1a1d3154ecba647e99b2a7c26475464f3"
+    },
+    {
+      "path": "docs/21_SOURCE_NOTES.md",
+      "sizeBytes": 2642,
+      "sha256": "ab6c419aecb76f700f15c0c700b2e1030d315c66fbaa364b7844a2c1628c6cb1"
+    },
+    {
+      "path": "planning/BACKLOG.md",
+      "sizeBytes": 1078,
+      "sha256": "494f1553dd6484c14f96fbb849b8561ef79d730678911fcec039de1c220ebfbe"
+    },
+    {
+      "path": "planning/CONTENT_TARGETS.csv",
+      "sizeBytes": 216,
+      "sha256": "189db9103dcd02496bb88cd1baac246471c23a686592bc3da4c0f9a1ca508905"
+    },
+    {
+      "path": "planning/PHASE_PLAN.md",
+      "sizeBytes": 831,
+      "sha256": "59985efbb7e2595606631a3c5249e490c126085a10268281443b2313c71cb769"
+    },
+    {
+      "path": "planning/TEST_MATRIX.csv",
+      "sizeBytes": 774,
+      "sha256": "6acce5636f770cd463b6e3090eeafd9ab4d96e62d73f29132d8ce0c79e880e02"
+    },
+    {
+      "path": "planning/TRACEABILITY.csv",
+      "sizeBytes": 1214,
+      "sha256": "594afca80128f5731fedff25c3532a24dd8081172232922d12104d119bdc8aa1"
+    },
+    {
+      "path": "prompts/00_PRE_FLIGHT.md",
+      "sizeBytes": 1590,
+      "sha256": "b0289251a662c804847ff9613cf35a92019ca3aa5189d97ecd07fbdc1e587bcc"
+    },
+    {
+      "path": "prompts/01_SCAFFOLD_FOUNDATION.md",
+      "sizeBytes": 2712,
+      "sha256": "67a9dded2056d3eacfcbe75b546bfc231d09d0149e49ad382f427a9834bc9150"
+    },
+    {
+      "path": "prompts/02_DOMAIN_DB_CONTENT_PIPELINE.md",
+      "sizeBytes": 2446,
+      "sha256": "e5bfaa2d805d0bc74fcec269a371e4e23d3c1d6e7db325a09dcc66b14e727bef"
+    },
+    {
+      "path": "prompts/03_ONBOARDING_CURRICULUM.md",
+      "sizeBytes": 2749,
+      "sha256": "7cc8d3504ae51f510008a9ed8beed0c49374a28cc0641bce7e183973a3c7abfb"
+    },
+    {
+      "path": "prompts/04_VOCABULARY_SRS.md",
+      "sizeBytes": 2362,
+      "sha256": "da89a86307d5a62b9e1c474a72dbd4dcbb9bd173b1db05198cfcc4394356b651"
+    },
+    {
+      "path": "prompts/05_DAILY_PLAN_LESSON_ENGINE.md",
+      "sizeBytes": 2248,
+      "sha256": "8476b8cbf2ab9e2be6b866402297c689700e8d27f7667ba9c83b3501fae87cac"
+    },
+    {
+      "path": "prompts/06_SKILL_MODULES.md",
+      "sizeBytes": 3277,
+      "sha256": "01ba87c1ce5679f87f3f232c0d3ed614e6ae0b78a4b12ae1a01fc8b991a1207a"
+    },
+    {
+      "path": "prompts/07_PWA_BACKUP_UPDATE.md",
+      "sizeBytes": 2472,
+      "sha256": "2b6cc3600f43752f51efec82880e3da5c27f5d79fb9b5e622d4560dfbe909c04"
+    },
+    {
+      "path": "prompts/08_PROGRESS_UX_ACCESSIBILITY.md",
+      "sizeBytes": 2559,
+      "sha256": "ca7e18bc42b749dbe1cd6a05d69b2332d11fb4e7b47bda2be82a0e477b7be2b9"
+    },
+    {
+      "path": "prompts/09_TEST_CI_DEPLOY.md",
+      "sizeBytes": 2046,
+      "sha256": "cad6dfe047930ccc5473e75c2e65568c6ac8bd27893630f887012f8aae86ecea"
+    },
+    {
+      "path": "prompts/10_FINAL_AUDIT_RELEASE.md",
+      "sizeBytes": 2232,
+      "sha256": "b8b3d9470e7c98a279e659c3274d03128ece493ed03b30fc64fdefde5e718b56"
+    },
+    {
+      "path": "prompts/11_CONTENT_EXPANSION.md",
+      "sizeBytes": 2285,
+      "sha256": "cf0e58532a9fbfcc858267c3259d7a4a43f8ddebc17c04a8b39eb5983f7a9b4d"
+    },
+    {
+      "path": "prompts/OPTIONAL_AI_PHASE.md",
+      "sizeBytes": 897,
+      "sha256": "b366436f5353dd9df6ef8683a79ab3f4d227eb1edd5d5abd8ded2d569915ac49"
+    },
+    {
+      "path": "prompts/RECOVERY_AND_CONTINUATION.md",
+      "sizeBytes": 922,
+      "sha256": "7fea84940c6bdcc0c8b7eb2e51ff5598e2ed427f3c4b3b64236f7afdb164b5ad"
+    },
+    {
+      "path": "scripts/README.md",
+      "sizeBytes": 277,
+      "sha256": "64aaf4cb4780abe18d62c48c86040680883628a202d72b6919c5003863ed2758"
+    },
+    {
+      "path": "scripts/generate_manifest.py",
+      "sizeBytes": 1628,
+      "sha256": "f83f645609aa97dbe262c1cfce82c932507b2dbae33445faab926439ca76d80e"
+    },
+    {
+      "path": "scripts/verify_handoff.py",
+      "sizeBytes": 6629,
+      "sha256": "0011b3c5cd0544a8f599cdd8d065e6510e99e9a46c085798a13d034db630d947"
+    }
+  ]
+}
