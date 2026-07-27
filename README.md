@@ -2,7 +2,18 @@
 
 > 作業名。英検公式または日本英語検定協会公認の製品ではありません。
 
+> [!IMPORTANT]
+> 本リポジトリのプログラム、仕様書、README等の文書、学習教材は、生成AI（OpenAI Codex）を利用して作成・編集しています。AIによる作成内容には誤り、不自然な表現、不完全な説明が含まれる可能性があり、英語教育・試験対策の専門家による完全な校閲や正確性保証を受けたものではありません。
+
 英語をほぼ初めて学ぶ人が、段階的に基礎を積み上げ、最終的に英検2級相当の総合力を目指すための自己学習PWAです。
+
+## スマホですぐ使う
+
+[E2 Study Pathを開く](https://v4vktbwht2-byte.github.io/e2-study-path/)
+
+- iPhone／iPad: Safariで開き、共有メニューから「ホーム画面に追加」
+- Android: Chromeで開き、メニューまたは画面の案内から「アプリをインストール」
+- 学習記録は利用端末のブラウザー内に保存されます。ブラウザーデータの削除や端末変更の前に、アプリの「設定」→「データ管理」からバックアップしてください。
 
 ## プロダクトの3本柱
 
@@ -29,17 +40,17 @@ Phase 10では`AC-REL-001`〜`AC-REL-012`、全repository、教材、PWA、backu
 Phase 10の全品質ゲート実行結果は次のとおりです。
 
 - clean install: workspace直下の`node_modules`／`dist`削除後、lockfileから533 packagesを再構築
-- unit/componentテスト: 75ファイル・547/547件成功
-- coverage: Statements 79.98% / Branches 71.77% / Functions 77.12% / Lines 80.33%
+- unit/componentテスト: 75ファイル・551/551件成功
+- coverage: Statements 79.73% / Branches 71.80% / Functions 76.29% / Lines 80.18%
 - Playwright E2E: 全フローdesktop/320pxで70/70成功（retry 0）
 - axe: 主要14 routeと実データ入りTodayでserious／critical違反0件
 - Pilot教材検証: 140語・31レッスン・155演習・技能25セット
 - `npm run check`: 成功
-- production build: root／`/e2-study-path/`とも成功（entry 209.96 kB、500 kB超のchunk警告なし、PWA precache 69件、artifact 70ファイル）
+- production build: root／`/e2-study-path/`とも成功（entry 210.06 kB、500 kB超のchunk警告なし、PWA precache 70件、artifact 71ファイル）
 
-この全実行後の最終コードレビューで、全ユーザーデータ保存をorigin単位の共有ロックへ集約し、バックアップsnapshot barrierと回帰テスト6件を追加しました。変更後のlint、typecheck、format、静的書込み経路監査はPassしましたが、Vitestの再実行はWindows sandboxの`spawn EPERM`と権限付き実行の利用上限により実行不能でした。実公開前に承認済みの通常環境で`npm run check`、`npm run test:coverage`、root／subpathのbuildと`npm run verify:dist`、`npm run test:e2e`を再実行してください。
+最終コードレビューで追加した全ユーザーデータ保存の共有ロック、バックアップsnapshot barrier、回帰テストを含め、通常権限環境で`npm run check`、`npm run test:coverage`、root／subpathのbuildと`npm run verify:dist`、`npm run test:e2e`を再実行し、すべて成功しました。
 
-Web Speechの声質・発音、MediaRecorderの実権限・録音・再生、iPhone Safari／ホーム画面PWA、実際のwaiting Service Worker差替え、NVDA／VoiceOver、実ブラウザーの200% zoom・forced colors、Cloudflare Pages／Accessは実機・配信環境で未確認です。GitHubの非公開repositoryは作成済みで、CIを実行しています。offline dependency auditは0件でしたが、最新registry照会は依存メタデータの外部送信承認が得られず未実施です。公開ライセンス／配布権利も所有者判断待ちのため、Accessで限定公開する場合を含め、利用者へ提供する前に確定してください。
+Web Speechの声質・発音、MediaRecorderの実権限・録音・再生、iPhone Safari／ホーム画面PWA、実際のwaiting Service Worker差替え、NVDA／VoiceOver、実ブラウザーの200% zoom・forced colorsは実機・配信環境での確認を継続します。2026-07-27の最新registry監査は、全依存10件／本番依存2件のHighを報告しました。本番側はこの静的PWAが使わないunstable RSC APIだけに影響するReact Router勧告、開発側はbuild時だけの間接`brace-expansion`です。いずれも該当機能・外部入力経路がなく、stableな修正版公開を追跡します。software licenseは未決定のため、公開repositoryの閲覧や公開PWAの利用が、source code・教材・文書の複製、改変、再配布を許諾するものではありません。
 
 ## 必要環境
 
@@ -47,7 +58,7 @@ Web Speechの声質・発音、MediaRecorderの実権限・録音・再生、iPh
 - npm 11.8.0以上
 - Git
 - Chrome、Edge、Firefox、Safari等の現行ブラウザー
-- Cloudflare Pagesへ配備する場合は、GitHub連携を許可できるCloudflareアカウント
+- GitHub Pagesへ公開する場合は、ActionsとPagesを利用できるGitHub repository
 
 バックエンド、外部アカウント、APIキー、`.env`はローカル起動に不要です。依存関係はlockfileどおりに入れるため、通常は`npm install`ではなく`npm ci`を使います。
 
@@ -255,28 +266,22 @@ backupにはprofile、設定、復習予定、習熟度、進捗、回答履歴�
 
 公開操作はrepository ownerの承認を得てから行い、教材、画像、音声、依存assetを配信する権利と、未決定のsoftware licenseの扱いを先に確認してください。
 
-### Cloudflare Pages + Access（採用構成）
+### GitHub Pages（採用構成）
 
-sourceはGitHubの非公開repository `v4vktbwht2-byte/e2-study-path`、production branchは`master`を使います。repositoryが非公開でも配備先URLは自動では非公開になりません。production URL、preview URL、custom domainのすべてをCloudflare Accessで保護し、未認証でアプリ本体を取得できないことを共有前に確認してください。
+公開URLは `https://v4vktbwht2-byte.github.io/e2-study-path/` です。`.github/workflows/deploy-pages.yml`は、既定branchへのpushでCIが全件成功した後、CIと同じcommitを`/e2-study-path/`向けにbuildし、GitHub Pagesへ公開します。
 
-1. Cloudflare Dashboardの「Workers & Pages」からPages projectを作成し、「Connect to Git」でGitHubを選びます。
-2. Cloudflare Pages用GitHub Appには「Only select repositories」で`e2-study-path`だけを許可します。
-3. production branchを`master`、build commandを`npm run build`、build output directoryを`dist`にします。root directoryは空欄、framework presetはReact (Vite)です。
-4. root配備では`VITE_BASE_PATH`を未設定にするか`/`へ設定してdeployします。
-5. Pages projectのpreview deploymentにAccess policyを有効化します。
-6. productionの`*.pages.dev`を保護する場合は、Pagesが作成したAccess applicationのdomain設定からpreview専用wildcardを外し、production hostnameを対象に含めます。custom domainを使う場合は、そのhostname用のSelf-hosted Access applicationとAllow policyを作成します。
-7. 未認証・許可外ユーザーが拒否され、許可ユーザーだけがproduction／previewへ入れることを別browser profileで確認してからURLを共有します。
-8. `#/`を含む画面遷移、manifest、icon、install、online起動後のoffline再読込を確認します。
+1. repositoryの「Settings」→「Pages」を開きます。
+2. 「Build and deployment」のSourceを「GitHub Actions」にします。
+3. `master`へ反映し、「CI」と「GitHub Pagesへ公開」が成功するまで待ちます。
+4. 公開URLで画面遷移、manifest、icon、PWA install、online起動後のoffline再読込を確認します。
 
-Cloudflare公式手順:
+workflowはrepository名からbase pathを自動設定します。GitHub Pagesの`github-pages` environmentには、既定branchだけを許可するdeployment branch ruleを推奨します。GitHub Pagesは公開サイトなので、source、教材、文書、build成果物へ秘密情報や個人情報を含めないでください。
 
-- [Git連携と非公開repository](https://developers.cloudflare.com/pages/get-started/git-integration/)
-- [GitHub Appのrepository範囲](https://developers.cloudflare.com/pages/configuration/git-integration/github-integration/)
-- [build設定](https://developers.cloudflare.com/pages/configuration/build-configuration/)
-- [preview deploymentのAccess](https://developers.cloudflare.com/pages/configuration/preview-deployments/)
-- [production `pages.dev`／custom domainのAccess注意点](https://developers.cloudflare.com/pages/platform/known-issues/)
+GitHub公式手順:
 
-D-024でCloudflare Pages + Accessを採用したため、GitHub Pagesの自動deploy workflowは削除しています。GitHub Actionsの`CI`は引き続き実行します。
+- [GitHub ActionsによるPages公開](https://docs.github.com/en/pages/getting-started-with-github-pages/using-custom-workflows-with-github-pages)
+- [Pagesの公開元設定](https://docs.github.com/en/pages/getting-started-with-github-pages/configuring-a-publishing-source-for-your-github-pages-site)
+- [HTTPSの設定](https://docs.github.com/en/pages/getting-started-with-github-pages/securing-your-github-pages-site-with-https)
 
 ### その他の静的host
 
@@ -319,7 +324,7 @@ rollbackでは前releaseの`dist/` artifactを再配信できますが、Indexed
 
 ### source map公開方針
 
-標準の`npm run build`、CI、Cloudflare Pagesではproduction source mapを生成・公開しません。調査目的で一時的に必要な場合だけ、信頼できるローカル環境で次を実行します。
+標準の`npm run build`、CI、GitHub Pagesではproduction source mapを生成・公開しません。調査目的で一時的に必要な場合だけ、信頼できるローカル環境で次を実行します。
 
 ```bash
 npm run build -- --sourcemap
@@ -353,9 +358,9 @@ npm run build -- --sourcemap
 
 `npx playwright install chromium`を実行します。Linux／WSLで共有libraryが不足する場合は`npx playwright install --with-deps chromium`を使います。
 
-### Cloudflare Pagesで白画面、asset 404、install不可になる
+### GitHub Pagesで白画面、asset 404、install不可になる
 
-Pagesのbuild commandが`npm run build`、出力先が`dist`、root配備のbase pathが`/`であることを確認します。Accessの認証redirect後にassetも同じhostnameから取得できること、manifest／Service Workerが200で取得できることも確認します。PWA installにはHTTPS、正常なmanifest、Service Workerが必要です。
+公開URLが`https://v4vktbwht2-byte.github.io/e2-study-path/`であること、PagesのSourceがGitHub Actionsであること、「CI」と「GitHub Pagesへ公開」が成功していることを確認します。PWA installにはHTTPS、正常なmanifest、Service Workerが必要です。
 
 ### PWAのinstall項目が表示されない
 
@@ -381,7 +386,9 @@ JSONをeditorで保存し直さず、書き出した元fileを選びます。画
 
 `E2 Study Path`は作業名であり、英検公式または日本英語検定協会公認・推奨の製品ではありません。教材、音声、模擬結果は本プロジェクトの学習用オリジナルで、公式問題、公式音声、公式scoreではありません。
 
-software licenseは未決定です。licenseがない状態をopen sourceや再配布許可と解釈しないでください。repository ownerがlicenseを選ぶまで、Codexやcontributorが独断でMIT等のlicenseを追加してはいけません。公開配布や第三者asset追加の前に`LICENSE_AND_BRANDING.md`を確認し、必要な権利とnoticeを整理します。
+本リポジトリの実装、文書、教材は生成AI（OpenAI Codex）を利用して作成・編集しています。人間による指示、検証、部分的な読み合わせを行っていますが、英語教育・試験対策の専門家による全件校閲済みではありません。内容の正確性、完全性、特定目的への適合性は保証されません。
+
+software licenseは未決定です。repositoryをPublicにしていることをopen sourceや再配布許可と解釈しないでください。明示的なlicenseが追加されるまで、著作権法上認められる場合を除き、source code、教材、文書の複製、改変、再配布を許諾していません。`LICENSE_AND_BRANDING.md`も確認してください。
 
 ## アクセシビリティ手動確認チェックリスト
 

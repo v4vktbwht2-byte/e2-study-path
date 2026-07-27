@@ -9,7 +9,7 @@
 - IndexedDB schema version: `2`
 - release-level acceptance: `AC-REL-001`〜`AC-REL-012`をすべてPass
 - 最終レビュー: Blocker 0 / P1 0 / P2 0
-- 公開判定: ローカル全品質ゲートのbaselineはPass。最終競合修正後の動的ゲート再実行、公開ライセンス・配布権利の確定、remote／Pages設定、最新registry auditをリポジトリ所有者が完了するまで実公開しない。実機確認の未完了範囲も公開時に明示する。
+- 公開判定: D-025でリポジトリ所有者がPublic GitHub Pages公開を選択。最終コード状態の動的ゲートと最新registry auditを完了し、AI作成・非公式・未校閲範囲・license未決定をREADMEへ明示した。remote CI／Pagesと実機確認を継続する。
 
 本判定は英検公式または日本英語検定協会公認を意味しない。収録教材、音声fallback、短縮模試の結果は本プロジェクト独自の学習用内容である。
 
@@ -99,19 +99,19 @@ runtime validationとは別に、ID、英語、日本語、正答、解説、出
 
 | Gate                           | Result                                                                                       |
 | ------------------------------ | -------------------------------------------------------------------------------------------- |
-| clean install                  | Pass — `npm ci --offline --no-audit`、lockfileから533 packages                               |
+| clean install                  | Pass — registry接続の`npm ci`、lockfileから533 packages                                      |
 | lint／typecheck                | Pass                                                                                         |
-| unit/component                 | Baseline Pass — 75 test files・547/547。最終競合修正の追加6件は環境制限で未再実行            |
-| coverage                       | Baseline Pass — 79.98% statements／71.77% branches／77.12% functions／80.33% lines           |
+| unit/component                 | Pass — 75 test files・551/551                                                                 |
+| coverage                       | Pass — 79.73% statements／71.80% branches／76.29% functions／80.18% lines                    |
 | content validation             | Pass — Pilot 140語・31レッスン・155演習・25技能セット                                       |
-| root／repository subpath build | Baseline Pass — entry 209.96 kB、PWA precache 69件                                           |
-| production artifact            | Baseline Pass — root／`/e2-study-path/`、manifest／SW／asset／source map方針、70 files        |
-| Playwright E2E                 | Baseline Pass — desktop／320px 70/70、retry 0。最終競合修正後は未再実行                       |
-| offline dependency audit       | Pass — 全依存0件、本番依存0件                                                                |
+| root／repository subpath build | Pass — entry 210.06 kB、PWA precache 70件                                                    |
+| production artifact            | Pass — root／`/e2-study-path/`、manifest／SW／asset／source map方針、71 files                 |
+| Playwright E2E                 | Pass — desktop／320px 70/70、retry 0                                                          |
+| latest registry audit          | Reviewed — 全依存10／本番2 High。RSC未使用とbuild-only間接依存。stable修正版を追跡            |
 | format／diff                   | Pass                                                                                         |
 | handoff manifest               | Pass — `python scripts/verify_handoff.py`                                                     |
 
-通常の`npm ci`はsandboxのspawn制限で失敗したため、権限付きのoffline／no-audit指定で同一lockfileを再構築した。全実行後の最終競合修正ではlint／typecheck／format／独立した静的書込み経路監査をPassしたが、追加6回帰テストを含むVitest再実行はsandbox `spawn EPERM`、権限付き実行は利用上限により拒否された。latest registry dependency auditも依存メタデータの外部送信承認が得られなかったため、いずれも実公開前のゲートとする。
+権限付き通常環境でregistry接続の`npm ci`、最新audit、追加回帰テストを含む全動的ゲートを再実行した。React RouterのHighはunstable RSC API使用時だけに影響し、本PWAはRSC／SSR／server actionを使用しない。`brace-expansion`は公開runtimeへ含まれないPWA buildの間接依存で、外部入力を処理しない。互換するstable修正版の公開を継続監視する。
 
 ## Environment-limited and external verification still required
 
@@ -119,10 +119,9 @@ runtime validationとは別に、ID、英語、日本語、正答、解説、出
 
 | Priority | Item                              | Reproduction / success condition                                                                                      | Current fallback / workaround                                           |
 | -------- | --------------------------------- | -------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------- |
-| High     | 公開ライセンス／配布権利          | リポジトリ所有者がcode・教材・自作iconの配布条件を選び、LICENSEとREADMEへ反映                                        | ライセンス未確定のため、現状はローカル引き渡しに限定                    |
-| High     | 最新registry dependency audit    | 承認済み接続環境で`npm audit`と`npm audit --omit=dev`を実行し、Critical／Highが0件                                    | offline audit 0件。新規公開を監査完了まで保留                           |
-| High     | 最終コード状態の動的quality gate | 通常環境で`npm run check`、`npm run test:coverage`、root／subpathの`npm run build`と`npm run verify:dist`、`npm run test:e2e`を実行し、追加6回帰テストを含めて全件成功 | 直前baselineは547/547・E2E 70/70・artifact 70 files。変更後lint／typecheck／format／静的監査Pass |
-| Medium   | GitHub CI／Cloudflare Pages／Access | private remoteのCIがgreenになり、Pagesのproduction／previewをAccessで保護し、配備URLでoffline、更新を確認             | private GitHubへのpush済み。local root／subpath artifactは検証済み       |
+| High     | 公開ライセンス／配布権利          | リポジトリ所有者がcode・教材・自作iconの配布条件を選び、LICENSEとREADMEへ反映                                        | Public閲覧・PWA利用は可能。複製・改変・再配布を許諾しない旨を明記       |
+| Medium   | upstream dependency advisory     | React Router 8.3.0相当のstable修正版とPWA build依存の修正版が利用可能になったら互換性確認後に更新                    | RSC／SSR未使用。`brace-expansion`はbuild-onlyで外部入力なし              |
+| Medium   | GitHub CI／GitHub Pages           | Public remoteのCIとPages deployがgreenになり、公開URLでinstall、offline、更新を確認                                  | workflowとlocal `/e2-study-path/` artifactは検証済み                     |
 | Medium   | iOS／Android install              | Safari共有メニュー／対応ブラウザーからinstallし、standalone起動、offline再起動、safe areaを確認                      | アプリ内にiOS手順、対応ブラウザーにはinstall UI                          |
 | Medium   | waiting Service Worker            | 旧版を開いたまま新版を配信し、案内→保存完了→更新→再読込で学習データが保持されることを確認                            | 書込みflush、失敗時fail-closed、backup／cache recovery                   |
 | Medium   | NVDA／VoiceOver                    | オンボーディング→診断→Today→単語→技能練習を読み上げ、見出し、label、live region、英日発音切替を確認                  | axe、keyboard E2E、semantic component test、`lang`分割                   |
@@ -133,7 +132,7 @@ runtime validationとは別に、ID、英語、日本語、正答、解説、出
 
 ## Recommended Phase 11 batches
 
-1. 公開前ゲート: 最新dependency audit、remote CI、Cloudflare Pages／Access、実配信Service Worker更新を1つのrelease rehearsalとして完了する。
+1. 公開前ゲート: remote CI、GitHub Pages、実配信Service Worker更新を1つのrelease rehearsalとして完了する。
 2. 実機アクセシビリティ: iPhone／Android、NVDA／VoiceOver、200% zoom／forced colors、録音・音声を端末別matrixで確認する。
 3. 教材拡張: Stageごとの語彙・レッスン・技能教材を小batchで追加し、人間の英語校閲と`CONTENT_QA.md`をbatchごとに完了する。
 4. 所有者判断: 正式名称と公開ライセンスを確定し、brandingと配布条件へ反映する。

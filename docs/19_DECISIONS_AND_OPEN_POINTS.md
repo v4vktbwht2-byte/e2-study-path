@@ -28,6 +28,7 @@
 | D-022 | Pilot Releaseをapp 0.2.0／content 0.7.0／DB 2とする        | Phase 00〜10の実装完了をapp versionで示し、教材校正・作文回答例・言語指定の変更をcontent versionで再seed対象にし、既存DB migrationとの境界を明示する    |
 | D-023 | 破壊操作と通常保存をorigin単位の世代・排他lockで調停する   | 複数タブの旧autosaveが全削除・置換復元後にデータを復活させないよう、shared／exclusive lock取得後に世代を検証し、調停API非対応時は破壊操作をfail-closedにする |
 | D-024 | 非公開GitHub + Cloudflare Pages + Accessを配備構成とする    | source codeを非公開に保ち、production／preview URLをAccess policyで利用者限定にする。GitHub Pagesの自動公開は削除し、CIだけを継続する                 |
+| D-025 | Public GitHub + GitHub PagesでPWAを公開する                 | Cloudflare設定の負担を避け、スマホからURLを開いてinstallできる構成にする。D-024を置き換え、READMEにAI作成・非公式・未校閲範囲を明示する               |
 
 ## Open points for repository owner after Pilot
 

@@ -7,30 +7,21 @@
 - source map公開方針をREADMEへ記載
 - app versionとcontent versionを画面に表示可能
 
-## 2. Cloudflare Pages + Access
+## 2. GitHub Pages
 
-D-024により、GitHubの非公開repositoryをsourceとするCloudflare Pagesを配備先に採用する。GitHub repositoryの非公開設定と配備URLのAccess制御は別であるため、production、preview、custom domainを共有前にAccessで保護する。
+D-025により、Public GitHub repositoryからGitHub Pagesへ配備する。
 
-Build設定:
+要件:
 
-- repository: `v4vktbwht2-byte/e2-study-path`
-- production branch: `master`
-- framework preset: React (Vite)
-- build command: `npm run build`
-- build output directory: `dist`
-- root directory: repository root
-- root配備の`VITE_BASE_PATH`: 未設定または`/`
+- 公開URLは `https://v4vktbwht2-byte.github.io/e2-study-path/`
+- repository名配下のbase path `/e2-study-path/`に対応
+- PWA manifestのstart_url／scopeとService Worker scopeもbaseに合わせる
+- Hash Routerを使い直リンク404を避ける
+- 既定branchのCI成功commitだけをPages artifactとしてdeploy
+- production source map、secret、個人情報を公開artifactへ含めない
+- README冒頭とlicense節にAI利用、非公式教材、未校閲範囲を表示
 
-Access要件:
-
-- GitHub Appは対象repositoryだけへ限定する。
-- preview deploymentのAccess policyを有効化する。
-- production `*.pages.dev`はPagesが作成したAccess applicationのdomain設定を確認し、production hostnameを保護する。
-- custom domainはSelf-hosted Access applicationとAllow policyで保護する。
-- 未認証、許可外、許可済みの3状態を別browser profileで確認してからURLを共有する。
-- Access bypass、service token、公開pathを追加する場合は、対象と理由をdecision logへ残す。
-
-GitHub Pagesの自動deploy workflowは、意図しない二重公開を避けるためD-024で削除した。GitHub Actions CIは継続する。
+GitHub PagesのSourceはGitHub Actionsとし、`github-pages` environmentは既定branchだけをdeploy可能にする。Cloudflare Pages + AccessはD-024の旧方針として廃止する。
 
 ## 3. Alternative hosts
 
@@ -62,7 +53,7 @@ Dexieの整数version。
 6. version update
 7. changelog
 8. production build
-9. Access policyと未認証拒否を確認
+9. READMEのAI作成表示と公開artifactの秘密情報不在を確認
 10. deploy
 11. installed PWA update test
 

@@ -4,20 +4,21 @@
 
 ## 残タスク（優先度順）
 
-1. [高] 公開ライセンス／配布権利の確定 — 所有者がcode・教材・自作iconの条件を選び、LICENSEとREADMEへ反映するまで実公開しない。
-2. [高] 最新registryのdependency audit — offline auditは0件で、`glob@11.1.0`は既知CVE修正版。外部送信承認が得られず最新照会は未実施のため、公開前に承認済み環境で全依存の`npm audit`と本番依存の`npm audit --omit=dev`を実行。
-3. [高] 最終競合修正後の動的quality gate — 通常環境で`npm run check`、`npm run test:coverage`、root／subpathの`npm run build`と`npm run verify:dist`、`npm run test:e2e`を実行し、追加6回帰テストを含め全件成功を確認。
-4. [中] Cloudflare Pages／Access実環境確認 — private GitHubへのpushは完了。Pages project接続、production／previewのAccess policy、CI green、配備URL、offline、更新を確認。
-5. [中] 実配信環境でのwaiting Service Worker差替え確認 — 更新案内、保存完了、更新適用、再読込を実際の旧版・新版で確認。
-6. [中] iPhone／Android PWA実機確認 — install、standalone、safe area、offline再起動を確認。
-7. [中] NVDA／VoiceOverによる主要フロー確認 — 実機・支援技術で見出し、label、live region、英日発音切替を確認。
-8. [中] 実ブラウザーの200% zoom・forced colors確認 — 対応環境で情報と操作が失われないことを確認。
-9. [中] MediaRecorder・録音権限の実機確認 — 対応端末で権限・録音・再生・削除を確認。
-10. [中] Phase 11教材batch QA — 人間の英語校閲者が全教材を小batchで校正し、文法、自然さ、難度、文化的偏りを記録。
-11. [低] Web Speechの声質・発音確認 — 利用端末の音声エンジン依存。
+1. [高] 公開ライセンス／配布権利の確定 — Public repositoryは閲覧可能だが再利用許諾ではない。所有者がcode・教材・自作iconの条件を選び、LICENSEとREADMEへ反映する。
+2. [中] upstream dependency advisory追跡 — React RouterはRSC未使用、`brace-expansion`はbuild-only。互換するstable修正版が出たら更新。
+3. [中] GitHub Pages／スマホPWA実環境確認 — Public切替、CI／Pages green、公開URL、install、offline、更新を確認。
+4. [中] 実配信環境でのwaiting Service Worker差替え確認 — 更新案内、保存完了、更新適用、再読込を実際の旧版・新版で確認。
+5. [中] iPhone／Android PWA実機確認 — install、standalone、safe area、offline再起動を確認。
+6. [中] NVDA／VoiceOverによる主要フロー確認 — 実機・支援技術で見出し、label、live region、英日発音切替を確認。
+7. [中] 実ブラウザーの200% zoom・forced colors確認 — 対応環境で情報と操作が失われないことを確認。
+8. [中] MediaRecorder・録音権限の実機確認 — 対応端末で権限・録音・再生・削除を確認。
+9. [中] Phase 11教材batch QA — 人間の英語校閲者が全教材を小batchで校正し、文法、自然さ、難度、文化的偏りを記録。
+10. [低] Web Speechの声質・発音確認 — 利用端末の音声エンジン依存。
 
 ## 完了
 
+- 2026-07-27: registry接続の`npm ci`と最新auditを実行。全依存10／本番2 HighはRSC未使用とbuild-only間接依存として適用可能性を評価。最終コード状態で551/551 unit/component、coverage lines 80.18%、root／subpath artifact 71ファイル、E2E desktop／320px 70/70をPass。
+- 2026-07-27: Cloudflare Pages + Access方針をD-025で置き換え、Public GitHub + GitHub Pagesへ変更。README冒頭とlicense節へ、プログラム・文書・教材が生成AI（OpenAI Codex）を利用して作成・編集され、専門家による全件校閲済みではないことを明記した。
 - 2026-07-27: `v4vktbwht2-byte/e2-study-path`をprivateで作成し、`master`の`2b8fe14`をpush。Cloudflare Pages + Accessを配備先に確定し、GitHub Pages自動deployを廃止した。
 - 2026-07-27: Phase 10の全Release受入条件、repository、教材、PWA、backup、mobile、accessibility、文書を監査。backup完全往復、timezone offset merge、全user-data write gate、backup snapshot barrier、英日混在lang、作文回答例、教材表現、E2E待機競合を補強し、app 0.2.0／content 0.7.0／DB 2を確定。全実行baselineは75 test files・547/547件、coverage lines 80.33%、全E2E 70/70、root/subpath artifact 70ファイル、教材検証がPass。最終競合修正後はlint／typecheck／format／静的経路監査をPassし、動的再実行を公開前ゲートへ記録。
 - 2026-07-27: Phase 09のclean install、CI、失敗時Playwright artifact、CI成功commit限定のGitHub Pages OIDC deploy、repository base path、production artifact検証、同期例外rollback対応の共通IndexedDB seed helper、v1 migration／破損backup／DST／MediaRecorderテスト、第三者向け運用READMEを実装。531 unit/component tests、coverage lines 80.14%、全E2E desktop/320px 70/70（Phase 09固有6/6）、root/subpath build、71ファイルのartifact検証を完了。
@@ -33,4 +34,4 @@
 
 ## 見送り・保留
 
-- GitHub Pages自動公開 — Cloudflare Pages + Access採用のためworkflowを削除。
+- Cloudflare Pages + Access — 設定負担を避け、D-025でPublic GitHub + GitHub Pagesへ変更。
