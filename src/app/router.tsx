@@ -98,6 +98,21 @@ function lazyFoundationRoute(routeId: FoundationRouteId) {
         const { MockRoute } = await import("./routes/MockRoute");
         return { Component: MockRoute };
       };
+    case "settings":
+      return async () => {
+        const { SettingsPage } = await import("../features/settings");
+        return { Component: SettingsPage };
+      };
+    case "data":
+      return async () => {
+        const { DataRoute } = await import("./routes/DataRoute");
+        return { Component: DataRoute };
+      };
+    case "help":
+      return async () => {
+        const { HelpPage } = await import("../features/help");
+        return { Component: HelpPage };
+      };
     default:
       return lazyPreparationRoute(routeId);
   }

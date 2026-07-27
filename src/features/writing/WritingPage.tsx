@@ -9,6 +9,7 @@ import {
   type WritingRubricChecks,
   type WritingRubricDimension,
 } from "../../domain/writing";
+import { trackPendingUpdateWrite } from "../../infrastructure/pwa";
 import {
   Button,
   Card,
@@ -314,7 +315,9 @@ export function WritingPage({
       setSaveError(undefined);
       try {
         const record = toWritingSubmissionRecord(editor, clock.now());
-        await port.saveDraft(record);
+        await trackPendingUpdateWrite(`writing-draft:${record.id}`, () =>
+          port.saveDraft(record),
+        );
         if (
           activeSubmissionIdRef.current === submissionId &&
           revisionRef.current === revision
@@ -396,7 +399,9 @@ export function WritingPage({
       const pending = pendingDraftRef.current;
       if (pending !== undefined && hasWritingDraftContent(pending.editor)) {
         const record = toWritingSubmissionRecord(pending.editor, clock.now());
-        void port.saveDraft(record).catch((error: unknown) => {
+        void trackPendingUpdateWrite(`writing-draft:${record.id}`, () =>
+          port.saveDraft(record),
+        ).catch((error: unknown) => {
           globalThis.console.error(
             "画面遷移時のライティング下書き保存に失敗しました。",
             error,
@@ -470,7 +475,10 @@ export function WritingPage({
         studyDate: data.session.studyDate,
         ...(planContext === undefined ? {} : { planContext }),
       });
-      const result = await port.commitSubmission(commit);
+      const result = await trackPendingUpdateWrite(
+        `writing-draft:${data.editor.submissionId}`,
+        () => port.commitSubmission(commit),
+      );
       setDirty(false);
       setSaveStatus("saved");
       setLoadState({

@@ -39,7 +39,7 @@ export async function initializeApplication(
   }
 
   try {
-    const pack = loadStarterPack();
+    const pack = await loadStarterPack();
     const contentSeedResult = await new DexieContentRepository(db).seedBundledPack(
       pack,
       now.toISOString(),

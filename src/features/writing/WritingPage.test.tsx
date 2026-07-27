@@ -3,6 +3,7 @@ import userEvent from "@testing-library/user-event";
 import { describe, expect, it, vi } from "vitest";
 import { pilotWritingPracticeSets } from "../../content/pilot/practiceWriting";
 import type { PracticeSet } from "../../infrastructure/content/schemas";
+import { flushPendingUpdateWrites } from "../../infrastructure/pwa";
 import { WritingPage } from "./WritingPage";
 import type {
   WritingCommitInput,
@@ -136,11 +137,10 @@ describe("WritingPage", () => {
 
     view.unmount();
 
-    await waitFor(() => {
-      expect([...port.records.values()][0]?.draft).toBe(
-        "Save this draft before navigation.",
-      );
-    });
+    await flushPendingUpdateWrites();
+    expect([...port.records.values()][0]?.draft).toBe(
+      "Save this draft before navigation.",
+    );
   });
 
   it("空の提出を止め、入力後は正誤なしのAttemptと4観点を保存する", async () => {

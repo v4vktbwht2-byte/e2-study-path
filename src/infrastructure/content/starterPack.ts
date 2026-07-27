@@ -1,6 +1,6 @@
-import { pilotContentPack } from "../../content/pilot/pilotContentPack";
 import { parseContentPackOrThrow } from "./validatePack";
 
-export function loadStarterPack() {
+export async function loadStarterPack() {
+  const { pilotContentPack } = await import("../../content/pilot/pilotContentPack");
   return parseContentPackOrThrow(pilotContentPack);
 }

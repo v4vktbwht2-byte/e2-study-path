@@ -19,7 +19,12 @@
 | D-013 | AC-REL-001〜012をすべてRelease必須条件として扱う           | 個別の重大度が未定義であるため、安全側で全release-level acceptanceをblockerとする                                                                       |
 | D-014 | マニフェストはソースのみを追跡                             | `.git`、依存、build・test生成物を除外し、実装後もhandoff検証を再現可能にする                                                                            |
 | D-015 | 学習規則へ現在時刻を注入する                               | 純粋関数とRepositoryを決定的にテストし、端末時刻・日付境界・再読み込みによる不安定動作を避ける                                                          |
-| D-016 | 不正な教材項目はpack全体から隔離できる                     | 1件の教材不備で既存の学習データと利用可能な教材を失わず、起動時に件数付きで問題を説明できるようにする                                                  |
+| D-016 | 不正な教材項目はpack全体から隔離できる                     | 1件の教材不備で既存の学習データと利用可能な教材を失わず、起動時に件数付きで問題を説明できるようにする                                                   |
+| D-017 | backup schema v1.0.0を厳密検証し、importを20 MiBへ制限する | unknown field、破損JSON、過大な録音、非互換versionをDB変更前に拒否し、部分反映を防ぐ                                                                    |
+| D-018 | 録音は既定backup対象外、明示選択時だけBase64で含める       | BlobはJSONへ直接保存できず容量も大きいため。1件10 MiBを上限とし、MIME・宣言size・復号sizeを一致検証する                                                 |
+| D-019 | backup mergeは非削除・新しいrecord優先                     | 現在データを残しつつ進捗を後退させない。settingsは取込側、内容が異なるAttempt・録音の同一IDは拒否し、DailyPlan完了と提出済み作文を保持する              |
+| D-020 | app cache、音声cache、録音、全利用者データを別操作にする   | cache recoveryでIndexedDBを消さず、利用者が削除対象を誤認しないようにする                                                                               |
+| D-021 | Service Worker更新前に画面外の保留書込みも中央で待機する   | 作文のunmount保存や復元処理はroute participant解除後も続き得るため、Promiseをcomponent外で追跡し、失敗時は更新をfail-closedにする                       |
 
 ## Open points for repository owner after Pilot
 

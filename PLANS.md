@@ -4,8 +4,8 @@
 
 ## 現在のPhase
 
-- Phase: 06 — Reading, Listening, Writing, Speaking, and Mock Practice
-- Status: 完了（次はPhase 07）
+- Phase: 08 — Progress, Settings, UX States, and Accessibility
+- Status: Phase 07完了・Phase 08計画準備
 - Last updated: 2026-07-27
 
 ## Phase 00〜10 高水準計画
@@ -404,3 +404,69 @@ npm run check
 - 実音声の収録はPilot Releaseの必須条件にせず、asset audioがない教材ではWeb Speechまたは明示されたtext fallbackを使う。
 - MediaRecorder、Web Speech、iPhone Safari、ホーム画面PWA、スクリーンリーダーの挙動と音声品質は、対応する実機・ブラウザーでの最終確認が必要。
 - production buildは成功するが、メイン初期chunk 676.50 kBの警告をPhase 07/09で再評価する。
+
+## Phase 07 — PWA, Offline, Update Safety, Backup, and Restore
+
+**Goal**
+
+アプリシェルと保存済み教材をインストール後もオフラインで使え、学習中の保存を壊さず更新できるPWAを完成させる。同時に、端末内の利用者データを厳密なversion付きJSONとして安全に書き出し、検証・プレビュー後に統合または置換できるようにする。
+
+**Files and areas expected to change**
+
+- `vite.config.ts`、`package.json`、`public/**`、`index.html`
+- `src/infrastructure/pwa/**`、`src/features/pwa/**`、`src/app/**`
+- `src/domain/backup/**`、`src/infrastructure/backup/**`
+- `src/features/data/**`、`src/app/routes/**`
+- `contracts/backup.schema.json`、`contracts/sample/backup.sample.json`
+- PWA、backup、storage、cache、offline E2E tests
+
+**Implementation steps**
+
+1. `vite-plugin-pwa`をprompt更新方式で導入し、同じ正規化baseをVite、manifest、Service Workerへ適用する。自作192/512/maskable icon、offline fallback、versioned content catalogを追加する。
+2. app shell、全JS/CSS chunk、starter content、manifest、iconをprecacheし、versioned JSON・画像・optional audioへ用途別runtime cacheを設定する。音声は利用者が再生した時だけ取得し、base path込みURLへ解決する。
+3. starter packを動的importへ分離し、初期chunk警告を削減する。production artifactでmanifest、scope、icon、SW、base pathを検査する。
+4. 全画面共通のonline/offline状態、install prompt、iOS手順、更新bannerを実装する。更新は自動reloadせず、active studyがなく、登録済みflushがすべて成功した時だけ適用する。
+5. 学習中状態と未保存書込みを共通registryへ登録する。作文autosaveを明示flushへ接続し、進行中の診断・レッスン・単語・技能・模試では更新を保留する。
+6. Storage Estimate、永続保存要求、音声cache削除、app cache再構築を実装する。cache操作とIndexedDB削除は分離し、再構築はonline時だけ行う。
+7. backup schemaを厳密化し、お気に入り・メモを含む`vocabularyUserStates`、対象一覧、録音opt-in wire形式を追加する。教材、cache、内部version metadata、録音Blobは既定で除外する。
+8. 20 MiBのimport上限、JSON parse、schema version、unknown field、主キー重複、JSON値、Base64・MIME・復号サイズをDB変更前に検証し、作成日、version、件数、録音、警告をpreviewする。
+9. replaceは対象tableを単一Dexie transactionで置換し、既定ONの自動安全backupを先に作る。mergeは時刻付きrecordの新しい側、DailyPlanの単調増加、提出済み作文の保持、ID衝突時の安全規則で統合する。
+10. 録音だけ削除、音声cacheだけ削除、app cache再構築、全利用者データ削除を別操作にし、全削除は二段階確認後も教材とcacheを残す。
+11. backup round-trip、録音opt-in、invalid・非互換・rollback・merge競合、cache分離、update flush、install fallbackをunit/integration/componentで検証する。
+12. production previewでSW active、offline reload後の学習・保存、export→削除→preview→restore、manifest/icon、desktop/320px、base path付きbuildを検証し、Phase品質ゲートを通す。
+
+**Verification commands**
+
+```powershell
+npm run test -- backup
+npm run build
+npm run test:e2e -- --grep "offline|backup|restore|update|PWA"
+npm run check
+python scripts/verify_handoff.py
+```
+
+**Decisions made**
+
+- Service Worker更新は`prompt`方式とし、自動reloadしない。active study中は適用操作を無効化し、更新前flushが1件でも失敗した場合も現行版を維持する。
+- backup schema versionは`1.0.0`とし、当面は完全一致だけを受理する。import全体上限は20 MiB、録音1件は10 MiBとする。
+- backup既定対象はprofile、settings、review、mastery、単語お気に入り・メモ、lesson progress、attempt、session、daily plan、writing submission。教材、cache、appMeta、録音は除外し、録音は明示選択時だけBase64で含める。
+- mergeは削除を行わず、時刻がある同一キーは新しい側を採用する。settingsは取込側、Attemptと録音の内容が異なる同一IDは拒否し、DailyPlan完了状態と提出済み作文は後退させない。
+- replaceは録音がbackup対象外なら既存録音を保持する。自動安全backupの生成またはダウンロードに失敗した場合は置換を開始しない。
+- cache名はアプリ固有prefixへ限定し、cache削除ではIndexedDBを変更しない。
+
+**Results**
+
+- prompt更新型Service Worker、manifest、自作192/512/maskable icon、offline fallback、version付き教材catalog、用途別runtime cacheを実装した。共通offline・install・iOS手順・update表示を実画面へ接続した。
+- app shell、全JS/CSS chunk、基本教材をprecacheし、starter packと画面を動的分割した。production buildの単一chunk警告を解消し、entry chunkは209.09 kB、基本教材は151.87 kBの遅延chunkになった。
+- activeな診断・レッスン・単語・技能・模試では更新操作を無効化した。Today、単語メモ、作文画面離脱、復元・削除の実書込みPromiseを中央trackerへ登録し、全件成功後だけService Worker更新を適用する。
+- backup schema `1.0.0`、20 MiB上限、録音10 MiB上限、録音opt-in Base64、厳密Zod検証、件数・version・録音容量・警告のpreviewを実装した。破損、unknown field、参照切れ、競合、非互換をDB変更前に拒否する。
+- replaceとmergeをDexie transactionで実装した。置換前の安全backup、進捗を後退させないmerge、失敗時rollback、録音・音声cache・app cache・全利用者データの分離削除をデータ管理画面へ接続した。
+- productionの実通信遮断でToday・単語・保存済みレッスンを再読込し、オフライン回答をIndexedDBへ保存した。JSON書出し→全削除→置換復元の完全一致、manifest/SW/icon、320px overflowをPlaywrightで検証した。
+- `npm run check`（68 test files・484件）、Phase 07 E2E desktop/320px 8/8、全E2E 54/54、`VITE_BASE_PATH=/e2-study-path/` buildが成功した。
+
+**Known limitations / follow-up**
+
+- iPhone Safariのホーム画面追加、standalone起動、MediaRecorderを含むbackup、実際のService Worker更新は対応する実機・配信環境で最終確認が必要。
+- `beforeinstallprompt`、Storage永続化、容量推定はブラウザー判断のため、非対応・拒否時の説明を常に用意する。
+- `vite-plugin-pwa`の内部から`inlineDynamicImports`非推奨警告が出るが、Service Worker生成とprecache注入は成功している。依存更新時に解消を確認する。
+- PWA依存追加後の`npm install`はhigh severity advisory 10件を報告した。詳細監査は依存メタデータの外部送信承認が得られず未実施のため、Phase 09の再確認対象とする。

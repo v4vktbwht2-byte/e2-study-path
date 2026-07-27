@@ -1,5 +1,6 @@
 import type { ReviewRating, ReviewState } from "./review/types";
 import type { DailyPlan as CanonicalDailyPlan } from "./planning/types";
+import type { OpinionOutline } from "./writing/types";
 
 export type { DailyPlan, DailyPlanBlock, DailyPlanMode } from "./planning/types";
 
@@ -132,6 +133,8 @@ export interface WritingSubmission {
   draft: string;
   wordCount: number;
   checklist: Record<string, boolean>;
+  summaryMemo: string;
+  opinionOutline: OpinionOutline;
   createdAt: string;
   updatedAt: string;
   submittedAt?: string;

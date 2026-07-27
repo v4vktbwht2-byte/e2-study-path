@@ -4,6 +4,7 @@ export {
   UnsupportedAudioService,
   WebSpeechAudioService,
   createBrowserAudioService,
+  resolveAppAssetUrl,
 } from "./audioServices";
 export {
   AudioPlaybackError,

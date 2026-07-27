@@ -42,10 +42,7 @@ export type OpinionWritingPrompt = PracticeSet & {
 
 export type WritingPrompt = SummaryWritingPrompt | OpinionWritingPrompt;
 
-export interface WritingSubmissionRecord extends WritingSubmission {
-  summaryMemo: string;
-  opinionOutline: OpinionOutline;
-}
+export type WritingSubmissionRecord = WritingSubmission;
 
 export interface WritingPlanContext {
   planDate: string;

@@ -1,0 +1,95 @@
+<!doctype html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#365fc7" />
+    <title>オフラインです — E2 Study Path</title>
+    <style>
+      :root {
+        color-scheme: light dark;
+        font-family:
+          -apple-system, BlinkMacSystemFont, "Segoe UI", "Hiragino Sans",
+          "Yu Gothic UI", sans-serif;
+        background: #f6f8fc;
+        color: #172033;
+      }
+
+      body {
+        display: grid;
+        min-height: 100vh;
+        min-height: 100dvh;
+        box-sizing: border-box;
+        place-items: center;
+        margin: 0;
+        padding: 1rem;
+      }
+
+      main {
+        width: min(100%, 32rem);
+        box-sizing: border-box;
+        padding: 1.5rem;
+        border: 1px solid #d7deea;
+        border-radius: 1rem;
+        background: #fff;
+        box-shadow: 0 1px 2px rgb(23 32 51 / 6%);
+      }
+
+      h1 {
+        margin-block: 0 0.75rem;
+        font-size: 1.5rem;
+        line-height: 1.4;
+      }
+
+      p {
+        margin-block: 0 1.25rem;
+        line-height: 1.7;
+      }
+
+      a {
+        display: inline-flex;
+        min-height: 2.75rem;
+        box-sizing: border-box;
+        align-items: center;
+        justify-content: center;
+        padding: 0.625rem 1rem;
+        border-radius: 0.8125rem;
+        background: #365fc7;
+        color: #fff;
+        font-weight: 700;
+        text-decoration: none;
+      }
+
+      a:focus-visible {
+        outline: 3px solid #1e6fff;
+        outline-offset: 3px;
+      }
+
+      @media (prefers-color-scheme: dark) {
+        :root {
+          background: #101724;
+          color: #f3f6fb;
+        }
+
+        main {
+          border-color: #3c4960;
+          background: #182235;
+        }
+
+        a {
+          background: #91b2ff;
+          color: #10234e;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <main>
+      <h1>現在オフラインです</h1>
+      <p>
+        一度開いた学習画面は利用できます。通信が戻ったら、今日の学習へ戻ってもう一度お試しください。
+      </p>
+      <a href="./#/">今日の学習へ戻る</a>
+    </main>
+  </body>
+</html>

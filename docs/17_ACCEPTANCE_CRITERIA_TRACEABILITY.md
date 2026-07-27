@@ -54,11 +54,15 @@ Given オンラインで一度起動しstarter contentを開いた
 When ネットワークを切り再読み込みする
 Then アプリシェル、今日、単語、保存済み教材が利用でき、回答を保存できる。
 
+Phase 07 verification: `e2e/phase07.spec.ts`でService Worker制御後に実通信を遮断し、Today・単語・保存済みレッスンのreloadとAttempt保存・再読込をdesktop/320pxの両方で確認する。manifest、scope、192/512/maskable icon、version付き教材catalogのprecacheもproduction artifactで検証する。
+
 ### AC-REL-009 Backup
 
 Given 学習履歴がある
 When JSONをexportし、別の空状態へrestoreする
-Thenprofile、review、mastery、progressが復元される。
+Then profile、review、mastery、progressが復元される。
+
+Phase 07 verification: `e2e/phase07.spec.ts`でprofile、lesson progress、単語お気に入り・メモ、作文をJSONへ書き出し、全利用者データ削除後の空状態へ置換復元して完全一致を確認する。domain／Dexieテストではreview、mastery、attempt、session、DailyPlan、録音opt-in、merge、rollback、破損・非互換拒否を検証する。
 
 ### AC-REL-010 Accessibility
 
@@ -138,7 +142,10 @@ Phase 06 verification: Pilotの技能教材25セットはすべて`source.type =
 
 ### Phase 07
 
-- install/offline/update/backup work
+- Complete: manifest・自作icon・Service Worker・用途別cache・offline fallback・install/iOS案内がproduction buildで動作する。
+- Complete: active学習中は更新を適用せず、実際の保留書込みPromiseを全件flushできた場合だけService Workerを切り替える。
+- Complete: 厳密version付きJSON、録音opt-in、preview、transactional merge/replace、安全backup、分離削除が動作する。
+- Evidence: 68 test files・484 unit/component tests、全E2E desktop/320px 54/54（`e2e/phase07.spec.ts` 8/8）、root/subpath production build、`npm run check`成功。
 
 ### Phase 08
 

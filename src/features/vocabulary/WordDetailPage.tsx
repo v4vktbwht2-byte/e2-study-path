@@ -7,6 +7,7 @@ import {
 } from "../../domain/review";
 import type { MasteryProfile, VocabularyUserState } from "../../domain/models";
 import type { VocabularyItem } from "../../infrastructure/content/schemas";
+import { trackPendingUpdateWrite } from "../../infrastructure/pwa";
 import {
   Button,
   Card,
@@ -174,7 +175,9 @@ export function WordDetailPage({
       updatedAt: clock.now().toISOString(),
     };
     try {
-      await store.saveWordState({ userState: nextUserState });
+      await trackPendingUpdateWrite(`vocabulary-word:${wordId}`, () =>
+        store.saveWordState({ userState: nextUserState }),
+      );
       updateReadyRecord(nextUserState);
       setMessage("お気に入りとメモを保存しました。");
     } catch (error: unknown) {
@@ -205,10 +208,12 @@ export function WordDetailPage({
       updatedAt: now.toISOString(),
     };
     try {
-      await store.saveWordState({
-        userState: nextUserState,
-        reviewState: nextReview,
-      });
+      await trackPendingUpdateWrite(`vocabulary-word:${wordId}`, () =>
+        store.saveWordState({
+          userState: nextUserState,
+          reviewState: nextReview,
+        }),
+      );
       updateReadyRecord(nextUserState, nextReview);
       setMessage(
         willSuspend
@@ -237,10 +242,12 @@ export function WordDetailPage({
       updatedAt: now.toISOString(),
     };
     try {
-      await store.saveWordState({
-        userState: nextUserState,
-        reviewState: nextReview,
-      });
+      await trackPendingUpdateWrite(`vocabulary-word:${wordId}`, () =>
+        store.saveWordState({
+          userState: nextUserState,
+          reviewState: nextReview,
+        }),
+      );
       updateReadyRecord(nextUserState, nextReview);
       setConfirmReset(false);
       setMessage("復習状態を未学習へ戻しました。回答履歴は残っています。");

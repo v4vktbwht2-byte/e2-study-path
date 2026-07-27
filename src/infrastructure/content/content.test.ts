@@ -7,8 +7,8 @@ import { loadStarterPack } from "./starterPack";
 import { validateContentPack } from "./validatePack";
 
 describe("教材パック検証", () => {
-  it("実際にbundleするPilot教材をstarter packとして読み込める", () => {
-    const pack = loadStarterPack();
+  it("実際にbundleするPilot教材をstarter packとして読み込める", async () => {
+    const pack = await loadStarterPack();
 
     expect(pack.id).toBe("pilot-core-ja-original");
     expect(pack.vocabulary.length).toBeGreaterThanOrEqual(140);

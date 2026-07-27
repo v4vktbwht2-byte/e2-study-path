@@ -232,7 +232,7 @@ describe("IndexedDB schemaとrepository", () => {
 
   it("同一contentVersionを重複seedしない", async () => {
     const repository = new DexieContentRepository(db);
-    const pack = loadStarterPack();
+    const pack = await loadStarterPack();
 
     await expect(
       repository.seedBundledPack(pack, "2026-07-27T00:00:00.000Z"),
@@ -251,7 +251,7 @@ describe("IndexedDB schemaとrepository", () => {
 
   it("教材更新時も同じIDの履歴を維持する", async () => {
     const repository = new DexieContentRepository(db);
-    const pack = loadStarterPack();
+    const pack = await loadStarterPack();
     const state = createReviewState();
     await repository.seedBundledPack(pack, "2026-07-27T00:00:00.000Z");
     await db.reviewStates.put(state);

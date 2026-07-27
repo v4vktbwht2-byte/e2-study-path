@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useState, type ReactNode } from "react";
 import { Button, Card, InlineAlert } from "../../shared/components";
-import { initializeApplication, type StartupSnapshot } from "./initializeApplication";
+import type { StartupSnapshot } from "./initializeApplication";
 import styles from "./StartupGate.module.css";
 
 interface StartupGateProps {
@@ -13,9 +13,14 @@ type StartupState =
   | { status: "ready"; snapshot: StartupSnapshot }
   | { status: "error"; error: Error };
 
+async function initializeDefaultApplication() {
+  const { initializeApplication } = await import("./initializeApplication");
+  return initializeApplication();
+}
+
 export function StartupGate({
   children,
-  initializer = initializeApplication,
+  initializer = initializeDefaultApplication,
 }: StartupGateProps) {
   const [state, setState] = useState<StartupState>({ status: "loading" });
   const [attempt, setAttempt] = useState(0);

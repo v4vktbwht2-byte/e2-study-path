@@ -4,19 +4,19 @@
 
 ## 残タスク（優先度順）
 
-1. [高] Phase 07: PWA・オフライン・バックアップ — オフライン利用とデータ所有権を完成。
-2. [高] Phase 08: 記録・設定・アクセシビリティ — 実用時の状態、画面遷移focus、操作性を仕上げ。
-3. [高] Phase 09: 全テスト・CI・静的デプロイ — 再現可能な品質ゲートを完成。
-4. [高] Phase 10: 最終監査・Pilot Release — 全受入条件と文書を確定。
-5. [高] 初期bundle分割 — メイン初期chunk 676.50 kBの警告をPhase 07/09で再評価し、必要な遅延読込と配信構成を実装。
-6. [高] npm依存のhigh severity advisory 2件を詳細監査 — `npm audit --json`は依存メタデータの外部送信を伴う実行承認が得られず未実施。Phase 09で承認条件を確認して再試行。
-7. [中] iPhone Safari／ホーム画面PWA実機確認 — Windows環境外のため実装後に利用者確認が必要。
-8. [中] 主要フローのスクリーンリーダー手動確認 — 実機・支援技術での最終確認が必要。
-9. [中] MediaRecorder・録音権限の実機確認 — 対応端末で権限・録音・再生・削除を確認。
-10. [低] Web Speechの声質・発音確認 — 利用端末の音声エンジン依存。
+1. [高] Phase 08: 記録・設定・アクセシビリティ — 実用時の状態、画面遷移focus、操作性を仕上げ。
+2. [高] Phase 09: 全テスト・CI・静的デプロイ — 再現可能な品質ゲートを完成。
+3. [高] Phase 10: 最終監査・Pilot Release — 全受入条件と文書を確定。
+4. [高] npm依存のhigh severity advisory 10件を詳細監査 — `npm audit --json`は依存メタデータの外部送信を伴う実行承認が得られず未実施。Phase 09で承認条件を確認して再試行。
+5. [中] iPhone Safari／ホーム画面PWA実機確認 — Windows環境外のため実装後に利用者確認が必要。
+6. [中] 実配信環境でのwaiting Service Worker差替え確認 — 更新案内、保存完了、更新適用、再読込を実際の旧版・新版で確認。
+7. [中] 主要フローのスクリーンリーダー手動確認 — 実機・支援技術での最終確認が必要。
+8. [中] MediaRecorder・録音権限の実機確認 — 対応端末で権限・録音・再生・削除を確認。
+9. [低] Web Speechの声質・発音確認 — 利用端末の音声エンジン依存。
 
 ## 完了
 
+- 2026-07-27: Phase 07のinstall/offline/update PWA、失敗済み書込み・controller切替時の再確認・全置換/全削除の排他バリアを含む更新安全制御、厳密backup schema、20 MiB検証、録音opt-in Base64、preview、原子的replace/merge、安全backup、選択削除、320px UIを実装。484 unit/component tests、全E2E desktop/320px 54/54、root/subpath production buildを完了。初期bundleの500 kB超警告も解消。
 - 2026-07-27: Phase 00の資料・環境・依存互換性・Git基準点監査を完了。
 - 2026-07-27: Phase 01のReact/Vite基盤、全ルート、共通UI、品質スクリプトを実装し、全Phaseゲートを完了。
 - 2026-07-27: Phase 02の復習・習熟度・診断・日次計画domain、Dexie永続化、原子的回答確定、教材検証・seed・起動処理を実装し、144テストと品質ゲートを完了。

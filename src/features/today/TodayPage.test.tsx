@@ -9,6 +9,10 @@ import {
 } from "../../domain/planning";
 import { createNewReviewState, type ReviewState } from "../../domain/review";
 import type { VocabularyItem } from "../../infrastructure/content/schemas";
+import {
+  countPendingUpdateWrites,
+  flushPendingUpdateWrites,
+} from "../../infrastructure/pwa";
 import { TodayPage } from "./TodayPage";
 import type { TodayDataPort, TodayDataSnapshot, TodayPageProps } from "./types";
 
@@ -114,6 +118,28 @@ function createPort(value: TodayDataSnapshot) {
 }
 
 describe("今日画面", () => {
+  it("初回プラン保存を更新前の待機対象として追跡する", async () => {
+    let resolveSnapshot: ((value: TodayDataSnapshot) => void) | undefined;
+    const savePlan = vi.fn<TodayDataPort["savePlan"]>((plan) => Promise.resolve(plan));
+    const port: TodayDataPort = {
+      loadSnapshot: vi.fn(
+        () =>
+          new Promise<TodayDataSnapshot>((resolve) => {
+            resolveSnapshot = resolve;
+          }),
+      ),
+      savePlan,
+    };
+
+    render(<TodayPage port={port} clock={clock} />);
+    await waitFor(() => expect(countPendingUpdateWrites()).toBe(1));
+
+    resolveSnapshot?.(snapshot());
+    await screen.findByRole("heading", { name: "今日の学習" });
+    await expect(flushPendingUpdateWrites()).resolves.toBeUndefined();
+    expect(savePlan).toHaveBeenCalledTimes(1);
+  });
+
   it("84件の滞留で4コースを表示し、軽め15件を保存して対象blockへ進む", async () => {
     const items = Array.from({ length: 85 }, (_, index) => vocabulary(index));
     const value = snapshot({

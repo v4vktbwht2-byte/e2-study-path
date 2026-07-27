@@ -6,11 +6,24 @@ import {
 } from "./types";
 
 type AudioElementFactory = (source: string) => HTMLAudioElement;
+type AssetUrlResolver = (source: string) => string;
 type SpeechSynthesisLike = Pick<SpeechSynthesis, "cancel" | "speak">;
 type UtteranceFactory = (text: string) => SpeechSynthesisUtterance;
 
 function defaultCreateAudio(source: string): HTMLAudioElement {
   return new Audio(source);
+}
+
+export function resolveAppAssetUrl(
+  source: string,
+  baseUrl: string = import.meta.env.BASE_URL,
+): string {
+  if (!source.startsWith("/") || baseUrl === "/") {
+    return source;
+  }
+
+  const normalizedBase = baseUrl.endsWith("/") ? baseUrl : `${baseUrl}/`;
+  return `${normalizedBase}${source.slice(1)}`;
 }
 
 function defaultSpeechSynthesis(): SpeechSynthesisLike | undefined {
@@ -28,7 +41,11 @@ function defaultIsOnline(): boolean {
 export class AssetAudioService implements AudioService {
   private currentAudio?: HTMLAudioElement;
 
-  constructor(private readonly createAudio: AudioElementFactory = defaultCreateAudio) {}
+  constructor(
+    private readonly createAudio: AudioElementFactory = defaultCreateAudio,
+    private readonly resolveUrl: AssetUrlResolver = resolveAppAssetUrl,
+    private readonly isOnline: () => boolean = defaultIsOnline,
+  ) {}
 
   availability(request: AudioPlaybackRequest): AudioAvailability {
     return request.assetUrl
@@ -53,7 +70,7 @@ export class AssetAudioService implements AudioService {
     }
 
     this.stop();
-    const audio = this.createAudio(request.assetUrl);
+    const audio = this.createAudio(this.resolveUrl(request.assetUrl));
     this.currentAudio = audio;
     audio.playbackRate = request.rate;
 
@@ -71,7 +88,12 @@ export class AssetAudioService implements AudioService {
           this.currentAudio = undefined;
         }
         reject(
-          new AudioPlaybackError("PLAYBACK_FAILED", "教材音声を再生できませんでした。"),
+          new AudioPlaybackError(
+            this.isOnline() ? "PLAYBACK_FAILED" : "OFFLINE",
+            this.isOnline()
+              ? "教材音声を再生できませんでした。下の英文で学習できます。"
+              : "この音声はまだ端末に保存されていません。通信が戻った後に再取得してください。",
+          ),
         );
       };
       const cleanup = () => {
@@ -252,11 +274,13 @@ export class FallbackAudioService implements AudioService {
   }
 
   async play(request: AudioPlaybackRequest): Promise<void> {
+    let assetFailure: unknown;
     if (this.asset.availability(request).available) {
       try {
         await this.asset.play(request);
         return;
-      } catch {
+      } catch (error: unknown) {
+        assetFailure = error;
         // assetの読込失敗時だけ、同じscriptをWeb Speechで読み上げる。
       }
     }
@@ -264,6 +288,17 @@ export class FallbackAudioService implements AudioService {
     if (this.webSpeech.availability(request).available) {
       await this.webSpeech.play(request);
       return;
+    }
+
+    if (assetFailure !== undefined) {
+      if (assetFailure instanceof Error) {
+        throw assetFailure;
+      }
+      throw new AudioPlaybackError(
+        "PLAYBACK_FAILED",
+        "教材音声を再生できませんでした。下の英文で学習できます。",
+        { cause: assetFailure },
+      );
     }
 
     await this.unsupported.play(request);

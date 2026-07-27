@@ -2,6 +2,14 @@
 
 ## Unreleased
 
+- Phase 07「PWA・オフライン・安全な更新・バックアップ／復元」を完了。
+  - prompt更新型Service Worker、manifest、自作192/512/maskable icon、offline fallback、version付き教材catalog、用途別runtime cacheを追加。
+  - 共通offline表示、install prompt、iOS手順、更新banner、Storage Estimate、永続保存、音声cache削除、app cache再構築を追加。
+  - 学習中は更新操作を無効化し、Today、単語メモ、作文画面離脱、復元・削除の実書込みPromiseが完了した後だけ更新する安全制御を追加。
+  - 厳密backup schema v1.0.0、20 MiB上限、録音opt-in Base64、preview、原子的merge／replace、置換前の安全backup、録音・cache・全データの分離削除を追加。
+  - starter packと各画面を動的分割し、500 kB超のchunk警告を解消。
+- Phase 07検証として68 test files・484/484件、全E2E desktop/320px 54/54（Phase 07固有8/8）、root/subpath production build、PWA precache 68件が成功。
+- 次のPhaseをPhase 08「記録・設定・UX状態・アクセシビリティ」へ更新。
 - Phase 06「読解・聞き取り・作文・会話・短縮模試」を完了。
   - 読解6、聞き取り6、要約4、意見4、会話4、短縮模試1の計25セットを、すべてオリジナル教材として追加。
   - 読解の根拠・解説、聞き取りの本番風／復習・音声fallback、作文の語数・autosave・rubric、会話のtimer・録音／text fallbackを追加。

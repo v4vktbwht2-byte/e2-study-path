@@ -2,6 +2,7 @@ import { describe, expect, it, vi } from "vitest";
 import {
   AssetAudioService,
   FallbackAudioService,
+  resolveAppAssetUrl,
   UnsupportedAudioService,
   WebSpeechAudioService,
 } from "./audioServices";
@@ -14,6 +15,15 @@ const request: AudioPlaybackRequest = {
 };
 
 describe("AudioService", () => {
+  it("base path配下へ教材音声URLを解決する", () => {
+    expect(resolveAppAssetUrl("/audio/original.ogg", "/e2-study-path/")).toBe(
+      "/e2-study-path/audio/original.ogg",
+    );
+    expect(resolveAppAssetUrl("audio/original.ogg", "/e2-study-path/")).toBe(
+      "audio/original.ogg",
+    );
+  });
+
   it("asset音声へ速度を設定し、終了まで待つ", async () => {
     const listeners = new Map<string, () => void>();
     const audio = {
@@ -31,11 +41,16 @@ describe("AudioService", () => {
         return Promise.resolve();
       }),
     } as unknown as HTMLAudioElement;
-    const service = new AssetAudioService(() => audio);
+    const createAudio = vi.fn(() => audio);
+    const service = new AssetAudioService(
+      createAudio,
+      (source) => `/e2-study-path${source}`,
+    );
 
     await expect(
       service.play({ ...request, rate: 1.25, assetUrl: "/audio/original.ogg" }),
     ).resolves.toBeUndefined();
+    expect(createAudio).toHaveBeenCalledWith("/e2-study-path/audio/original.ogg");
     expect(audio.playbackRate).toBe(1.25);
   });
 
@@ -139,5 +154,39 @@ describe("AudioService", () => {
     await fallback.play({ ...request, assetUrl: "/missing.ogg" });
     expect(assetPlay).toHaveBeenCalledOnce();
     expect(speechPlay).toHaveBeenCalledOnce();
+  });
+
+  it("未取得assetをオフラインで開いたとき再取得方法を案内する", async () => {
+    const listeners = new Map<string, () => void>();
+    const audio = {
+      playbackRate: 1,
+      currentTime: 0,
+      pause: vi.fn(),
+      addEventListener: vi.fn((event: string, listener: () => void) => {
+        listeners.set(event, listener);
+      }),
+      removeEventListener: vi.fn(),
+      play: vi.fn(() => {
+        listeners.get("error")?.();
+        return Promise.resolve();
+      }),
+    } as unknown as HTMLAudioElement;
+    const fallback = new FallbackAudioService(
+      new AssetAudioService(
+        () => audio,
+        (source) => source,
+        () => false,
+      ),
+      new WebSpeechAudioService(undefined, undefined, () => false),
+      new UnsupportedAudioService(),
+    );
+
+    await expect(
+      fallback.play({ ...request, assetUrl: "/audio/not-cached.ogg" }),
+    ).rejects.toMatchObject({
+      code: "OFFLINE",
+      message:
+        "この音声はまだ端末に保存されていません。通信が戻った後に再取得してください。",
+    });
   });
 });

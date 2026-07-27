@@ -1,9 +1,36 @@
 import { Suspense } from "react";
 import { Link, Outlet, useLocation, useNavigate } from "react-router-dom";
+import { PwaStatusRegion, usePwaUpdateParticipant } from "../features/pwa";
+import { flushPendingUpdateWrites } from "../infrastructure/pwa";
 import { AppShell, BottomNavigation, Card, TopBar } from "../shared/components";
 import styles from "./AppLayout.module.css";
 
 type MainTabId = "today" | "course" | "vocabulary" | "practice" | "progress";
+
+const ACTIVE_STUDY_PATHS = [
+  "/onboarding",
+  "/diagnostic",
+  "/lesson/",
+  "/vocabulary/",
+  "/review",
+  "/practice/reading",
+  "/practice/listening",
+  "/practice/writing",
+  "/practice/speaking",
+  "/mock",
+] as const;
+
+function isActiveStudyPath(pathname: string): boolean {
+  const normalizedPathname =
+    pathname.length > 1
+      ? pathname.replace(/\/+$/u, "").toLowerCase()
+      : pathname.toLowerCase();
+  return ACTIVE_STUDY_PATHS.some(
+    (path) =>
+      normalizedPathname === path ||
+      (path.endsWith("/") && normalizedPathname.startsWith(path)),
+  );
+}
 
 function getCurrentTab(pathname: string): MainTabId | undefined {
   if (pathname === "/") {
@@ -41,6 +68,11 @@ export function AppLayout() {
   const { pathname } = useLocation();
   const navigate = useNavigate();
   const currentTab = getCurrentTab(pathname);
+  usePwaUpdateParticipant({
+    id: "active-study-route",
+    active: isActiveStudyPath(pathname),
+    flush: flushPendingUpdateWrites,
+  });
   const navigationItems = [
     { id: "today", label: "今日", href: "#/", isCurrent: currentTab === "today" },
     {
@@ -102,6 +134,7 @@ export function AppLayout() {
         />
       }
     >
+      <PwaStatusRegion />
       <Suspense fallback={<RouteLoadingState />}>
         <Outlet />
       </Suspense>

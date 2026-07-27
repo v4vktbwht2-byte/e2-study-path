@@ -1,0 +1,84 @@
+.statusRegion {
+  display: grid;
+  width: 100%;
+  max-width: var(--content-max-width);
+  box-sizing: border-box;
+  gap: var(--space-2);
+  margin: 0 auto;
+  padding: var(--space-2) max(var(--space-4), var(--safe-area-right)) var(--space-2)
+    max(var(--space-4), var(--safe-area-left));
+  background: var(--color-bg);
+}
+
+.actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+}
+
+.panel {
+  display: grid;
+  gap: var(--space-4);
+}
+
+.heading {
+  margin: 0;
+  font-size: var(--font-size-xl);
+  line-height: var(--line-height-compact);
+}
+
+.description,
+.note {
+  margin: 0;
+  color: var(--color-text-muted);
+  line-height: var(--line-height-body);
+}
+
+.steps {
+  display: grid;
+  gap: var(--space-2);
+  margin: 0;
+  padding-left: 1.5rem;
+  line-height: var(--line-height-body);
+}
+
+.metrics {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: var(--space-2);
+  margin: 0;
+}
+
+.metrics div {
+  min-width: 0;
+  padding: var(--space-3);
+  border-radius: var(--radius-sm);
+  background: var(--color-surface-muted);
+}
+
+.metrics dt {
+  color: var(--color-text-muted);
+  font-size: var(--font-size-sm);
+}
+
+.metrics dd {
+  overflow-wrap: anywhere;
+  margin: var(--space-1) 0 0;
+  font-weight: 700;
+}
+
+.buttonList {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+}
+
+@media (max-width: 30rem) {
+  .metrics {
+    grid-template-columns: 1fr;
+  }
+
+  .buttonList > * {
+    width: 100%;
+  }
+}

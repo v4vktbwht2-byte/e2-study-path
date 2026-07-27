@@ -8,6 +8,7 @@ import {
   InlineAlert,
   ProgressBar,
 } from "../../shared/components";
+import { trackPendingUpdateWrite } from "../../infrastructure/pwa";
 import {
   buildCompletionSummary,
   buildTodayPlanPreviews,
@@ -76,16 +77,13 @@ export function TodayPage({
   const [customSelected, setCustomSelected] = useState(false);
   const [saving, setSaving] = useState(false);
   const [saveError, setSaveError] = useState<string>();
-  const [online, setOnline] = useState(
-    typeof navigator === "undefined" ? true : navigator.onLine,
-  );
   const headingRef = useRef<HTMLHeadingElement>(null);
 
   const reload = useCallback(() => {
     let active = true;
     setState({ status: "loading" });
     setSaveError(undefined);
-    void loadToday(port, clock)
+    void trackPendingUpdateWrite("today-plan", () => loadToday(port, clock))
       .then((loaded) => {
         if (!active) {
           return;
@@ -120,17 +118,6 @@ export function TodayPage({
   useEffect(reload, [reload]);
 
   useEffect(() => {
-    const onOnline = () => setOnline(true);
-    const onOffline = () => setOnline(false);
-    globalThis.addEventListener?.("online", onOnline);
-    globalThis.addEventListener?.("offline", onOffline);
-    return () => {
-      globalThis.removeEventListener?.("online", onOnline);
-      globalThis.removeEventListener?.("offline", onOffline);
-    };
-  }, []);
-
-  useEffect(() => {
     if (state.status !== "ready") {
       return;
     }
@@ -157,7 +144,10 @@ export function TodayPage({
         if (loaded.plan === undefined) {
           return;
         }
-        const persistedPlan = await port.savePlan(loaded.plan);
+        const recalculatedPlan = loaded.plan;
+        const persistedPlan = await trackPendingUpdateWrite("today-plan", () =>
+          port.savePlan(recalculatedPlan),
+        );
         const persistedLoaded = {
           ...loaded,
           plan: persistedPlan,
@@ -284,12 +274,6 @@ export function TodayPage({
           {profile.selectedStage}から少しずつ進めましょう。できる分だけで大丈夫です。
         </p>
       </header>
-
-      {!online ? (
-        <InlineAlert tone="info" title="オフラインで利用中です">
-          保存済みの教材と学習記録を使えます。接続後も操作は変わりません。
-        </InlineAlert>
-      ) : null}
 
       {saveError !== undefined ? (
         <InlineAlert tone="danger" title="プランを保存できませんでした">

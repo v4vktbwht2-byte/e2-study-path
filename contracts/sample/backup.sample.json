@@ -1,20 +1,46 @@
 {
   "schemaVersion": "1.0.0",
-  "exportedAt": "2026-07-27T00:00:00Z",
+  "exportedAt": "2026-07-27T00:00:00.000Z",
   "appVersion": "0.1.0",
   "contentVersions": {
     "sample-core-ja": "0.1.0"
   },
+  "includedData": [
+    "profiles",
+    "settings",
+    "reviewStates",
+    "mastery",
+    "vocabularyUserStates",
+    "lessonProgress",
+    "attempts",
+    "sessions",
+    "dailyPlans",
+    "writingSubmissions"
+  ],
   "data": {
     "profiles": [],
-    "settings": [],
+    "settings": [
+      {
+        "id": "settings",
+        "theme": "system",
+        "fontScale": 1,
+        "reducedMotion": false,
+        "dailyNewVocabularyLimit": 10,
+        "reviewIntensity": "standard",
+        "speechRate": 1,
+        "autoPlayAudio": false,
+        "showKanaPronunciationGuide": false,
+        "speedAdjustmentEnabled": true,
+        "studyDayStartHour": 4
+      }
+    ],
     "reviewStates": [],
     "mastery": [],
+    "vocabularyUserStates": [],
     "lessonProgress": [],
     "attempts": [],
     "sessions": [],
     "dailyPlans": [],
-    "writingSubmissions": [],
-    "speakingRecordings": []
+    "writingSubmissions": []
   }
 }

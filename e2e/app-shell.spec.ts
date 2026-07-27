@@ -46,6 +46,9 @@ test.describe("app shell", () => {
 
   test("長い画面から移動したとき先頭見出しを表示する", async ({ page }) => {
     await page.goto("/#/course");
+    await expect(
+      page.getByRole("heading", { level: 1, name: "ステージマップ" }),
+    ).toBeVisible();
     const main = page.getByRole("main", { name: "学習コンテンツ" });
     await main.evaluate((element) => {
       element.scrollTop = element.scrollHeight;

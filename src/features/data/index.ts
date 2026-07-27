@@ -1,0 +1,21 @@
+export { DataManagementPage } from "./DataManagementPage";
+export type {
+  AvailableStorageEstimate,
+  BackupDataCategory,
+  BackupExportOptions,
+  BackupExportResult,
+  BackupPreview,
+  CacheStorageSummary,
+  DataManagementOverview,
+  DataManagementPageProps,
+  DataManagementPort,
+  DataOperationResult,
+  PersistenceRequestResult,
+  PersistentStorageState,
+  RestoreBackupInput,
+  RestoreBackupResult,
+  RestoreMode,
+  StorageEstimate,
+  StoredRecordingSummary,
+  UnsupportedCapability,
+} from "./types";

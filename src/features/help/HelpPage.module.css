@@ -1,0 +1,66 @@
+.page {
+  display: grid;
+  gap: var(--space-6);
+  width: min(100%, 56rem);
+  margin: 0 auto;
+}
+
+.header {
+  display: grid;
+  gap: var(--space-2);
+}
+
+.eyebrow {
+  margin: 0;
+  color: var(--color-text-muted);
+  font-size: var(--font-size-sm);
+  font-weight: 700;
+}
+
+.header h1,
+.header p,
+.card h2,
+.card h3,
+.card p {
+  margin: 0;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--space-4);
+}
+
+.card {
+  display: grid;
+  align-content: start;
+  gap: var(--space-3);
+}
+
+.steps,
+.notes {
+  display: grid;
+  gap: var(--space-2);
+  margin: 0;
+  padding-left: 1.35rem;
+}
+
+.links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-3);
+}
+
+.link {
+  display: inline-flex;
+  min-height: 44px;
+  align-items: center;
+  color: var(--color-primary-strong);
+  font-weight: 700;
+}
+
+@media (max-width: 40rem) {
+  .grid {
+    grid-template-columns: 1fr;
+  }
+}
