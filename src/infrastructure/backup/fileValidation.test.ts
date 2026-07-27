@@ -38,6 +38,18 @@ describe("backup file validation", () => {
     expect(text).not.toHaveBeenCalled();
   });
 
+  it.each([
+    ["負数", -1],
+    ["小数", 1.5],
+    ["非数", Number.NaN],
+  ])("不正な宣言size（%s）を本文読込前に拒否する", async (_label, size) => {
+    const text = vi.fn(() => Promise.resolve(validText()));
+    await expect(parseBackupFile({ size, text })).rejects.toMatchObject({
+      code: "FILE_TOO_LARGE",
+    });
+    expect(text).not.toHaveBeenCalled();
+  });
+
   it("破損JSONと未知fieldを拒否する", () => {
     expect(() => parseBackupText("{")).toThrowError(
       expect.objectContaining({ code: "INVALID_JSON" }),
@@ -45,6 +57,24 @@ describe("backup file validation", () => {
     const unknown = JSON.parse(validText()) as Record<string, unknown>;
     unknown.extra = true;
     expect(() => parseBackupText(JSON.stringify(unknown))).toThrowError(
+      expect.objectContaining({ code: "INVALID_SCHEMA" }),
+    );
+  });
+
+  it("JSONとして読めてもroot型・日時・必須sectionが壊れたbackupを拒否する", () => {
+    expect(() => parseBackupText("[]")).toThrowError(
+      expect.objectContaining({ code: "INVALID_SCHEMA" }),
+    );
+
+    const invalidDate = JSON.parse(validText()) as Record<string, unknown>;
+    invalidDate.exportedAt = "2026年7月27日";
+    expect(() => parseBackupText(JSON.stringify(invalidDate))).toThrowError(
+      expect.objectContaining({ code: "INVALID_SCHEMA" }),
+    );
+
+    const missingSection = JSON.parse(validText()) as Record<string, unknown>;
+    delete (missingSection.data as Record<string, unknown>).attempts;
+    expect(() => parseBackupText(JSON.stringify(missingSection))).toThrowError(
       expect.objectContaining({ code: "INVALID_SCHEMA" }),
     );
   });

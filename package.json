@@ -21,6 +21,7 @@
     "test:coverage": "vitest run --coverage",
     "test:e2e": "playwright test",
     "validate:content": "tsx scripts/validate-content.ts",
+    "verify:dist": "node scripts/verify-production-build.mjs",
     "check": "npm run lint && npm run typecheck && npm run test && npm run validate:content && npm run build"
   },
   "dependencies": {

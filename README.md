@@ -22,46 +22,356 @@
 
 ## 現在の実装状況
 
-Phase 00〜08が完了し、次はPhase 09「全テスト・CI・静的デプロイ」です。
+Phase 00〜09が完了し、次はPhase 10「最終監査・Pilot Release」です。
 
-Phase 08では、端末内の実学習データから7日・30日の記録、6技能傾向、弱点、Stage進行を集計する記録画面を実装しました。7つの学習・表示設定は即時保存され、画面遷移focus、見出し・landmark、live region、Dialog復帰、44px操作領域、320px・文字200%相当のreflowも整備しました。
+Phase 09では、clean installから品質ゲートを再現するCI、失敗時のPlaywright artifact、repository base path対応のGitHub Pages workflow、production artifact検証を追加しました。v1 migration、破損backup、DST境界、MediaRecorder、共通IndexedDB seed helperのテストも補強し、第三者向けの起動・テスト・教材・PWA・backup・deploy・復旧手順を本READMEへ統合しました。
 
-最新のPhase 08検証は次のとおりです。
+最新のPhase 09検証は次のとおりです。
 
-- unit/componentテスト: 73ファイル・518/518件成功
-- Playwright E2E: 全フローdesktop/320pxで64/64成功（Phase 08固有10/10）
+- clean install: workspace直下の`node_modules`／`dist`削除後、lockfileから533 packagesを再構築
+- unit/componentテスト: 73ファイル・531/531件成功
+- coverage: Statements 79.80% / Branches 71.62% / Functions 76.75% / Lines 80.14%
+- Playwright E2E: 全フローdesktop/320pxで70/70成功（Phase 09固有6/6）
 - axe: 主要14 routeと実データ入りTodayでserious／critical違反0件
 - Pilot教材検証: 140語・31レッスン・155演習・技能25セット
 - `npm run check`: 成功
-- production build: 成功（entry 210.34 kB、500 kB超のchunk警告なし、PWA precache 70件）
+- production build: root／`/e2-study-path/`とも成功（entry 210.34 kB、500 kB超のchunk警告なし、PWA precache 70件、artifact 71ファイル）
 
-Web Speechの声質・発音、MediaRecorderの権限・録音・再生、iPhone Safari／ホーム画面PWA、実際のwaiting Service Worker差替え、NVDA／VoiceOver、実ブラウザーの200% zoom・forced colorsは実機・配信環境で未確認です。PWA依存追加後の`npm install`が報告したhigh severity advisory 10件の`npm audit --json`は、依存メタデータの外部送信承認が得られず未実施で、Phase 09へ引き継ぎます。
+Web Speechの声質・発音、MediaRecorderの実権限・録音・再生、iPhone Safari／ホーム画面PWA、実際のwaiting Service Worker差替え、NVDA／VoiceOver、実ブラウザーの200% zoom・forced colors、GitHub上のActions／Pagesは実機・配信環境で未確認です。offline dependency auditは0件でしたが、最新registry照会は依存メタデータの外部送信承認が得られず未実施です。公開前に承認済み環境で`npm audit`と`npm audit --omit=dev`を再実行してください。
+
+## 必要環境
+
+- Node.js 24.13.1（`.nvmrc`と`package.json`に記録）
+- npm 11.8.0以上
+- Git
+- Chrome、Edge、Firefox、Safari等の現行ブラウザー
+- GitHub Pagesへ公開する場合は、ActionsとPagesを利用できるGitHubリポジトリ
+
+バックエンド、外部アカウント、APIキー、`.env`はローカル起動に不要です。依存関係はlockfileどおりに入れるため、通常は`npm install`ではなく`npm ci`を使います。
 
 ## ローカル起動
 
-必要環境は Node.js 24.13.1（`.nvmrc`に記録）とnpm 11以降です。
+開発サーバーは通常`http://localhost:5173/`で起動します。実際のURLはターミナル表示を優先してください。停止はターミナルで`Ctrl+C`です。
+
+### Windows 11／PowerShell
 
 ```powershell
+git clone <repository-url>
+Set-Location <repository-directory>
+node --version
+npm --version
 npm ci
 npm run dev
 ```
 
-起動後、ターミナルに表示されたローカルURLをブラウザーで開きます。ルーティングはHash Routerを使うため、静的ホスティングでも各画面を直接開けます。
+PowerShellの実行ポリシーで`npm.ps1`が拒否される場合、ポリシーを変更せず`npm.cmd ci`、`npm.cmd run dev`のように`npm.cmd`を使えます。
 
-## 品質確認
+### macOS／Linux
 
-```powershell
-npm run lint
-npm run typecheck
-npm run test
-npm run test:coverage
-npm run validate:content
-npm run build
-npm run test:e2e
-npm run check
+`nvm`を使う場合は、リポジトリの`.nvmrc`から同じNode.jsを導入できます。Node.jsを別の方法で管理している場合は、先に24.13.1へ切り替えてください。
+
+```bash
+git clone <repository-url>
+cd <repository-directory>
+nvm install
+nvm use
+node --version
+npm --version
+npm ci
+npm run dev
 ```
 
-`npm run check` はlint、型検査、単体・コンポーネントテスト、教材検証、production buildを順に実行します。E2Eは別コマンドで実行します。
+### WSL2
+
+Node.jsとnpmはWindows側ではなくWSL側へ導入します。速度とfile watchingの安定性のため、可能ならリポジトリを`/mnt/c`配下ではなくWSLのホーム配下へ置いてください。Windowsブラウザーから開く場合は、次のように全interfaceで待ち受けます。
+
+```bash
+cd ~/work/<repository-directory>
+nvm install
+nvm use
+npm ci
+npm run dev -- --host 0.0.0.0
+```
+
+通常はWindows側で`http://localhost:5173/`を開けます。開けない場合は、WSLで`hostname -I`を実行して表示されたIPとターミナルのportを使います。公共ネットワークでは開発サーバーを公開しないでください。WindowsとWSLの両方から同じ`node_modules`を使い回さず、利用する環境側で`npm ci`をやり直します。
+
+### production buildをローカル確認する
+
+PWAのService Workerは開発サーバーでは無効です。install、更新、offlineを確認するときはproduction buildをpreviewします。
+
+```bash
+npm run build
+npm run preview -- --host 127.0.0.1 --port 4173
+```
+
+ブラウザーで`http://127.0.0.1:4173/`を開きます。`localhost`と`127.0.0.1`は別originなので、学習データも別になります。普段使う方を統一してください。
+
+サブディレクトリ配信をローカル確認する場合は、末尾`/`を含むbase pathを指定してからbuildします。
+
+PowerShell:
+
+```powershell
+$env:VITE_BASE_PATH="/e2-study-path/"
+npm run build
+npm run preview -- --host 127.0.0.1 --port 4173
+Remove-Item Env:VITE_BASE_PATH -ErrorAction SilentlyContinue
+```
+
+macOS／Linux／WSL:
+
+```bash
+export VITE_BASE_PATH=/e2-study-path/
+npm run build
+npm run preview -- --host 127.0.0.1 --port 4173
+unset VITE_BASE_PATH
+```
+
+この例では`http://127.0.0.1:4173/e2-study-path/`を開きます。previewを`Ctrl+C`で終了してから環境変数を解除します。通常のE2Eを実行する前は`VITE_BASE_PATH`を未設定へ戻してください。
+
+## テストと品質ゲート
+
+初回だけPlaywrightのChromiumを導入します。
+
+Windows／macOS:
+
+```bash
+npx playwright install chromium
+```
+
+Linux／WSLでOS依存パッケージも必要な場合:
+
+```bash
+npx playwright install --with-deps chromium
+```
+
+各scriptの役割は次のとおりです。
+
+| コマンド                   | 内容                                                     |
+| -------------------------- | -------------------------------------------------------- |
+| `npm run format:check`     | Prettierの整形漏れを確認                                 |
+| `npm run lint`             | ESLint                                                   |
+| `npm run typecheck`        | TypeScript型検査                                         |
+| `npm run test`             | Vitestの単体・統合・コンポーネントテスト                 |
+| `npm run test:coverage`    | coverageを計測し`coverage/`へHTML・LCOVを出力            |
+| `npm run validate:content` | Pilot教材と`src/content/packs/*.json`を検証              |
+| `npm run build`            | 型検査後に`dist/`へproduction build                      |
+| `npm run verify:dist`      | manifest・SW・base path・公開asset・source map方針を検証 |
+| `npm run check`            | lint、型検査、テスト、教材検証、buildを順に実行          |
+| `npm run test:e2e`         | production previewに対するdesktop／320px Playwright E2E  |
+
+第三者が変更を提出する前の標準確認は次のとおりです。
+
+```bash
+npm ci
+npm run check
+npm run test:e2e
+```
+
+`npm run check`にE2Eは含まれません。`npm run test:e2e`は内部でproduction buildとpreviewを起動し、既定でport 4173を使います。失敗時のHTML reportは`playwright-report/`、traceやscreenshotは`test-results/`に出ます。reportは次のコマンドで開けます。
+
+```bash
+npx playwright show-report
+```
+
+依存関係のrelease監査では、registryへ接続できる環境で次も実行し、重大度、影響範囲、対応または見送り理由を記録します。
+
+```bash
+npm audit
+npm audit --omit=dev
+```
+
+前者で開発・ビルド依存を含む全依存、後者で本番依存だけを確認します。
+
+CIは`.github/workflows/ci.yml`の「CI」で、`main`／`master`へのpush、pull request、手動実行時にclean install、lint、型検査、テスト、coverage、教材検証、build、成果物検証、E2Eを実行します。E2E失敗時はPlaywright reportとtest resultsを7日間artifactとして保存します。失敗を隠すためにテストをskipしたり、原因を確認せずretryを増やしたりしないでください。
+
+## 教材を追加・検証する
+
+教材の基準は`contracts/*.schema.json`、実装時の詳細は`docs/12_CONTENT_MODEL_AND_AUTHORING.md`、人手確認は`checklists/CONTENT_QA.md`です。現在アプリが起動時に読み込むstarter packは`src/content/pilot/pilotContentPack.ts`で組み立てています。
+
+1. `contracts/sample/content-pack.sample.json`を参考に、小さな単位で教材を作ります。
+2. `id`は既存と重複しない安定値にし、`schemaVersion`と`contentVersion`を設定します。
+3. `source.type`を`original`にし、作者または生成元を記録します。
+4. 単語、レッスン、演習、技能教材間の参照ID、前提関係、正答、解説を揃えます。
+5. JSON packとして検証する場合は`src/content/packs/<pack-id>.json`へ置きます。ディレクトリがなければ作成して構いません。
+6. 次の検証を実行し、最後に`checklists/CONTENT_QA.md`で人手確認します。
+
+```bash
+npm run validate:content
+npm run test
+npm run build
+```
+
+`src/content/packs/`へJSONを置くだけでは、現在のアプリへ自動配信されません。starter packへ含める場合は、対応する配列を`src/content/pilot/`へ追加し、`pilotContentPack.ts`へ明示的に登録します。そのうえでpackの`contentVersion`、`public/content/<pack-id>/<version>/index.json`、`vite.config.ts`のService Worker用content URLとrevisionを同じversionへ更新します。
+
+公式問題、公式音声、公式logo、市販教材、過去問の言い換えは追加しません。問題形式や語数を参考にする場合も、本文、設問、選択肢、解説、音声は独自に作成します。AI生成教材も`original`として出所を記録し、必ず人が正答の一意性、日本語、難易度、偏見、著作権を確認します。
+
+## PWAのinstallとoffline確認
+
+installとService WorkerにはHTTPSまたはlocalhostが必要です。`npm run dev`ではなくproduction previewまたはHTTPSの配信URLで確認します。
+
+### パソコン／Android
+
+1. production URLをChromeまたはEdgeで開き、初回読込を完了させます。
+2. アプリ内の「設定」から「この端末に追加」を選び、ブラウザーの確認を許可します。
+3. アプリ内に案内がない場合は、address barのinstall iconまたはブラウザーmenuの「アプリをインストール」「ホーム画面に追加」を使います。
+4. installしたiconからstandalone表示で起動します。
+
+### iPhone／iPad
+
+1. Safariでproduction URLを開きます。
+2. 共有buttonを選びます。
+3. 「ホーム画面に追加」を選び、右上の「追加」を押します。
+4. ホーム画面のiconから起動します。
+
+install項目が表示されない場合でも通常のWebアプリとして学習できます。offline確認は、オンラインで一度起動して基本教材の準備を終え、install済みPWAまたは同じoriginを閉じて再度開いてから、端末の通信を切るかDevToolsをofflineにして再読み込みします。未取得の任意音声はofflineでは再生できませんが、基本教材、回答、復習、下書きは端末内で利用・保存できます。
+
+## バックアップ、復元、データ回復
+
+学習データはアカウントやserverではなく、ブラウザーのIndexedDBへ保存されます。端末故障、ブラウザーprofile削除、site data削除、origin変更から自動回復するcloud copyはありません。定期的にJSON backupを端末外へ保管してください。
+
+### バックアップを書き出す
+
+1. アプリの「設定」→「データ管理」を開きます。
+2. 「バックアップを書き出す」で、必要な場合だけ「スピーキング録音も含める」を有効にします。録音は既定で含みません。
+3. 「JSONを書き出す」を選び、downloadされたfileを別drive等へ保管します。
+
+backupにはprofile、設定、復習予定、習熟度、進捗、回答履歴、作文等が入ります。教材本体、アプリcache、再取得できる音声cacheは含みません。
+
+### バックアップから復元する
+
+1. 「設定」→「データ管理」→「バックアップから復元する」でJSONを選びます。
+2. schema・app・教材version、警告、カテゴリ別件数を確認します。不正なfileはこの段階で拒否され、現在のデータは変更されません。
+3. 現在の記録を残す場合は「現在のデータへ統合」、backupの状態へ切り替える場合は「現在のデータを置換」を選びます。
+4. 置換時は「置換前に現在の安全バックアップを書き出す」を有効のままにすることを推奨します。
+5. 「復元内容を最終確認」を選び、確認Dialogで実行します。
+
+誤って削除した場合、backupがなければ学習データは復元できません。URLやdomainを変更した後に記録が見えない場合は、元のscheme・host・portのURLへ戻り、そこからbackupを書き出してください。`localhost`と`127.0.0.1`、HTTPとHTTPS、別domain、別ブラウザーprofileはそれぞれ別originです。
+
+表示やService Workerだけが壊れた場合は、site data全削除の前に「データ管理」→「アプリキャッシュを再構築」を使います。これは学習データを残してアプリcacheを再取得します。「閲覧履歴データを削除」「Clear site data」はIndexedDBも消すことがあるため、必ず先にbackupしてください。
+
+## 静的デプロイ
+
+公開操作はrepository ownerの承認を得てから行い、教材、画像、音声、依存assetを配信する権利と、未決定のsoftware licenseの扱いを先に確認してください。
+
+### GitHub Pages
+
+`.github/workflows/deploy-pages.yml`の「GitHub Pagesへ公開」は、既定branchへのpushでCIが全件成功した後にだけbuildし、CIが検証した同じcommitの`dist/`をPages artifactとして公開します。repository名からbase pathを自動設定し、`<owner>.github.io` repositoryだけは`/`、通常のproject repositoryは`/<repository-name>/`を使います。deploy用secretやAPI keyは不要です。
+
+1. GitHubへrepositoryをpushします。
+2. repositoryの「Settings」→「Pages」を開きます。
+3. 「Build and deployment」のSourceを「GitHub Actions」にします。
+4. `main`または`master`のうち実際の既定branchへpushし、「CI」が全件成功するまで待ちます。成功後に「GitHub Pagesへ公開」が同じcommitを対象として自動実行されます。
+5. workflowの`deploy` jobが成功したら、表示されたURLを開きます。通常は`https://<owner>.github.io/<repository-name>/`です。
+6. `#/`を含む画面遷移、manifest、icon、install、online起動後のoffline再読込を確認します。
+
+GitHub Pagesの`github-pages` environmentには、既定branchだけがdeployできるdeployment branch ruleを設定してください。workflow自体も既定branchと同一repository内の成功したpushだけを自動公開対象にしますが、environment ruleを二重の保護として使います。
+
+GitHub Pages用base pathはworkflowが設定するため、通常は手作業で`VITE_BASE_PATH`を追加しません。現在の自動計算は既定の`github.io` URL向けです。custom domainを使う場合は、workflowのbase pathを`/`へ変更し、Pages側のcustom domain設定と必要な`CNAME`を用意してから再buildします。manifestの`start_url`／`scope`とService Workerのscopeが新URLに合うことも確認してください。
+
+### GitHub Pages以外の静的host
+
+Cloudflare Pages、Netlify、S3系host、社内static server等でも、生成された`dist/`だけを配信できます。Hash Routerを使うため、通常はSPA rewrite ruleを必要としません。
+
+root domainへ配信するbuild:
+
+PowerShell:
+
+```powershell
+$env:VITE_BASE_PATH="/"
+npm run build
+Remove-Item Env:VITE_BASE_PATH -ErrorAction SilentlyContinue
+```
+
+macOS／Linux／WSL:
+
+```bash
+VITE_BASE_PATH=/ npm run build
+```
+
+サブディレクトリへ配信する場合は、`VITE_BASE_PATH=/subdirectory/`のように先頭と末尾の`/`を含めます。hostのbuild commandは`npm run build`、公開directoryは`dist`です。
+
+配信先では次を確認します。
+
+- HTTPSで配信する。
+- `dist/`の内容を階層ごと保持し、JS、CSS、JSON、Web Manifest、iconへ正しいMIME typeを返す。
+- `index.html`、`service-worker.js`、`manifest.webmanifest`へ長期間のimmutable cacheを設定しない。hash付きassetだけを長期cacheする。
+- build時のbase pathと実際の公開pathを一致させる。
+- 任意の`#/...`画面をreloadできる。
+- 外部telemetryやAPI keyを追加しない。
+
+### Service Worker更新とrollbackの注意
+
+新しいreleaseを配信しても、開いているPWAは旧Service Workerを使い続ける場合があります。更新案内が出たら、回答、下書き、録音等を保存して学習を終えた後に「保存して更新」を選びます。学習中や未完了の書込みがある間に、強制reload、DevToolsからのunregister、site data削除をしないでください。
+
+更新が反映されない場合は、まず全tabとinstall済みPWAを閉じ、onlineで開き直します。それでも直らない場合は、backupを書き出してから「データ管理」→「アプリキャッシュを再構築」を実行します。Service Workerの手動unregisterやbrowser storage削除は最後の手段です。
+
+rollbackでは前releaseの`dist/` artifactを再配信できますが、IndexedDB migrationを自動で元へ戻すことはできません。DB変更を含むrelease前はbackupを案内し、旧appが新DBを読めることを確認するか、互換性のある修正版を再配信します。
+
+### source map公開方針
+
+標準の`npm run build`、CI、GitHub Pagesではproduction source mapを生成・公開しません。調査目的で一時的に必要な場合だけ、信頼できるローカル環境で次を実行します。
+
+```bash
+npm run build -- --sourcemap
+```
+
+生成された`.map`は公開artifactへ含めず、調査後に通常の`npm run build`で`dist/`を作り直します。source mapを本番公開する方針へ変える場合は、source、教材、path等の開示範囲をreviewし、release記録へ残してください。
+
+## トラブルシューティング
+
+### Node.jsまたはnpmのversionが違う
+
+`node --version`と`npm --version`を確認し、Node.js 24.13.1、npm 11.8.0以上へ合わせてから`npm ci`をやり直します。Windows側とWSL側のNode.jsを混在させないでください。
+
+### `npm ci`がlockfileエラーになる
+
+`package.json`と`package-lock.json`が同じcommitか確認します。依存更新が目的でない限りlockfileを手修正せず、作業中の変更を退避してcleanなcheckoutで再確認します。registry接続、proxy、証明書、空き容量も確認してください。
+
+### Windowsで`spawn EPERM`、file lock、削除失敗になる
+
+起動中のdev server、preview、test runnerを`Ctrl+C`で止め、該当repositoryを開いている別processを閉じます。Windows Defenderや企業向けsecurity software、OneDrive同期、深すぎるpathがprocess起動を妨げる場合があります。WindowsとWSLで同じ`node_modules`を共有せず、利用側で`npm ci`を実行してください。
+
+### WSLのdev serverをWindowsブラウザーから開けない
+
+`npm run dev -- --host 0.0.0.0`で起動し、まず`http://localhost:5173/`を試します。開けない場合は`hostname -I`のIP、Windows Firewall、VPN、利用中portを確認します。
+
+### port 5173または4173が使用中
+
+以前のVite／Playwright processを停止するか、開発時は`npm run dev -- --port 5174`のように別portを指定します。E2Eは4173を前提とするため、E2E実行前は4173を空けてください。
+
+### Playwrightがbrowser executableを見つけられない
+
+`npx playwright install chromium`を実行します。Linux／WSLで共有libraryが不足する場合は`npx playwright install --with-deps chromium`を使います。
+
+### GitHub Pagesで白画面、asset 404、install不可になる
+
+workflowが計算したbase pathと公開URLが一致すること、PagesのSourceがGitHub Actionsであること、Actionsのbuild／deploy両jobが成功していることを確認します。custom domainはbase `/`で再buildします。PWA installにはHTTPS、正常なmanifest、Service Workerが必要です。
+
+### PWAのinstall項目が表示されない
+
+`npm run dev`ではなくproduction previewまたはHTTPS URLを開きます。すでにinstall済みでないか、private browsingでないか、manifest／icon／Service Workerが200で取得できるかを確認します。iOSはSafariの共有menuから「ホーム画面に追加」を使います。
+
+### 更新後も古い画面、真っ白な画面、offline状態が続く
+
+online接続を確認し、学習を保存して全tab／PWAを閉じてから再起動します。次に「設定」→「データ管理」→「アプリキャッシュを再構築」を試します。browserのsite data全削除は学習記録も消すため、先にbackupします。
+
+### 学習データが消えたように見える
+
+同じbrowser profile、scheme、host、portで開いているか確認します。`localhost`と`127.0.0.1`、HTTPとHTTPS、通常windowと一部のprivate window、別domainは保存領域が異なります。元のoriginへ戻ってJSONを書き出し、新しいoriginで復元します。
+
+### backupを復元できない
+
+JSONをeditorで保存し直さず、書き出した元fileを選びます。画面に出るschema／version／破損内容を確認します。検証失敗時は現在データを変更しません。対応外schemaを無理に編集せず、作成元versionのアプリで開いて新しいbackupを書き出してください。
+
+### マイクを許可できない
+
+録音開始操作後にだけ権限を求めます。browser／OSのsite権限を確認してください。拒否またはMediaRecorder非対応でも、テキスト回答と自己評価で練習を完了できます。
+
+## ライセンス、branding、非公式注記
+
+`E2 Study Path`は作業名であり、英検公式または日本英語検定協会公認・推奨の製品ではありません。教材、音声、模擬結果は本プロジェクトの学習用オリジナルで、公式問題、公式音声、公式scoreではありません。
+
+software licenseは未決定です。licenseがない状態をopen sourceや再配布許可と解釈しないでください。repository ownerがlicenseを選ぶまで、Codexやcontributorが独断でMIT等のlicenseを追加してはいけません。公開配布や第三者asset追加の前に`LICENSE_AND_BRANDING.md`を確認し、必要な権利とnoticeを整理します。
 
 ## アクセシビリティ手動確認チェックリスト
 

@@ -19,6 +19,7 @@ import {
   DexieContentRepository,
   DexieReviewStateRepository,
 } from "./repositories";
+import legacyDailyPlanV1Fixture from "./__fixtures__/dailyPlans.v1.json";
 
 let databaseSequence = 0;
 let db: AppDb;
@@ -223,6 +224,84 @@ describe("IndexedDB schemaとrepository", () => {
     await migratedDb.delete();
 
     db = createDatabase();
+  });
+
+  it("version 1 fixtureを複数recordまとめて移行し、旧fieldを残さない", async () => {
+    const databaseName = `e2-study-path-migration-fixture-${databaseSequence}`;
+    db.close();
+    await db.delete();
+    const legacyDb = new Dexie(databaseName, {
+      indexedDB,
+      IDBKeyRange,
+    });
+    legacyDb.version(1).stores(DB_VERSION_1_STORES);
+    await legacyDb.open();
+    await legacyDb.table("dailyPlans").bulkPut(legacyDailyPlanV1Fixture.records);
+    legacyDb.close();
+
+    const migratedDb = new AppDb(databaseName, {
+      indexedDB,
+      IDBKeyRange,
+    });
+    try {
+      await migratedDb.open();
+      const migrated = await migratedDb.dailyPlans.orderBy("date").toArray();
+
+      expect(migrated).toHaveLength(2);
+      expect(migrated[0]).toMatchObject({
+        date: "2026-07-28",
+        targetMinutes: 10,
+        mode: "light",
+        sourceSnapshot: {
+          dueCount: 2,
+          overdueCount: 0,
+          newLimit: 2,
+        },
+        plannedSeconds: 46,
+        blocks: [
+          {
+            blockId: "legacy-overdue",
+            itemId: "vocab:c",
+            category: "overdueReview",
+            estimatedSeconds: 15,
+            status: "pending",
+          },
+          {
+            blockId: "legacy-weak",
+            itemId: "legacy-weak",
+            category: "weakItem",
+            estimatedSeconds: 1,
+            status: "completed",
+          },
+          {
+            blockId: "legacy-skill",
+            itemId: "practice:reading-x",
+            category: "skillPractice",
+            estimatedSeconds: 30,
+            status: "pending",
+          },
+        ],
+        completedBlockIds: ["legacy-weak"],
+      });
+      expect(migrated[1]).toMatchObject({
+        date: "2026-07-29",
+        blocks: [
+          {
+            blockId: "legacy-new",
+            itemId: "legacy-new",
+            category: "newVocabulary",
+            status: "completed",
+          },
+        ],
+        completedBlockIds: ["legacy-new"],
+      });
+      expect(JSON.stringify(migrated)).not.toContain('"titleJa"');
+      expect(JSON.stringify(migrated)).not.toContain('"type"');
+    } finally {
+      migratedDb.close();
+      await migratedDb.delete();
+      db = createDatabase();
+    }
   });
 
   it("現行DailyPlanはmigration helperで同じ参照を保つ", () => {

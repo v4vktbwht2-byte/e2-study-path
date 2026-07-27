@@ -13,42 +13,45 @@ Codexは各フェーズ完了時に更新する。
 - [x] Phase 06 Skill modules and mock
 - [x] Phase 07 PWA, offline, backup
 - [x] Phase 08 Progress, UX, accessibility
-- [ ] Phase 09 Tests, CI, deployment
+- [x] Phase 09 Tests, CI, deployment
 - [ ] Phase 10 Final audit and release
 - [ ] Phase 11 Content expansion (separate)
 
 ## Feature status
 
-| Feature          | Status      | Verification                         | Notes                                                                       |
-| ---------------- | ----------- | ------------------------------------ | --------------------------------------------------------------------------- |
-| Onboarding       | Complete    | Phase 03 E2E                         | 目標・時間・任意受験日、端末内保存説明、skip                                |
-| Diagnostic       | Complete    | domain + Phase 03 E2E                | 18問適応、途中再開、Stage 0〜6推薦、手動変更                                |
-| Course map       | Complete    | course component + E2E               | Stage 0〜6、進捗、推奨順、強制ロックなし                                    |
-| Lesson engine    | Complete    | lesson/DB integration + Phase 05 E2E | 31レッスン、155問、中断・再開・回答・原子的完了・翌学習日復習・復習位置再開 |
-| Vocabulary hub   | Complete    | Phase 04 feature + E2E               | 140語、7入口、一覧・検索・お気に入り・詳細                                  |
-| Review scheduler | Complete    | Phase 04 domain/feature 117 + E2E    | 4段階評価、Level 1〜7、canonical Due/Weak、Again、5軸、混同語               |
-| Daily plan       | Complete    | Phase 05 domain/component + E2E      | 5/15/30/45/custom、4コース、滞留救済、競合安全な再計算、原子的完了          |
-| Reading          | Complete    | Phase 06 component + E2E             | 6セット、根拠文、採点・解説、語句お気に入り                                 |
-| Listening        | Complete    | audio/model/component + Phase 06 E2E | 6セット、本番風1回再生、復習、script・dictation・fallback                   |
-| Writing          | Complete    | domain/component + Phase 06 E2E      | 要約4・意見4、語数、autosave、履歴、自己評価rubric                          |
-| Speaking         | Complete    | recorder/component + Phase 06 E2E    | 4セット、20秒timer、録音・text response・権限fallback                       |
-| Mock exam        | Complete    | component + Phase 06 E2E             | オリジナル短縮1セット、timer、中断警告、非公式結果、弱点導線                |
-| Progress         | Complete    | domain/component + Phase 08 E2E      | 7日・30日、6技能、弱点、Stage進行、非懲罰的な継続・再開表示                 |
-| Backup/restore   | Complete    | backup/adapter tests + Phase 07 E2E  | 厳密JSON、preview、merge/replace、安全backup、録音opt-in、分離削除          |
-| PWA/offline      | Complete    | PWA tests + Phase 07 E2E             | install/iOS案内、offline、用途別cache、更新前write flush、base path         |
-| Accessibility    | Complete    | axe + component + Phase 08 E2E       | landmark、h1、route focus、live region、Dialog、44px、320px・200%相当       |
-| CI/deploy        | Not started | —                                    |                                                                             |
+| Feature          | Status   | Verification                         | Notes                                                                       |
+| ---------------- | -------- | ------------------------------------ | --------------------------------------------------------------------------- |
+| Onboarding       | Complete | Phase 03 E2E                         | 目標・時間・任意受験日、端末内保存説明、skip                                |
+| Diagnostic       | Complete | domain + Phase 03 E2E                | 18問適応、途中再開、Stage 0〜6推薦、手動変更                                |
+| Course map       | Complete | course component + E2E               | Stage 0〜6、進捗、推奨順、強制ロックなし                                    |
+| Lesson engine    | Complete | lesson/DB integration + Phase 05 E2E | 31レッスン、155問、中断・再開・回答・原子的完了・翌学習日復習・復習位置再開 |
+| Vocabulary hub   | Complete | Phase 04 feature + E2E               | 140語、7入口、一覧・検索・お気に入り・詳細                                  |
+| Review scheduler | Complete | Phase 04 domain/feature 117 + E2E    | 4段階評価、Level 1〜7、canonical Due/Weak、Again、5軸、混同語               |
+| Daily plan       | Complete | Phase 05 domain/component + E2E      | 5/15/30/45/custom、4コース、滞留救済、競合安全な再計算、原子的完了          |
+| Reading          | Complete | Phase 06 component + E2E             | 6セット、根拠文、採点・解説、語句お気に入り                                 |
+| Listening        | Complete | audio/model/component + Phase 06 E2E | 6セット、本番風1回再生、復習、script・dictation・fallback                   |
+| Writing          | Complete | domain/component + Phase 06 E2E      | 要約4・意見4、語数、autosave、履歴、自己評価rubric                          |
+| Speaking         | Complete | recorder/component + Phase 06 E2E    | 4セット、20秒timer、録音・text response・権限fallback                       |
+| Mock exam        | Complete | component + Phase 06 E2E             | オリジナル短縮1セット、timer、中断警告、非公式結果、弱点導線                |
+| Progress         | Complete | domain/component + Phase 08 E2E      | 7日・30日、6技能、弱点、Stage進行、非懲罰的な継続・再開表示                 |
+| Backup/restore   | Complete | backup/adapter tests + Phase 07 E2E  | 厳密JSON、preview、merge/replace、安全backup、録音opt-in、分離削除          |
+| PWA/offline      | Complete | PWA tests + Phase 07 E2E             | install/iOS案内、offline、用途別cache、更新前write flush、base path         |
+| Accessibility    | Complete | axe + component + Phase 08 E2E       | landmark、h1、route focus、live region、Dialog、44px、320px・200%相当       |
+| CI/deploy        | Complete | clean install + CI/Pages + 70 E2E    | CI成功commit限定、failure artifact、root/subpath、Pages OIDC、汎用dist      |
 
 ## Quality gates
 
 | Command                  | Last result                                                                                   | Date       |
 | ------------------------ | --------------------------------------------------------------------------------------------- | ---------- |
+| npm ci                   | Pass (workspace直下をclean後、lockfileから533 packages)                                       | 2026-07-27 |
 | npm run lint             | Pass                                                                                          | 2026-07-27 |
 | npm run typecheck        | Pass                                                                                          | 2026-07-27 |
-| npm run test             | Pass (518/518)                                                                                | 2026-07-27 |
+| npm run test             | Pass (531/531)                                                                                | 2026-07-27 |
+| npm run test:coverage    | Pass (79.80% statements / 71.62% branches / 76.75% functions / 80.14% lines)                  | 2026-07-27 |
 | npm run validate:content | Pass (Pilot 140 vocabulary / 31 lessons / 155 exercises / 25 practice sets + contract sample) | 2026-07-27 |
-| npm run build            | Pass (entry 210.34 kB、500 kB超のchunk警告なし、PWA precache 70件)                            | 2026-07-27 |
-| npm run test:e2e         | Pass (all desktop/320px 64/64; Phase 08 10/10)                                                | 2026-07-27 |
+| npm run build            | Pass (root/subpath、entry 210.34 kB、PWA precache 70件)                                       | 2026-07-27 |
+| npm run verify:dist      | Pass (root/subpath、manifest/SW/asset/source map、71 files)                                   | 2026-07-27 |
+| npm run test:e2e         | Pass (all desktop/320px 70/70; Phase 09 6/6)                                                  | 2026-07-27 |
 | npm run check            | Pass (lint、typecheck、unit、content validation、build)                                       | 2026-07-27 |
 
 ## Known issues
@@ -58,8 +61,9 @@ Codexは各フェーズ完了時に更新する。
 - MediaRecorderの録音・権限拒否とWeb Speechの音声品質・端末差は対応端末での実機確認が必要。非対応時のtext fallbackは自動テスト済み。
 - 実際のwaiting Service Worker差替え、`beforeinstallprompt`、Storage永続化、iOS standaloneは配信環境・対応実機で最終確認が必要。
 - `vite-plugin-pwa`内部の`inlineDynamicImports`非推奨警告が残るが、Service Worker生成と70件のprecache注入は成功している。
+- GitHub Actions／Pagesはremote未設定のため実workflowと公開URLで未確認。localでworkflow構文、root/subpath build、71ファイルのartifactを検証済み。
 - 公開先とソフトウェアライセンスはリポジトリ所有者の最終判断待ち。実装を停止する要因ではない。
-- PWA依存追加後の`npm install`が10件のhigh severity advisoryを報告。`npm audit --json`は依存メタデータの外部送信を伴う実行承認が得られず未実施で、Phase 09で承認条件を確認して再試行する。
+- offline dependency auditは本番・全依存とも0件。build時依存`glob@11.1.0`は既知CVEの修正版だが非推奨警告が残り、最新registry auditは外部送信承認が得られず未実施。公開前に承認済み環境で`npm audit`と`npm audit --omit=dev`を再実行する。
 
 ## Phase notes
 
@@ -72,3 +76,4 @@ Codexは各フェーズ完了時に更新する。
 - 2026-07-27 Phase 06: 読解6、聞き取り6、要約4、意見4、会話4、短縮模試1のオリジナル教材と実画面を追加。AudioService、作文autosave・rubric、録音・text fallback、短縮模試中断警告、Today振分け、技能履歴とDailyPlanの原子的完了、共通教材検証を実装した。407 unit/component tests、全E2E desktop/320px 46/46、`npm run check`、production buildが成功した。
 - 2026-07-27 Phase 07: prompt更新型PWA、manifest・自作icon・offline fallback・用途別cache、共通offline/install/iOS/update UI、失敗済み書込み・controller切替時の再確認・全置換/全削除の排他バリアを含む更新安全制御を実装。厳密backup v1.0.0、録音opt-in、preview、原子的merge/replace、安全backup、分離削除をデータ管理へ接続した。484 unit/component tests、全E2E desktop/320px 54/54、root/subpath production buildが成功した。
 - 2026-07-27 Phase 08: 7日・30日記録、6技能傾向、弱点、Stage進行、7設定の即時保存・反映、route focus、単一main・h1、live region、Dialog復帰、44px操作領域、320px・文字200%相当reflowを実装。518 unit/component tests、全E2E desktop/320px 64/64、主要route axe serious／critical 0件、`npm run check`が成功した。
+- 2026-07-27 Phase 09: clean install、CI、失敗時Playwright artifact、CI成功commit限定のGitHub Pages OIDC deploy、repository base path、production artifact検証、同期例外rollback対応の共通IndexedDB seed helper、v1 migration／破損backup／DST／MediaRecorderテスト、第三者向け運用READMEを実装。531 unit/component tests、coverage lines 80.14%、全E2E desktop/320px 70/70、root/subpath build、71ファイルのartifact検証が成功した。

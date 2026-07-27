@@ -130,6 +130,39 @@ describe("backup schema", () => {
     expect(() => parseBackupEnvelope(oversized)).toThrow(BackupError);
   });
 
+  it("録音のBase64破損と許可外MIME typeを拒否する", () => {
+    const envelope = createEnvelope();
+    envelope.includedData = [...DEFAULT_BACKUP_SECTIONS, "speakingRecordings"];
+    (envelope.data as Record<string, unknown>).speakingRecordings = [
+      {
+        id: "recording-1",
+        promptId: "speaking-1",
+        createdAt: "2026-07-27T00:00:00.000Z",
+        durationMs: 1000,
+        mimeType: "audio/webm",
+        sizeBytes: 3,
+        dataBase64: "%%%=",
+        selfAssessment: {},
+      },
+    ];
+    expect(() => parseBackupEnvelope(envelope)).toThrow(BackupError);
+
+    const invalidMime = structuredClone(envelope);
+    (
+      (invalidMime.data as Record<string, unknown>).speakingRecordings as Record<
+        string,
+        unknown
+      >[]
+    )[0]!.dataBase64 = "AQID";
+    (
+      (invalidMime.data as Record<string, unknown>).speakingRecordings as Record<
+        string,
+        unknown
+      >[]
+    )[0]!.mimeType = "text/html";
+    expect(() => parseBackupEnvelope(invalidMime)).toThrow(BackupError);
+  });
+
   it("Attempt.scoreを0〜1、responseをJSON値へ制限する", () => {
     const envelope = createEnvelope();
     (envelope.data as Record<string, unknown>).attempts = [

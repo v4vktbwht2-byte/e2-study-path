@@ -161,7 +161,12 @@ Phase 06 verification: Pilotの技能教材25セットはすべて`source.type =
 
 ### Phase 09
 
-- CI, full tests, deployment build
+- Complete: clean installからlint、型検査、unit/component、coverage、教材検証、build、artifact検証、全E2Eを再現するCIを追加した。
+- Complete: repository名配下のbase path、manifest／Service Worker scope、Pages artifact、OIDC deployを備えたGitHub Pages workflowを追加した。
+- Complete: v1 migration fixture、破損backup、DST境界、unsupported MediaRecorder、原子的E2E seed helperを追加した。
+- Complete: READMEだけでWindows、macOS／Linux、WSL、テスト、教材追加、PWA、backup、deploy、復旧を実行できるようにした。
+- Evidence: clean `npm ci`、73 test files・531/531件、coverage 79.80% statements／71.62% branches／76.75% functions／80.14% lines、全E2E desktop/320px 70/70（Phase 09固有6/6）、root/subpath build、artifact 71ファイル、`npm run check`成功。
+- Manual pending: remote GitHub Actions／Pages、最新registry dependency audit、実OS・実端末・実配信環境。
 
 ### Phase 10
 

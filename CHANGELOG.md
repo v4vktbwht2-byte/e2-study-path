@@ -2,6 +2,14 @@
 
 ## Unreleased
 
+- Phase 09「全テスト・CI・静的デプロイ」を完了。
+  - clean install、lint、型検査、unit/component、coverage、教材、build、artifact、E2Eを実行するGitHub Actions CIと、失敗時Playwright artifactを追加。
+  - repository base pathを自動設定し、secret不要のOIDCでPages artifactを公開するGitHub Pages workflowを追加。
+  - v1 DailyPlan migration fixture、破損backup、DST境界、MediaRecorder、原子的IndexedDB seed helperのテストを追加。
+  - manifest、Service Worker、icon、starter教材、全asset参照、source map方針を検証するproduction artifact validatorを追加。
+  - Windows、macOS／Linux、WSL、テスト、教材、PWA、backup、deploy、更新・rollback、troubleshootingをREADMEへ追加。
+- Phase 09検証としてclean install、73 test files・531/531件、coverage lines 80.14%、全E2E desktop/320px 70/70（Phase 09固有6/6）、root/subpath build、71ファイルのartifact検証が成功。
+- 次のPhaseをPhase 10「最終監査・Pilot Release」へ更新。
 - Phase 08「記録・設定・UX状態・アクセシビリティ」を完了。
   - 7日・30日の学習記録、6技能傾向、弱点候補、Stage進行を端末内の実データから集計する記録画面を追加。
   - 学習時間、新規上限、復習強度、読み上げ速度、テーマ、文字倍率、動き軽減の即時保存・即時反映を追加。

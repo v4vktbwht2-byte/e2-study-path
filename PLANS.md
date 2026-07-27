@@ -4,8 +4,8 @@
 
 ## 現在のPhase
 
-- Phase: 08 — Progress, Settings, UX States, and Accessibility
-- Status: Phase 08完了・Phase 09開始待ち
+- Phase: 09 — Full Test Suite, CI, and Static Deployment
+- Status: Phase 09完了・Phase 10開始待ち
 - Last updated: 2026-07-27
 
 ## Phase 00〜10 高水準計画
@@ -531,3 +531,69 @@ python scripts/verify_handoff.py
 - MediaRecorderの権限・録音・再生・削除とWeb Speechの声質は対応実機での確認が必要。
 - `vite-plugin-pwa`内部の`inlineDynamicImports`非推奨警告は継続しているが、Service Worker生成と70件のprecache注入は成功している。
 - high severity advisory 10件の詳細監査は、依存メタデータの外部送信承認が得られず未実施のままPhase 09へ引き継ぐ。
+
+## Phase 09 — Full Test Suite, CI, and Static Deployment
+
+**Goal**
+
+clean installから同じ品質ゲートを再現し、pull request／pushのCI、失敗artifact、GitHub Pages用base path build、汎用`dist/`配信を自動化する。READMEだけで第三者が起動、検証、教材追加、PWA運用、backup、deploy、復旧を実行できる状態にする。
+
+**Files and areas expected to change**
+
+- `.github/workflows/**`
+- `package.json`、`vite.config.ts`、`playwright.config.ts`
+- `e2e/support/**`、`e2e/phase09.spec.ts`、不足分のunit／integration tests
+- `scripts/**`
+- `README.md`、`CHANGELOG.md`、`docs/17_ACCEPTANCE_CRITERIA_TRACEABILITY.md`、`docs/20_IMPLEMENTATION_STATUS.md`、`docs/backlog.md`
+
+**Implementation steps**
+
+1. `npm run test:coverage`で重要domain、DB migration、backup検証、時刻境界、unsupported APIの不足を確認し、仕様分岐を補う。
+2. Playwrightから任意storeへ原子的かつ失敗理由付きで投入・読込できる共通IndexedDB seed helperを用意し、critical journeyのfixtureへ適用する。
+3. root production previewに対するmanifest、Service Worker、offline reload、routing、保存の既存E2Eを維持し、base path artifactのmanifest・scope・asset参照・Hash Routerを追加検証する。
+4. CI workflowで固定Node／npm、`npm ci`、lint、typecheck、unit/component、coverage、教材検証、build、Playwrightを実行し、失敗時report・test resultsをartifact化する。
+5. Pages workflowでrepository名からbase pathを決定し、同じlockfileからproduction build、artifact upload、Pages deployを行う。fork等でPages権限がない場合もCI buildは独立して通る構成にする。
+6. READMEへWindows、macOS/Linux、WSL、テスト、教材作成、PWA install、backup／restore、Pages／代替host、Service Worker更新、troubleshooting、source map・license方針を書く。
+7. workspace内の対象を確認したうえでclean `npm ci`を行い、全check、coverage、全E2E、root／subpath build、artifact検証、handoff検証を実行する。
+8. dependency auditを試みる。外部送信承認が得られない場合は件数、未監査理由、Release判断への影響を隠さず記録する。
+
+**Verification commands**
+
+```powershell
+npm ci
+npm run test:coverage
+npm run check
+npm run test:e2e
+$env:VITE_BASE_PATH = "/e2-study-path/"
+npm run build
+Remove-Item Env:VITE_BASE_PATH
+python scripts/verify_handoff.py
+```
+
+**Decisions made**
+
+- CIは単一の`npm run check`だけへ隠さず、lint、型検査、unit/component、coverage、教材検証、buildを別stepで見える化する。
+- CIを含めPlaywright retryは0回とし、flakyを再実行だけでgreen扱いにしない。失敗時のtrace、screenshot、HTML reportをartifactとして調査する。
+- Pages deployと通常CIを分離し、`dist/`はGitHub Pages以外の静的hostでもそのまま配信できるようにする。
+- source mapは既定で公開せず、外部telemetryとsecretを導入しない。
+- licenseは所有者判断が未確定のため追加しない。
+
+**Results**
+
+- GitHub Actions CIを追加し、`main`／`master`のpush、pull request、手動実行でclean install、lint、型検査、unit/component、coverage、教材検証、build、artifact検証、全E2Eを実行するようにした。E2E失敗時はPlaywright report、trace、screenshotを7日保持する。
+- GitHub Pages workflowを追加し、既定branchのCI成功後に検証済みの同一commitだけをbuild・公開するようにした。owner siteは`/`、project siteはrepository名配下のbase pathを自動設定し、deploy jobだけにPages／OIDC権限を限定している。
+- v1 DailyPlanの複数record migration fixture、破損backup、DST開始・終了日の学習日境界、MediaRecorder非対応・失敗・解放を13テスト追加した。
+- 共通IndexedDB seed helperを追加し、存在しないstoreの事前拒否と、`put()`の同期例外時に先行書込みをrollbackすることをE2Eで確認した。
+- production artifact validatorを追加し、manifestのid／start_url／scope、192／512／maskable icon、Service Worker、starter教材、全HTML参照、base path外参照、source map非公開を検証した。
+- READMEへWindows、macOS／Linux、WSL、テスト、教材追加、PWA install、backup／restore、Pages／代替host、Service Worker更新・rollback、troubleshooting、license方針を追加した。
+- workspace直下の`node_modules`と`dist`を照合して削除し、`npm ci --offline --no-audit`でlockfileから533 packagesを再構築した。
+- `npm run test:coverage`は73 test files・531/531件、Statements 79.80%、Branches 71.62%、Functions 76.75%、Lines 80.14%で成功した。
+- `npm run check`、全Playwright E2E desktop／320px 70/70件、root／`/e2-study-path/` build、71ファイルのartifact検証が成功した。entryは210.34 kB、PWA precacheは70件だった。
+- `npm audit --omit=dev --offline`と全依存のoffline auditは0件だった。build時依存`glob@11.1.0`は既知のCVE-2025-64756修正版だが、npmの非推奨警告は残る。
+
+**Known limitations**
+
+- GitHub ActionsとGitHub Pagesはremote未設定のため、実repository上のworkflow実行と公開URLでは未確認。
+- Windows以外の起動手順、Firefox／Safari、実端末PWA、実配信環境の更新・rollbackは手動確認が必要。
+- offline auditは最新registry照会の代わりにはならない。依存メタデータの外部送信承認が得られなかったため、公開前に接続可能な承認済み環境で全依存の`npm audit`と本番依存の`npm audit --omit=dev`を再実行する。
+- `vite-plugin-pwa`内部の`inlineDynamicImports`非推奨警告は継続しているが、root／subpath双方のService Worker生成とartifact検証は成功している。

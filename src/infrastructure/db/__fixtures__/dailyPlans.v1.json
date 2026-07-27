@@ -1,0 +1,67 @@
+{
+  "records": [
+    {
+      "date": "2026-07-28",
+      "generatedAt": "2026-07-28T00:00:00.000Z",
+      "targetMinutes": 10.4,
+      "mode": "light",
+      "blocks": [
+        {
+          "id": "legacy-overdue",
+          "type": "overdue",
+          "titleJa": "期限超過の復習",
+          "itemKeys": ["vocab:c"],
+          "estimatedSeconds": 15
+        },
+        {
+          "id": "legacy-weak",
+          "type": "weak",
+          "titleJa": "弱点",
+          "itemKeys": [],
+          "estimatedSeconds": 0
+        },
+        {
+          "id": "legacy-skill",
+          "type": "skill",
+          "titleJa": "技能練習",
+          "itemKeys": ["practice:reading-x"],
+          "estimatedSeconds": 30
+        },
+        {
+          "id": "legacy-unknown",
+          "type": "removed-category",
+          "titleJa": "廃止済み",
+          "itemKeys": ["unknown:x"],
+          "estimatedSeconds": 99
+        }
+      ],
+      "completedBlockIds": ["legacy-weak"],
+      "sourceSnapshot": {
+        "dueCount": 2.4,
+        "overdueCount": -2,
+        "newLimit": 1.7
+      }
+    },
+    {
+      "date": "2026-07-29",
+      "generatedAt": "2026-07-29T00:00:00.000Z",
+      "targetMinutes": 15,
+      "mode": "standard",
+      "blocks": [
+        {
+          "id": "legacy-new",
+          "type": "new",
+          "titleJa": "新しい単語",
+          "itemKeys": [],
+          "estimatedSeconds": 45
+        }
+      ],
+      "completedBlockIds": ["legacy-new"],
+      "sourceSnapshot": {
+        "dueCount": 0,
+        "overdueCount": 0,
+        "newLimit": 1
+      }
+    }
+  ]
+}

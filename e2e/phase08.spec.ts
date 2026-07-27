@@ -1,5 +1,6 @@
 import AxeBuilder from "@axe-core/playwright";
 import { expect, test, type Locator, type Page } from "@playwright/test";
+import { readAppDatabaseRecord, seedAppDatabase } from "./support/indexedDb";
 
 const ACCESSIBILITY_ROUTES = [
   "/#/",
@@ -117,58 +118,32 @@ async function expectCurrentPageAccessibility(page: Page, routeLabel: string) {
 }
 
 async function seedSettingsProfile(page: Page) {
-  await page.evaluate(async () => {
-    const database = await new Promise<IDBDatabase>((resolve, reject) => {
-      const request = indexedDB.open("e2-study-path");
-      request.onsuccess = () => resolve(request.result);
-      request.onerror = () =>
-        reject(request.error ?? new Error("IndexedDBを開けませんでした。"));
-    });
-    const now = new Date().toISOString();
-    const transaction = database.transaction("profiles", "readwrite");
-    transaction.objectStore("profiles").put({
-      id: "local-user",
-      createdAt: now,
-      updatedAt: now,
-      goals: ["relearn"],
-      dailyMinutes: 15,
-      recommendedStage: 0,
-      selectedStage: 0,
-      onboardingCompleted: true,
-    });
-    await new Promise<void>((resolve, reject) => {
-      transaction.oncomplete = () => resolve();
-      transaction.onerror = () =>
-        reject(transaction.error ?? new Error("プロフィールを保存できませんでした。"));
-      transaction.onabort = () =>
-        reject(transaction.error ?? new Error("プロフィール保存が中断されました。"));
-    });
-    database.close();
-  });
+  const now = new Date().toISOString();
+  await seedAppDatabase(page, [
+    {
+      storeName: "profiles",
+      records: [
+        {
+          id: "local-user",
+          createdAt: now,
+          updatedAt: now,
+          goals: ["relearn"],
+          dailyMinutes: 15,
+          recommendedStage: 0,
+          selectedStage: 0,
+          onboardingCompleted: true,
+        },
+      ],
+    },
+  ]);
 }
 
 async function readStoredPreferences(page: Page) {
-  return page.evaluate(async () => {
-    const database = await new Promise<IDBDatabase>((resolve, reject) => {
-      const request = indexedDB.open("e2-study-path");
-      request.onsuccess = () => resolve(request.result);
-      request.onerror = () =>
-        reject(request.error ?? new Error("IndexedDBを開けませんでした。"));
-    });
-    const transaction = database.transaction(["profiles", "settings"], "readonly");
-    const asPromise = <T>(request: IDBRequest<T>) =>
-      new Promise<T>((resolve, reject) => {
-        request.onsuccess = () => resolve(request.result);
-        request.onerror = () =>
-          reject(request.error ?? new Error("設定を読み込めませんでした。"));
-      });
-    const [profile, settings] = await Promise.all([
-      asPromise<unknown>(transaction.objectStore("profiles").get("local-user")),
-      asPromise<unknown>(transaction.objectStore("settings").get("settings")),
-    ]);
-    database.close();
-    return { profile, settings };
-  });
+  const [profile, settings] = await Promise.all([
+    readAppDatabaseRecord(page, "profiles", "local-user"),
+    readAppDatabaseRecord(page, "settings", "settings"),
+  ]);
+  return { profile, settings };
 }
 
 async function seedProgressData(page: Page) {

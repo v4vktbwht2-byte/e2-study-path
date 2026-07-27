@@ -4,9 +4,9 @@
 
 ## 残タスク（優先度順）
 
-1. [高] Phase 09: 全テスト・CI・静的デプロイ — 再現可能な品質ゲートを完成。
-2. [高] Phase 10: 最終監査・Pilot Release — 全受入条件と文書を確定。
-3. [高] npm依存のhigh severity advisory 10件を詳細監査 — `npm audit --json`は依存メタデータの外部送信承認が得られず未実施。Phase 09へ引き継ぐ。
+1. [高] Phase 10: 最終監査・Pilot Release — 全受入条件と文書を確定。
+2. [高] 最新registryのdependency audit — offline auditは0件で、`glob@11.1.0`は既知CVE修正版。外部送信承認が得られず最新照会は未実施のため、公開前に承認済み環境で全依存の`npm audit`と本番依存の`npm audit --omit=dev`を実行。
+3. [中] GitHub Actions／Pages実環境確認 — remote未設定のため、CI green、Pages URL、artifact、権限を実repositoryで確認。
 4. [中] iPhone Safari／ホーム画面PWA実機確認 — Windows環境外のため利用者確認が必要。
 5. [中] 実配信環境でのwaiting Service Worker差替え確認 — 更新案内、保存完了、更新適用、再読込を実際の旧版・新版で確認。
 6. [中] NVDA／VoiceOverによる主要フロー確認 — 実機・支援技術での最終確認が必要。
@@ -16,6 +16,7 @@
 
 ## 完了
 
+- 2026-07-27: Phase 09のclean install、CI、失敗時Playwright artifact、CI成功commit限定のGitHub Pages OIDC deploy、repository base path、production artifact検証、同期例外rollback対応の共通IndexedDB seed helper、v1 migration／破損backup／DST／MediaRecorderテスト、第三者向け運用READMEを実装。531 unit/component tests、coverage lines 80.14%、全E2E desktop/320px 70/70（Phase 09固有6/6）、root/subpath build、71ファイルのartifact検証を完了。
 - 2026-07-27: Phase 08の7日・30日記録、6技能傾向、弱点、Stage進行、7設定の即時保存・反映、route focus、単一main・h1、live region、Dialog復帰、44px操作領域、320px・文字200%相当reflowを実装。518 unit/component tests、全E2E desktop/320px 64/64、主要route axe serious／critical 0件、`npm run check`を完了。
 - 2026-07-27: Phase 07のinstall/offline/update PWA、失敗済み書込み・controller切替時の再確認・全置換/全削除の排他バリアを含む更新安全制御、厳密backup schema、20 MiB検証、録音opt-in Base64、preview、原子的replace/merge、安全backup、選択削除、320px UIを実装。484 unit/component tests、全E2E desktop/320px 54/54、root/subpath production buildを完了。初期bundleの500 kB超警告も解消。
 - 2026-07-27: Phase 00の資料・環境・依存互換性・Git基準点監査を完了。

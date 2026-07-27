@@ -1,11 +1,21 @@
 {
   "package": "E2 Study Path Codex Handoff Full Set",
   "packageVersion": "1.0.0",
-  "generatedAt": "2026-07-27T04:36:20+00:00",
+  "generatedAt": "2026-07-27T05:06:25+00:00",
   "manifestPolicy": "The manifest tracks repository source files and excludes PROJECT_MANIFEST.json, Git metadata, dependencies, and generated artifacts.",
-  "fileCountExcludingManifest": 449,
-  "totalSizeBytesExcludingManifest": 2546182,
+  "fileCountExcludingManifest": 455,
+  "totalSizeBytesExcludingManifest": 2606157,
   "files": [
+    {
+      "path": ".github/workflows/ci.yml",
+      "sizeBytes": 2012,
+      "sha256": "bb0c937f6a90b5ecaf57702c90f864991157d8f646e03f3efb8d186d7034fa4e"
+    },
+    {
+      "path": ".github/workflows/deploy-pages.yml",
+      "sizeBytes": 2149,
+      "sha256": "624ffb6fb8415d945a7b0d23611d722d9992528f317148f654378c0985d4eaf6"
+    },
     {
       "path": ".gitignore",
       "sizeBytes": 144,
@@ -23,8 +33,8 @@
     },
     {
       "path": "CHANGELOG.md",
-      "sizeBytes": 5506,
-      "sha256": "b6d8b16af93c493634cbd597f24f9c6b7904465d57affccc079fc44ea4623ab8"
+      "sizeBytes": 6580,
+      "sha256": "ad3907de0f50a04b2c65caf3fd57b66b426cda615ffd2d24791a6f7876c08b15"
     },
     {
       "path": "checklists/CODE_REVIEW.md",
@@ -238,13 +248,13 @@
     },
     {
       "path": "docs/17_ACCEPTANCE_CRITERIA_TRACEABILITY.md",
-      "sizeBytes": 9152,
-      "sha256": "17b63c2f88172a2873c4b5d56a1e7db3d40dd5f106be493e19caf9457737635b"
+      "sizeBytes": 10109,
+      "sha256": "805562a9a73fda5353e4edc8150e31cf89b53635d6d49807abdbdc6e90f5cf7f"
     },
     {
       "path": "docs/18_RISK_REGISTER.md",
-      "sizeBytes": 2264,
-      "sha256": "1a1f7239709ee30be28ffa507867c8c94e3147aa2c945c315fe47f8f222fa542"
+      "sizeBytes": 3786,
+      "sha256": "47c8e2dead5ff72c4bfd77dfc2fcb4ebf03e1a22c10cf41a606ca2995bee028a"
     },
     {
       "path": "docs/19_DECISIONS_AND_OPEN_POINTS.md",
@@ -253,8 +263,8 @@
     },
     {
       "path": "docs/20_IMPLEMENTATION_STATUS.md",
-      "sizeBytes": 9357,
-      "sha256": "1e9c46fd4b03a1be69e55a9f9dda6e0966d5e86a4f06afaf53603e5236d44482"
+      "sizeBytes": 10447,
+      "sha256": "2d8eec0342a48853c64885ed408a5ed637779c9fc6ca49bfcf8d77b265730b9f"
     },
     {
       "path": "docs/21_SOURCE_NOTES.md",
@@ -263,8 +273,8 @@
     },
     {
       "path": "docs/backlog.md",
-      "sizeBytes": 4020,
-      "sha256": "714531e65304940c4f5d9635fab6bbd3a7103c46f2193b537049a24429e5ca0f"
+      "sizeBytes": 4669,
+      "sha256": "30467ee2c95baef9bcc78b74a0e938331dabf32db3e14c2738389213ebc31fd2"
     },
     {
       "path": "e2e/app-shell.spec.ts",
@@ -298,8 +308,18 @@
     },
     {
       "path": "e2e/phase08.spec.ts",
-      "sizeBytes": 21522,
-      "sha256": "be96bc4a0e98c3a809f5cb8bd4b14d01f1f83cd1d5bba205ad63587f93563fdf"
+      "sizeBytes": 20071,
+      "sha256": "e2f7c7d4bc1bbc62578b58ad45231d97ff650e19f6214e599177a180a067611a"
+    },
+    {
+      "path": "e2e/phase09.spec.ts",
+      "sizeBytes": 3146,
+      "sha256": "1cdbbbada222955e9ceadeee459642244150b3764a4175189a77fc107e5c5122"
+    },
+    {
+      "path": "e2e/support/indexedDb.ts",
+      "sizeBytes": 6372,
+      "sha256": "f343329b36468d62ad05fb168314145d907734ae491557c23b1c23d62883de58"
     },
     {
       "path": "eslint.config.js",
@@ -333,8 +353,8 @@
     },
     {
       "path": "package.json",
-      "sizeBytes": 2311,
-      "sha256": "f91ad30ae7bc315421c7e207a8a25dcebd5f7236c444d7ec6ff19f5700c8c7b0"
+      "sizeBytes": 2374,
+      "sha256": "e8fe7413e4d910f8fc1255100c188b309a522c205b5ed6be27d0c0db4e40547e"
     },
     {
       "path": "planning/BACKLOG.md",
@@ -363,13 +383,13 @@
     },
     {
       "path": "PLANS.md",
-      "sizeBytes": 43165,
-      "sha256": "0bdff446f57310fff0e39e0b32dd41e1b3a9415c66dcef66580f72b98e928456"
+      "sizeBytes": 49105,
+      "sha256": "5d72027f8944c01de4cfa3a2eef8fd0c4c40dbe0e7c43ab5128e6765e345dde6"
     },
     {
       "path": "playwright.config.ts",
-      "sizeBytes": 876,
-      "sha256": "b3242f041425f55e4f473c3b4f85e9afd97784e15b74e5a2c98c92f695c209dd"
+      "sizeBytes": 855,
+      "sha256": "d36991b544c739cff9ab7a962738a4191ddfdd35ddc187ebd9e849a59ccd7fdb"
     },
     {
       "path": "prettier.config.mjs",
@@ -478,8 +498,8 @@
     },
     {
       "path": "README.md",
-      "sizeBytes": 11401,
-      "sha256": "c2e2f09f2efebf1ac3b4d8cd98a9acc08ed0d8aa19bcddf47d49484751910227"
+      "sizeBytes": 32432,
+      "sha256": "514b271f9ab3fd84c535e77e2af453001027e860602db47e70c154d600d4be32"
     },
     {
       "path": "scripts/generate_manifest.py",
@@ -500,6 +520,11 @@
       "path": "scripts/validate-content.ts",
       "sizeBytes": 3266,
       "sha256": "e0d9ac2e018269faf18334cc7fd2090f0a3527d60b5d23774723ee9d3f3967b7"
+    },
+    {
+      "path": "scripts/verify-production-build.mjs",
+      "sizeBytes": 4281,
+      "sha256": "ea19ba18f91e01735a4494a5ea9f26c85ff93233d7e6971005ae1ff89b6d7cde"
     },
     {
       "path": "scripts/verify_handoff.py",
@@ -803,8 +828,8 @@
     },
     {
       "path": "src/domain/backup/schema.test.ts",
-      "sizeBytes": 5487,
-      "sha256": "06314f3156102f912d9c46bc50e1e87a73f1f88f85c75c73e670809d7b3b3fc7"
+      "sizeBytes": 6543,
+      "sha256": "72ea3b5145f88399cadcdea979352db1e470e55e3d769fd299d47774538d1d93"
     },
     {
       "path": "src/domain/backup/schema.ts",
@@ -898,8 +923,8 @@
     },
     {
       "path": "src/domain/planning/studyDay.test.ts",
-      "sizeBytes": 1714,
-      "sha256": "8c2f1ead410d2acc5ba9e3005cef9258a2a11d052de46ec4b64620a1186cbd3e"
+      "sizeBytes": 2842,
+      "sha256": "4880a5b5e0461453335f1b796f67b749bf04e4f5335ca0952ee8a64877c6ce90"
     },
     {
       "path": "src/domain/planning/types.ts",
@@ -1668,8 +1693,8 @@
     },
     {
       "path": "src/features/speaking/browserRecorder.test.ts",
-      "sizeBytes": 2814,
-      "sha256": "0a87888e6aa5b6bfff70fce129dc2772fe3ba3901f09812937b164b8ef13edbc"
+      "sizeBytes": 6663,
+      "sha256": "b031c13adabd1577d31b61fb32e8abd78c2b26dbb052d7c8f114ae61a2d22fe6"
     },
     {
       "path": "src/features/speaking/browserRecorder.ts",
@@ -1933,8 +1958,8 @@
     },
     {
       "path": "src/infrastructure/backup/fileValidation.test.ts",
-      "sizeBytes": 1585,
-      "sha256": "fbd466b0460c1801265b67005a551301886e3264e92a12af2524da5725685f01"
+      "sizeBytes": 2780,
+      "sha256": "8ead97acedf137ca9a8fad0de7966e96d88ff1be041249bd506b724edc3a6d49"
     },
     {
       "path": "src/infrastructure/backup/fileValidation.ts",
@@ -1977,9 +2002,14 @@
       "sha256": "4a589a9aeca4319b997f566d0a6aaeb46cce7e74f2af867b33aaeaace5d201d5"
     },
     {
+      "path": "src/infrastructure/db/__fixtures__/dailyPlans.v1.json",
+      "sizeBytes": 1599,
+      "sha256": "1a8f460a82e1490568ba0d5575f95ba3966d181c52555dc56f58a4eb712b4b3d"
+    },
+    {
       "path": "src/infrastructure/db/appDb.test.ts",
-      "sizeBytes": 11292,
-      "sha256": "3807bfce45f4432bb843e70ae173713a9a9af596274571c59ba0791066031b9b"
+      "sizeBytes": 13626,
+      "sha256": "d0de5252399eb7d413b4fb8a5a21705464090e52bccecfee2e145cf140043f28"
     },
     {
       "path": "src/infrastructure/db/appDb.ts",
