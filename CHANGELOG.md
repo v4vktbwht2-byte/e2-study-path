@@ -9,6 +9,7 @@
 - 最新registry auditを実行し、HighをRSC未使用とbuild-only間接依存として評価。最終状態で551/551 unit/component、coverage lines 80.18%、root/subpath artifact 71ファイル、E2E 70/70をPass。
 - `master`のcoverage CIで顕在化した診断画面のfocus effect競合を修正し、見出しのfocus完了まで待機する安定したテストへ変更。
 - 日本時間0〜4時に暦日と午前4時開始の学習日がずれて失敗する進捗E2Eを修正し、日本時間0:30固定の境界回帰へ変更。
+- Public repositoryの`master` CIとGitHub Pages deployを成功させ、公開PWAの320px表示、manifest、Service Worker、3 icon、HTTPS応答を実URLで確認。
 
 ## 0.2.0 - 2026-07-27
 

@@ -166,7 +166,7 @@ Phase 10 verification: Pilot 140語・31レッスン・155演習・25技能セ�
 - Complete: v1 migration fixture、破損backup、DST境界、unsupported MediaRecorder、原子的E2E seed helperを追加した。
 - Complete: READMEだけでWindows、macOS／Linux、WSL、テスト、教材追加、PWA、backup、deploy、復旧を実行できるようにした。
 - Evidence: clean `npm ci`、73 test files・531/531件、coverage 79.80% statements／71.62% branches／76.75% functions／80.14% lines、全E2E desktop/320px 70/70（Phase 09固有6/6）、root/subpath build、artifact 71ファイル、`npm run check`成功。
-- Manual pending: Phase 09時点ではremote GitHub Actions／Pages、最新registry dependency audit、実OS・実端末・実配信環境。最新auditと最終動的ゲートは2026-07-27に完了し、D-025でPublic GitHub Pages確認へ移行した。
+- Manual pending: Phase 09時点のremote GitHub Actions／Pagesと最新registry dependency auditは2026-07-28までに完了。実OS・実端末でのinstall、offline再起動、waiting Service Worker差替えを継続する。
 
 ### Phase 10
 
@@ -175,4 +175,4 @@ Phase 10 verification: Pilot 140語・31レッスン・155演習・25技能セ�
 - Complete: 指摘されたtimestamp比較、複数タブの破壊操作と旧世代保存、英日混在の読み上げ、教材表現、作文回答例を修正し、Blocker 0／P1 0／P2 0まで再レビューした。
 - Complete: app `0.2.0`、Pilot content `0.7.0`、DB schema `2`としてREADME、CHANGELOG、checklist、status、plan、backlogを同期した。
 - Current evidence: registry接続のclean install、75 test files・551/551件、coverage 79.73% statements／71.80% branches／76.29% functions／80.18% lines、全E2E desktop/320px 70/70、root/subpath build、artifact 71ファイル、教材検証をPass。最新auditのHighはRSC未使用とbuild-only間接依存として適用可能性を評価した。詳細値は`docs/20_IMPLEMENTATION_STATUS.md`、受入・教材・手動確認matrixは`docs/22_PILOT_RELEASE_AUDIT.md`を正本とする。
-- Pending: remote CI／GitHub Pages、upstream dependency修正版、iOS／Android PWA、waiting Service Worker、NVDA／VoiceOver、実zoom／forced colors、実機録音・Web Speech。
+- Pending: upstream dependency修正版、iOS／Android PWA、waiting Service Worker、NVDA／VoiceOver、実zoom／forced colors、実機録音・Web Speech。
