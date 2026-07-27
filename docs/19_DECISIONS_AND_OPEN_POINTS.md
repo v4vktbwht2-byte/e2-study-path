@@ -27,6 +27,7 @@
 | D-021 | Service Worker更新前に画面外の保留書込みも中央で待機する   | 作文のunmount保存や復元処理はroute participant解除後も続き得るため、Promiseをcomponent外で追跡し、失敗時は更新をfail-closedにする                       |
 | D-022 | Pilot Releaseをapp 0.2.0／content 0.7.0／DB 2とする        | Phase 00〜10の実装完了をapp versionで示し、教材校正・作文回答例・言語指定の変更をcontent versionで再seed対象にし、既存DB migrationとの境界を明示する    |
 | D-023 | 破壊操作と通常保存をorigin単位の世代・排他lockで調停する   | 複数タブの旧autosaveが全削除・置換復元後にデータを復活させないよう、shared／exclusive lock取得後に世代を検証し、調停API非対応時は破壊操作をfail-closedにする |
+| D-024 | 非公開GitHub + Cloudflare Pages + Accessを配備構成とする    | source codeを非公開に保ち、production／preview URLをAccess policyで利用者限定にする。GitHub Pagesの自動公開は削除し、CIだけを継続する                 |
 
 ## Open points for repository owner after Pilot
 
@@ -34,12 +35,11 @@
 
 1. 正式なアプリ名
 2. 公開ライセンス
-3. 公開先の最終選択
-4. 商用レベルの教材制作体制
-5. 人間による英語校閲者
-6. 音声収録またはTTSサービス
-7. クラウド同期の要否
-8. AI添削の要否と予算
+3. 商用レベルの教材制作体制
+4. 人間による英語校閲者
+5. 音声収録またはTTSサービス
+6. クラウド同期の要否
+7. AI添削の要否と予算
 
 ## Decision log template
 

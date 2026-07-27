@@ -122,7 +122,7 @@ runtime validationとは別に、ID、英語、日本語、正答、解説、出
 | High     | 公開ライセンス／配布権利          | リポジトリ所有者がcode・教材・自作iconの配布条件を選び、LICENSEとREADMEへ反映                                        | ライセンス未確定のため、現状はローカル引き渡しに限定                    |
 | High     | 最新registry dependency audit    | 承認済み接続環境で`npm audit`と`npm audit --omit=dev`を実行し、Critical／Highが0件                                    | offline audit 0件。新規公開を監査完了まで保留                           |
 | High     | 最終コード状態の動的quality gate | 通常環境で`npm run check`、`npm run test:coverage`、root／subpathの`npm run build`と`npm run verify:dist`、`npm run test:e2e`を実行し、追加6回帰テストを含めて全件成功 | 直前baselineは547/547・E2E 70/70・artifact 70 files。変更後lint／typecheck／format／静的監査Pass |
-| Medium   | GitHub Actions／Pages             | remoteへpushし、同一commitのCI成功後だけPages deployが走り、公開URLでroot／subpath、offline、更新を確認               | local root／subpath artifactを静的hostへ配置可能                         |
+| Medium   | GitHub CI／Cloudflare Pages／Access | private remoteのCIがgreenになり、Pagesのproduction／previewをAccessで保護し、配備URLでoffline、更新を確認             | private GitHubへのpush済み。local root／subpath artifactは検証済み       |
 | Medium   | iOS／Android install              | Safari共有メニュー／対応ブラウザーからinstallし、standalone起動、offline再起動、safe areaを確認                      | アプリ内にiOS手順、対応ブラウザーにはinstall UI                          |
 | Medium   | waiting Service Worker            | 旧版を開いたまま新版を配信し、案内→保存完了→更新→再読込で学習データが保持されることを確認                            | 書込みflush、失敗時fail-closed、backup／cache recovery                   |
 | Medium   | NVDA／VoiceOver                    | オンボーディング→診断→Today→単語→技能練習を読み上げ、見出し、label、live region、英日発音切替を確認                  | axe、keyboard E2E、semantic component test、`lang`分割                   |
@@ -133,7 +133,7 @@ runtime validationとは別に、ID、英語、日本語、正答、解説、出
 
 ## Recommended Phase 11 batches
 
-1. 公開前ゲート: 最新dependency audit、remote CI／Pages、実配信Service Worker更新を1つのrelease rehearsalとして完了する。
+1. 公開前ゲート: 最新dependency audit、remote CI、Cloudflare Pages／Access、実配信Service Worker更新を1つのrelease rehearsalとして完了する。
 2. 実機アクセシビリティ: iPhone／Android、NVDA／VoiceOver、200% zoom／forced colors、録音・音声を端末別matrixで確認する。
 3. 教材拡張: Stageごとの語彙・レッスン・技能教材を小batchで追加し、人間の英語校閲と`CONTENT_QA.md`をbatchごとに完了する。
-4. 所有者判断: 正式名称、公開ライセンス、公開先を確定し、brandingと配布条件へ反映する。
+4. 所有者判断: 正式名称と公開ライセンスを確定し、brandingと配布条件へ反映する。

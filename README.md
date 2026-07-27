@@ -39,7 +39,7 @@ Phase 10の全品質ゲート実行結果は次のとおりです。
 
 この全実行後の最終コードレビューで、全ユーザーデータ保存をorigin単位の共有ロックへ集約し、バックアップsnapshot barrierと回帰テスト6件を追加しました。変更後のlint、typecheck、format、静的書込み経路監査はPassしましたが、Vitestの再実行はWindows sandboxの`spawn EPERM`と権限付き実行の利用上限により実行不能でした。実公開前に承認済みの通常環境で`npm run check`、`npm run test:coverage`、root／subpathのbuildと`npm run verify:dist`、`npm run test:e2e`を再実行してください。
 
-Web Speechの声質・発音、MediaRecorderの実権限・録音・再生、iPhone Safari／ホーム画面PWA、実際のwaiting Service Worker差替え、NVDA／VoiceOver、実ブラウザーの200% zoom・forced colors、GitHub上のActions／Pagesは実機・配信環境で未確認です。offline dependency auditは0件でしたが、最新registry照会は依存メタデータの外部送信承認が得られず未実施です。公開ライセンス／配布権利も所有者判断待ちのため、実公開前に確定してください。
+Web Speechの声質・発音、MediaRecorderの実権限・録音・再生、iPhone Safari／ホーム画面PWA、実際のwaiting Service Worker差替え、NVDA／VoiceOver、実ブラウザーの200% zoom・forced colors、Cloudflare Pages／Accessは実機・配信環境で未確認です。GitHubの非公開repositoryは作成済みで、CIを実行しています。offline dependency auditは0件でしたが、最新registry照会は依存メタデータの外部送信承認が得られず未実施です。公開ライセンス／配布権利も所有者判断待ちのため、Accessで限定公開する場合を含め、利用者へ提供する前に確定してください。
 
 ## 必要環境
 
@@ -47,7 +47,7 @@ Web Speechの声質・発音、MediaRecorderの実権限・録音・再生、iPh
 - npm 11.8.0以上
 - Git
 - Chrome、Edge、Firefox、Safari等の現行ブラウザー
-- GitHub Pagesへ公開する場合は、ActionsとPagesを利用できるGitHubリポジトリ
+- Cloudflare Pagesへ配備する場合は、GitHub連携を許可できるCloudflareアカウント
 
 バックエンド、外部アカウント、APIキー、`.env`はローカル起動に不要です。依存関係はlockfileどおりに入れるため、通常は`npm install`ではなく`npm ci`を使います。
 
@@ -255,24 +255,32 @@ backupにはprofile、設定、復習予定、習熟度、進捗、回答履歴�
 
 公開操作はrepository ownerの承認を得てから行い、教材、画像、音声、依存assetを配信する権利と、未決定のsoftware licenseの扱いを先に確認してください。
 
-### GitHub Pages
+### Cloudflare Pages + Access（採用構成）
 
-`.github/workflows/deploy-pages.yml`の「GitHub Pagesへ公開」は、既定branchへのpushでCIが全件成功した後にだけbuildし、CIが検証した同じcommitの`dist/`をPages artifactとして公開します。repository名からbase pathを自動設定し、`<owner>.github.io` repositoryだけは`/`、通常のproject repositoryは`/<repository-name>/`を使います。deploy用secretやAPI keyは不要です。
+sourceはGitHubの非公開repository `v4vktbwht2-byte/e2-study-path`、production branchは`master`を使います。repositoryが非公開でも配備先URLは自動では非公開になりません。production URL、preview URL、custom domainのすべてをCloudflare Accessで保護し、未認証でアプリ本体を取得できないことを共有前に確認してください。
 
-1. GitHubへrepositoryをpushします。
-2. repositoryの「Settings」→「Pages」を開きます。
-3. 「Build and deployment」のSourceを「GitHub Actions」にします。
-4. `main`または`master`のうち実際の既定branchへpushし、「CI」が全件成功するまで待ちます。成功後に「GitHub Pagesへ公開」が同じcommitを対象として自動実行されます。
-5. workflowの`deploy` jobが成功したら、表示されたURLを開きます。通常は`https://<owner>.github.io/<repository-name>/`です。
-6. `#/`を含む画面遷移、manifest、icon、install、online起動後のoffline再読込を確認します。
+1. Cloudflare Dashboardの「Workers & Pages」からPages projectを作成し、「Connect to Git」でGitHubを選びます。
+2. Cloudflare Pages用GitHub Appには「Only select repositories」で`e2-study-path`だけを許可します。
+3. production branchを`master`、build commandを`npm run build`、build output directoryを`dist`にします。root directoryは空欄、framework presetはReact (Vite)です。
+4. root配備では`VITE_BASE_PATH`を未設定にするか`/`へ設定してdeployします。
+5. Pages projectのpreview deploymentにAccess policyを有効化します。
+6. productionの`*.pages.dev`を保護する場合は、Pagesが作成したAccess applicationのdomain設定からpreview専用wildcardを外し、production hostnameを対象に含めます。custom domainを使う場合は、そのhostname用のSelf-hosted Access applicationとAllow policyを作成します。
+7. 未認証・許可外ユーザーが拒否され、許可ユーザーだけがproduction／previewへ入れることを別browser profileで確認してからURLを共有します。
+8. `#/`を含む画面遷移、manifest、icon、install、online起動後のoffline再読込を確認します。
 
-GitHub Pagesの`github-pages` environmentには、既定branchだけがdeployできるdeployment branch ruleを設定してください。workflow自体も既定branchと同一repository内の成功したpushだけを自動公開対象にしますが、environment ruleを二重の保護として使います。
+Cloudflare公式手順:
 
-GitHub Pages用base pathはworkflowが設定するため、通常は手作業で`VITE_BASE_PATH`を追加しません。現在の自動計算は既定の`github.io` URL向けです。custom domainを使う場合は、workflowのbase pathを`/`へ変更し、Pages側のcustom domain設定と必要な`CNAME`を用意してから再buildします。manifestの`start_url`／`scope`とService Workerのscopeが新URLに合うことも確認してください。
+- [Git連携と非公開repository](https://developers.cloudflare.com/pages/get-started/git-integration/)
+- [GitHub Appのrepository範囲](https://developers.cloudflare.com/pages/configuration/git-integration/github-integration/)
+- [build設定](https://developers.cloudflare.com/pages/configuration/build-configuration/)
+- [preview deploymentのAccess](https://developers.cloudflare.com/pages/configuration/preview-deployments/)
+- [production `pages.dev`／custom domainのAccess注意点](https://developers.cloudflare.com/pages/platform/known-issues/)
 
-### GitHub Pages以外の静的host
+D-024でCloudflare Pages + Accessを採用したため、GitHub Pagesの自動deploy workflowは削除しています。GitHub Actionsの`CI`は引き続き実行します。
 
-Cloudflare Pages、Netlify、S3系host、社内static server等でも、生成された`dist/`だけを配信できます。Hash Routerを使うため、通常はSPA rewrite ruleを必要としません。
+### その他の静的host
+
+Netlify、S3系host、社内static server等でも、生成された`dist/`だけを配信できます。Hash Routerを使うため、通常はSPA rewrite ruleを必要としません。
 
 root domainへ配信するbuild:
 
@@ -311,7 +319,7 @@ rollbackでは前releaseの`dist/` artifactを再配信できますが、Indexed
 
 ### source map公開方針
 
-標準の`npm run build`、CI、GitHub Pagesではproduction source mapを生成・公開しません。調査目的で一時的に必要な場合だけ、信頼できるローカル環境で次を実行します。
+標準の`npm run build`、CI、Cloudflare Pagesではproduction source mapを生成・公開しません。調査目的で一時的に必要な場合だけ、信頼できるローカル環境で次を実行します。
 
 ```bash
 npm run build -- --sourcemap
@@ -345,9 +353,9 @@ npm run build -- --sourcemap
 
 `npx playwright install chromium`を実行します。Linux／WSLで共有libraryが不足する場合は`npx playwright install --with-deps chromium`を使います。
 
-### GitHub Pagesで白画面、asset 404、install不可になる
+### Cloudflare Pagesで白画面、asset 404、install不可になる
 
-workflowが計算したbase pathと公開URLが一致すること、PagesのSourceがGitHub Actionsであること、Actionsのbuild／deploy両jobが成功していることを確認します。custom domainはbase `/`で再buildします。PWA installにはHTTPS、正常なmanifest、Service Workerが必要です。
+Pagesのbuild commandが`npm run build`、出力先が`dist`、root配備のbase pathが`/`であることを確認します。Accessの認証redirect後にassetも同じhostnameから取得できること、manifest／Service Workerが200で取得できることも確認します。PWA installにはHTTPS、正常なmanifest、Service Workerが必要です。
 
 ### PWAのinstall項目が表示されない
 

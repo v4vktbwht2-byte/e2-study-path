@@ -37,7 +37,7 @@ Codexは各フェーズ完了時に更新する。
 | Backup/restore   | Complete | backup/adapter tests + Phase 07 E2E  | 厳密JSON、preview、merge/replace、安全backup、録音opt-in、分離削除          |
 | PWA/offline      | Complete | PWA tests + Phase 07 E2E             | install/iOS案内、offline、用途別cache、更新前write flush、base path         |
 | Accessibility    | Complete | axe + component + Phase 08 E2E       | landmark、h1、route focus、live region、Dialog、44px、320px・200%相当       |
-| CI/deploy        | Complete | workflow + root/subpath artifact     | CI成功commit限定、failure artifact、Pages OIDCを実装。remote実行は確認待ち |
+| CI/deploy        | Complete | workflow + root/subpath artifact     | CIとfailure artifactを実装。private GitHubへpush済み。Cloudflare Pages／Access接続は確認待ち |
 
 ## Quality gates
 
@@ -61,8 +61,9 @@ Codexは各フェーズ完了時に更新する。
 - MediaRecorderの録音・権限拒否とWeb Speechの音声品質・端末差は対応端末での実機確認が必要。非対応時のtext fallbackは自動テスト済み。
 - 実際のwaiting Service Worker差替え、`beforeinstallprompt`、Storage永続化、iOS standaloneは配信環境・対応実機で最終確認が必要。
 - `vite-plugin-pwa`内部の`inlineDynamicImports`非推奨警告が残るが、Service Worker生成と69件のprecache注入は成功している。
-- GitHub Actions／Pagesはremote未設定のため実workflowと公開URLで未確認。localでworkflow構文、root/subpath build、70ファイルのartifactを検証済み。
-- 公開先とソフトウェアライセンスはリポジトリ所有者の最終判断待ち。実装を停止する要因ではない。
+- GitHub remoteはprivate repository `v4vktbwht2-byte/e2-study-path`として設定済み。初回CIは実行中で、結果確認を残す。
+- 配備先はCloudflare Pages + Accessに確定した。Pages project接続、production／previewのAccess policy、配備URLは未確認。
+- ソフトウェアライセンスはリポジトリ所有者の最終判断待ち。Accessで限定公開する場合を含め、利用者へ提供する前に確定する。
 - offline dependency auditは本番・全依存とも0件。build時依存`glob@11.1.0`は既知CVEの修正版だが非推奨警告が残り、最新registry auditは外部送信承認が得られず未実施。公開前に承認済み環境で`npm audit`と`npm audit --omit=dev`を再実行する。
 - 最終コードレビュー後に全user-data write gateとbackup snapshot barrier、回帰テスト6件を追加した。変更後のlint／typecheck／format／静的経路監査はPassしたが、Vitestはsandbox `spawn EPERM`、権限付き再実行は利用上限で拒否された。公開前に通常環境で`npm run check`、`npm run test:coverage`、`npm run test:e2e`を再実行する。
 

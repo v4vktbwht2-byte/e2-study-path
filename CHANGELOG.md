@@ -2,7 +2,9 @@
 
 ## Unreleased
 
-- 予定されている変更はありません。
+- GitHubに`v4vktbwht2-byte/e2-study-path`をprivate repositoryとして作成し、`master`をpush。
+- 配備先をCloudflare Pages + Accessへ確定し、production／previewのAccess確認手順を追加。
+- 意図しない二重公開を避けるため、GitHub Pages自動deploy workflowを削除。
 
 ## 0.2.0 - 2026-07-27
 

@@ -7,7 +7,7 @@
 1. [高] 公開ライセンス／配布権利の確定 — 所有者がcode・教材・自作iconの条件を選び、LICENSEとREADMEへ反映するまで実公開しない。
 2. [高] 最新registryのdependency audit — offline auditは0件で、`glob@11.1.0`は既知CVE修正版。外部送信承認が得られず最新照会は未実施のため、公開前に承認済み環境で全依存の`npm audit`と本番依存の`npm audit --omit=dev`を実行。
 3. [高] 最終競合修正後の動的quality gate — 通常環境で`npm run check`、`npm run test:coverage`、root／subpathの`npm run build`と`npm run verify:dist`、`npm run test:e2e`を実行し、追加6回帰テストを含め全件成功を確認。
-4. [中] GitHub Actions／Pages実環境確認 — remote未設定のため、CI green、Pages URL、artifact、権限を実repositoryで確認。
+4. [中] Cloudflare Pages／Access実環境確認 — private GitHubへのpushは完了。Pages project接続、production／previewのAccess policy、CI green、配備URL、offline、更新を確認。
 5. [中] 実配信環境でのwaiting Service Worker差替え確認 — 更新案内、保存完了、更新適用、再読込を実際の旧版・新版で確認。
 6. [中] iPhone／Android PWA実機確認 — install、standalone、safe area、offline再起動を確認。
 7. [中] NVDA／VoiceOverによる主要フロー確認 — 実機・支援技術で見出し、label、live region、英日発音切替を確認。
@@ -18,6 +18,7 @@
 
 ## 完了
 
+- 2026-07-27: `v4vktbwht2-byte/e2-study-path`をprivateで作成し、`master`の`2b8fe14`をpush。Cloudflare Pages + Accessを配備先に確定し、GitHub Pages自動deployを廃止した。
 - 2026-07-27: Phase 10の全Release受入条件、repository、教材、PWA、backup、mobile、accessibility、文書を監査。backup完全往復、timezone offset merge、全user-data write gate、backup snapshot barrier、英日混在lang、作文回答例、教材表現、E2E待機競合を補強し、app 0.2.0／content 0.7.0／DB 2を確定。全実行baselineは75 test files・547/547件、coverage lines 80.33%、全E2E 70/70、root/subpath artifact 70ファイル、教材検証がPass。最終競合修正後はlint／typecheck／format／静的経路監査をPassし、動的再実行を公開前ゲートへ記録。
 - 2026-07-27: Phase 09のclean install、CI、失敗時Playwright artifact、CI成功commit限定のGitHub Pages OIDC deploy、repository base path、production artifact検証、同期例外rollback対応の共通IndexedDB seed helper、v1 migration／破損backup／DST／MediaRecorderテスト、第三者向け運用READMEを実装。531 unit/component tests、coverage lines 80.14%、全E2E desktop/320px 70/70（Phase 09固有6/6）、root/subpath build、71ファイルのartifact検証を完了。
 - 2026-07-27: Phase 08の7日・30日記録、6技能傾向、弱点、Stage進行、7設定の即時保存・反映、route focus、単一main・h1、live region、Dialog復帰、44px操作領域、320px・文字200%相当reflowを実装。518 unit/component tests、全E2E desktop/320px 64/64、主要route axe serious／critical 0件、`npm run check`を完了。
@@ -32,4 +33,4 @@
 
 ## 見送り・保留
 
-- 公開先の最終決定と実デプロイ（GitHub認証・Pages設定が必要）。
+- GitHub Pages自動公開 — Cloudflare Pages + Access採用のためworkflowを削除。

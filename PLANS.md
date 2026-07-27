@@ -66,7 +66,7 @@ git status --short
 
 **Known limitations / follow-up**
 
-- 公開先とソフトウェアライセンスは所有者判断待ち。Pages用設定は作成するが、認証を要する公開操作は行わない。
+- Phase 00時点では公開先とソフトウェアライセンスは所有者判断待ち。Pages用設定は作成するが、認証を要する公開操作は行わない。
 - iPhone実機とスクリーンリーダーの最終手動確認は外部確認が必要。
 
 ## Phase 01 — Scaffold, App Shell, and Design Foundation
@@ -593,7 +593,7 @@ python scripts/verify_handoff.py
 
 **Known limitations**
 
-- GitHub ActionsとGitHub Pagesはremote未設定のため、実repository上のworkflow実行と公開URLでは未確認。
+- Phase 09時点ではGitHub ActionsとGitHub Pagesはremote未設定だった。2026-07-27にprivate GitHubへpushし、D-024でCloudflare Pages + Accessへ配備方針を変更した。
 - Windows以外の起動手順、Firefox／Safari、実端末PWA、実配信環境の更新・rollbackは手動確認が必要。
 - offline auditは最新registry照会の代わりにはならない。依存メタデータの外部送信承認が得られなかったため、公開前に接続可能な承認済み環境で全依存の`npm audit`と本番依存の`npm audit --omit=dev`を再実行する。
 - `vite-plugin-pwa`内部の`inlineDynamicImports`非推奨警告は継続しているが、root／subpath双方のService Worker生成とartifact検証は成功している。
@@ -666,7 +666,28 @@ python scripts/verify_handoff.py
 
 **Known limitations**
 
-- 最新registry dependency audit、remote GitHub Actions／Pages、実配信waiting Service Worker、iOS／Android PWA、NVDA／VoiceOver、実zoom／forced colors、MediaRecorder、Web Speech、人間の英語校閲者による全件レビューを外部確認として残す。
+- 最新registry dependency audit、remote CI／Cloudflare Pages／Access、実配信waiting Service Worker、iOS／Android PWA、NVDA／VoiceOver、実zoom／forced colors、MediaRecorder、Web Speech、人間の英語校閲者による全件レビューを外部確認として残す。
 - 最終競合修正後の`npm run check`、`npm run test:coverage`、root／subpath build・artifact検証、`npm run test:e2e`は環境制限で未再実行。直前の全実行値と変更後の静的検証を証跡として残し、実公開前のHigh gateとする。
 - offline audit、artifact、E2E、fallbackはローカルで確認するが、実公開はHigh priorityの最新registry audit完了後に行う。
-- 公開ライセンス、正式名称、最終公開先はリポジトリ所有者の判断待ち。
+- 公開ライセンスと正式名称はリポジトリ所有者の判断待ち。配備先はD-024でCloudflare Pages + Accessに確定した。
+
+## Post-Phase 10 — Private GitHub and Cloudflare handoff
+
+**Decisions made**
+
+- sourceはGitHubのprivate repository `v4vktbwht2-byte/e2-study-path`で管理する。
+- 配備先はCloudflare Pages、production／previewの利用制限はCloudflare Accessで行う。
+- GitHub repositoryのprivate設定は配備URLを保護しないため、Accessの未認証拒否確認を共有前ゲートにする。
+- 意図しない二重公開を避けるため、GitHub Pages自動deploy workflowを削除し、GitHub Actions CIだけを継続する。
+
+**Results**
+
+- `master`のPilot Release commit `2b8fe14`をprivate repositoryへpushした。
+- GitHub remoteを`origin`として設定し、`master`を`origin/master`へ追跡させた。
+- Cloudflare Pagesのbuild設定、Access設定、production／preview確認手順をREADMEと運用文書へ追加した。
+- D-024、R-021、status、release audit、checklist、backlog、CHANGELOGを同じ方針へ同期した。
+
+**Known limitations**
+
+- Cloudflare Pages projectのGitHub接続、production／preview Access policy、配備URLはCloudflareアカウントでの設定が必要。
+- private GitHub上のCI結果、Access拒否／許可、offline、waiting Service Worker更新は実環境で確認する。

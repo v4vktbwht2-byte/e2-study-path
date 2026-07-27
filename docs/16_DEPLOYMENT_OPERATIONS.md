@@ -7,27 +7,34 @@
 - source map公開方針をREADMEへ記載
 - app versionとcontent versionを画面に表示可能
 
-## 2. GitHub Pages
+## 2. Cloudflare Pages + Access
 
-第一候補としてGitHub Actionsを用意する。
+D-024により、GitHubの非公開repositoryをsourceとするCloudflare Pagesを配備先に採用する。GitHub repositoryの非公開設定と配備URLのAccess制御は別であるため、production、preview、custom domainを共有前にAccessで保護する。
 
-要件:
+Build設定:
 
-- repository名配下のbase pathに対応
-- PWA manifestのstart_url / scopeもbaseに合わせる
-- Hash Routerを使い直リンク404を避ける
-- Actions artifactからPagesへdeploy
+- repository: `v4vktbwht2-byte/e2-study-path`
+- production branch: `master`
+- framework preset: React (Vite)
+- build command: `npm run build`
+- build output directory: `dist`
+- root directory: repository root
+- root配備の`VITE_BASE_PATH`: 未設定または`/`
 
-READMEに:
+Access要件:
 
-1. PagesをGitHub Actions sourceへ設定
-2. workflow実行
-3. 公開URL
-4. 更新時のSW注意
+- GitHub Appは対象repositoryだけへ限定する。
+- preview deploymentのAccess policyを有効化する。
+- production `*.pages.dev`はPagesが作成したAccess applicationのdomain設定を確認し、production hostnameを保護する。
+- custom domainはSelf-hosted Access applicationとAllow policyで保護する。
+- 未認証、許可外、許可済みの3状態を別browser profileで確認してからURLを共有する。
+- Access bypass、service token、公開pathを追加する場合は、対象と理由をdecision logへ残す。
+
+GitHub Pagesの自動deploy workflowは、意図しない二重公開を避けるためD-024で削除した。GitHub Actions CIは継続する。
 
 ## 3. Alternative hosts
 
-Cloudflare Pages等でも静的 `dist/` を公開できる。特定サービスへロックしない。
+生成した静的 `dist/` は他の静的hostでも公開できる。移行時はbase path、manifest、Service Worker scope、認証境界を再確認する。
 
 ## 4. Versioning
 
@@ -55,8 +62,9 @@ Dexieの整数version。
 6. version update
 7. changelog
 8. production build
-9. deploy
-10. installed PWA update test
+9. Access policyと未認証拒否を確認
+10. deploy
+11. installed PWA update test
 
 ## 6. Rollback
 

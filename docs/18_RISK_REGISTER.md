@@ -22,6 +22,7 @@
 | R-018 | 非公式スコアが合格保証に見える      |      Medium |   High | 「練習指標」表示、公式CSEを模倣しない                                                  |
 | R-019 | 最新dependency advisoryを見落とす   |     Unknown |   High | lockfile、offline audit、CI、既知CVEの修正版確認、公開前に承認済み環境でregistry audit |
 | R-020 | 最終修正後の動的ゲートが未実行      |     Unknown |   High | lint／型／静的監査、追加回帰テスト、実公開前に通常環境で全動的ゲートを再実行           |
+| R-021 | Access未設定のPages URLが公開される |      Medium |   High | production／preview／custom domainをAccess対象にし、未認証・許可外・許可済みを共有前に確認 |
 
 ## Phase 10 residual review
 
@@ -30,4 +31,5 @@
 - R-005／R-007／R-008／R-017はWindows上の自動検証をPass。実配信Service Worker、iOS／Android、NVDA／VoiceOver、実zoom／forced colors、実音声は外部手動確認を残す。
 - R-019はoffline audit 0件。最新registry照会は承認されなかったため、実公開前のHigh priority gateとして残す。
 - R-020は最終write coordination修正後のlint／typecheck／format／静的経路監査をPass。sandbox `spawn EPERM`と権限付き実行の利用上限により動的再実行できなかったため、unit／coverage／root・subpath build／artifact／E2Eを実公開前のHigh priority gateとして残す。
+- R-021はD-024でAccessを必須化し、GitHub Pages自動deployを削除。実Cloudflare環境でのpolicy設定と未認証拒否を配備前ゲートとして残す。
 - Phase 10終了時点で既知のCritical／High実装不具合は0件。残余リスクの再現手順とfallbackは`docs/22_PILOT_RELEASE_AUDIT.md`に記録する。

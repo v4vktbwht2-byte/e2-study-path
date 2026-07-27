@@ -77,7 +77,7 @@ Phase 10 local Pilot repository result: 2026-07-27 environment-limited Pass。�
 
 - [ ] 公開ライセンス／配布権利の確定（High、実公開前）
 - [ ] latest registry `npm audit`／`npm audit --omit=dev`（High、実公開前）
-- [ ] remote GitHub Actions／Pages（Medium、実repository）
+- [ ] remote GitHub CI／Cloudflare Pages／Access（Medium、実repository・配備環境）
 - [ ] waiting Service Worker差替え（Medium、旧版・新版の実配信）
 - [ ] iOS／Android PWA（Medium、実機）
 - [ ] NVDA／VoiceOver（Medium、実支援技術）
