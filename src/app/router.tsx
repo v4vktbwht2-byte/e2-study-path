@@ -4,18 +4,6 @@ import { RouteErrorPage } from "./RouteErrorPage";
 import { RouterLoadingPage } from "./RouterLoadingPage";
 import { foundationRoutes, type FoundationRouteId } from "./routeCatalog";
 
-function lazyPreparationRoute(routeId: FoundationRouteId) {
-  return async () => {
-    const { PreparationPage } = await import("../features/foundation/PreparationPage");
-
-    return {
-      Component: function FoundationPreparationRoute() {
-        return <PreparationPage routeId={routeId} />;
-      },
-    };
-  };
-}
-
 function lazyFoundationRoute(routeId: FoundationRouteId) {
   switch (routeId) {
     case "today":
@@ -118,8 +106,10 @@ function lazyFoundationRoute(routeId: FoundationRouteId) {
         const { HelpPage } = await import("../features/help");
         return { Component: HelpPage };
       };
-    default:
-      return lazyPreparationRoute(routeId);
+    default: {
+      const exhaustiveRouteId: never = routeId;
+      throw new Error(`未定義のルートです: ${String(exhaustiveRouteId)}`);
+    }
   }
 }
 

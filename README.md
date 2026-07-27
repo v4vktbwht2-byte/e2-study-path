@@ -22,22 +22,24 @@
 
 ## 現在の実装状況
 
-Phase 00〜09が完了し、次はPhase 10「最終監査・Pilot Release」です。
+Phase 00〜10を完了し、Pilot Release `0.2.0`として引き渡せる状態です。Pilot教材は`0.7.0`、IndexedDB schemaは`2`です。
 
-Phase 09では、clean installから品質ゲートを再現するCI、失敗時のPlaywright artifact、repository base path対応のGitHub Pages workflow、production artifact検証を追加しました。v1 migration、破損backup、DST境界、MediaRecorder、共通IndexedDB seed helperのテストも補強し、第三者向けの起動・テスト・教材・PWA・backup・deploy・復旧手順を本READMEへ統合しました。
+Phase 10では`AC-REL-001`〜`AC-REL-012`、全repository、教材、PWA、backup、mobile、accessibility、文書を横断監査しました。backupの完全往復、timezone offsetを含むmerge、複数タブの破壊操作と旧autosave、英日混在教材の読み上げ、作文回答例と語数検証、教材表現を補強し、最終再レビューをBlocker 0／P1 0／P2 0としました。詳細は[`docs/22_PILOT_RELEASE_AUDIT.md`](docs/22_PILOT_RELEASE_AUDIT.md)です。
 
-最新のPhase 09検証は次のとおりです。
+Phase 10の全品質ゲート実行結果は次のとおりです。
 
 - clean install: workspace直下の`node_modules`／`dist`削除後、lockfileから533 packagesを再構築
-- unit/componentテスト: 73ファイル・531/531件成功
-- coverage: Statements 79.80% / Branches 71.62% / Functions 76.75% / Lines 80.14%
-- Playwright E2E: 全フローdesktop/320pxで70/70成功（Phase 09固有6/6）
+- unit/componentテスト: 75ファイル・547/547件成功
+- coverage: Statements 79.98% / Branches 71.77% / Functions 77.12% / Lines 80.33%
+- Playwright E2E: 全フローdesktop/320pxで70/70成功（retry 0）
 - axe: 主要14 routeと実データ入りTodayでserious／critical違反0件
 - Pilot教材検証: 140語・31レッスン・155演習・技能25セット
 - `npm run check`: 成功
-- production build: root／`/e2-study-path/`とも成功（entry 210.34 kB、500 kB超のchunk警告なし、PWA precache 70件、artifact 71ファイル）
+- production build: root／`/e2-study-path/`とも成功（entry 209.96 kB、500 kB超のchunk警告なし、PWA precache 69件、artifact 70ファイル）
 
-Web Speechの声質・発音、MediaRecorderの実権限・録音・再生、iPhone Safari／ホーム画面PWA、実際のwaiting Service Worker差替え、NVDA／VoiceOver、実ブラウザーの200% zoom・forced colors、GitHub上のActions／Pagesは実機・配信環境で未確認です。offline dependency auditは0件でしたが、最新registry照会は依存メタデータの外部送信承認が得られず未実施です。公開前に承認済み環境で`npm audit`と`npm audit --omit=dev`を再実行してください。
+この全実行後の最終コードレビューで、全ユーザーデータ保存をorigin単位の共有ロックへ集約し、バックアップsnapshot barrierと回帰テスト6件を追加しました。変更後のlint、typecheck、format、静的書込み経路監査はPassしましたが、Vitestの再実行はWindows sandboxの`spawn EPERM`と権限付き実行の利用上限により実行不能でした。実公開前に承認済みの通常環境で`npm run check`、`npm run test:coverage`、root／subpathのbuildと`npm run verify:dist`、`npm run test:e2e`を再実行してください。
+
+Web Speechの声質・発音、MediaRecorderの実権限・録音・再生、iPhone Safari／ホーム画面PWA、実際のwaiting Service Worker差替え、NVDA／VoiceOver、実ブラウザーの200% zoom・forced colors、GitHub上のActions／Pagesは実機・配信環境で未確認です。offline dependency auditは0件でしたが、最新registry照会は依存メタデータの外部送信承認が得られず未実施です。公開ライセンス／配布権利も所有者判断待ちのため、実公開前に確定してください。
 
 ## 必要環境
 
@@ -474,6 +476,8 @@ software licenseは未決定です。licenseがない状態をopen sourceや再�
 6. `docs/07_TECHNICAL_ARCHITECTURE.md`
 7. `docs/09_REVIEW_ALGORITHM.md`
 8. `docs/17_ACCEPTANCE_CRITERIA_TRACEABILITY.md`
+9. `docs/22_PILOT_RELEASE_AUDIT.md`
+10. `docs/20_IMPLEMENTATION_STATUS.md`
 
 ## 実装と教材制作の区別
 

@@ -11,8 +11,10 @@ import type { DataManagementPort } from "../../features/data";
 import { AppDb } from "../../infrastructure/db/appDb";
 import { DEFAULT_SETTINGS } from "../../infrastructure/db/repositories";
 import {
+  createPendingUpdateWriteCoordinator,
   PendingWriteSupersededError,
-  trackPendingUpdateWrite,
+  type PendingWriteGenerationStore,
+  type PendingWriteOriginLock,
 } from "../../infrastructure/pwa";
 import {
   DataManagementAdapter,
@@ -87,6 +89,21 @@ const PREPARED_IMPORT: PreparedBackupImport = {
   },
 };
 
+function createTestPendingWriteCoordinator() {
+  let generation = 0;
+  const generationStore: PendingWriteGenerationStore = {
+    read: () => generation,
+    write: (nextGeneration) => {
+      generation = nextGeneration;
+    },
+  };
+  const immediateLock: PendingWriteOriginLock = async (_mode, operation) => operation();
+  return createPendingUpdateWriteCoordinator({
+    withOriginLock: immediateLock,
+    generationStore,
+  });
+}
+
 function createDependencies(
   overrides: Partial<DataManagementAdapterDependencies> = {},
 ): DataManagementAdapterDependencies {
@@ -148,6 +165,7 @@ function createDependencies(
     reloadPage: vi.fn(),
     now: () => new Date("2026-07-27T05:00:00.000Z"),
     appVersion: "0.1.0",
+    pendingWriteCoordinator: createTestPendingWriteCoordinator(),
     ...overrides,
   };
 }
@@ -219,6 +237,39 @@ describe("DataManagementAdapter", () => {
         fileName: "backup.json",
       }),
     );
+  });
+
+  it("バックアップ生成後はダウンロード中でもbarrierを解放する", async () => {
+    let finishDownload: (() => void) | undefined;
+    const downloadBackup = vi.fn(
+      () =>
+        new Promise<void>((resolve) => {
+          finishDownload = resolve;
+        }),
+    );
+    const deleteAllUserData = vi.fn(() => Promise.resolve(3));
+    const baseDependencies = createDependencies();
+    const adapter = new DataManagementAdapter({
+      ...baseDependencies,
+      backupService: {
+        ...baseDependencies.backupService,
+        deleteAllUserData,
+      },
+      downloadBackup,
+    });
+
+    const exporting = adapter.exportBackup({ includeRecordings: false });
+    await vi.waitFor(() => expect(downloadBackup).toHaveBeenCalledOnce());
+
+    await expect(adapter.deleteAllUserData()).resolves.toEqual({
+      affectedCount: 3,
+    });
+    expect(deleteAllUserData).toHaveBeenCalledOnce();
+
+    finishDownload?.();
+    await expect(exporting).resolves.toMatchObject({
+      fileName: "backup.json",
+    });
   });
 
   it("previewを変換し、安全backupのダウンロード完了前には置換しない", async () => {
@@ -375,11 +426,12 @@ describe("DataManagementAdapter", () => {
   });
 
   it("全削除は既存保存の完了を待ち、削除中の古い保存を開始させない", async () => {
+    const pendingWriteCoordinator = createTestPendingWriteCoordinator();
     let finishExistingWrite: (() => void) | undefined;
     const existingWritePromise = new Promise<void>((resolve) => {
       finishExistingWrite = resolve;
     });
-    const existingWrite = trackPendingUpdateWrite(
+    const existingWrite = pendingWriteCoordinator.trackPendingUpdateWrite(
       "today-plan",
       () => existingWritePromise,
     );
@@ -387,6 +439,7 @@ describe("DataManagementAdapter", () => {
     const baseDependencies = createDependencies();
     const adapter = new DataManagementAdapter({
       ...baseDependencies,
+      pendingWriteCoordinator,
       backupService: {
         ...baseDependencies.backupService,
         deleteAllUserData,
@@ -395,10 +448,9 @@ describe("DataManagementAdapter", () => {
 
     const deletion = adapter.deleteAllUserData();
     const staleSave = vi.fn(() => Promise.resolve());
-    const staleError = await trackPendingUpdateWrite(
-      "writing-draft:old",
-      staleSave,
-    ).catch((error: unknown) => error);
+    const staleError = await pendingWriteCoordinator
+      .trackPendingUpdateWrite("writing-draft:old", staleSave)
+      .catch((error: unknown) => error);
     const deletionStartedBeforeExistingWriteFinished =
       deleteAllUserData.mock.calls.length > 0;
     finishExistingWrite?.();
@@ -458,6 +510,7 @@ describe("createDataManagementPort", () => {
         }),
       downloadBackup: () => Promise.resolve(),
       reloadPage: vi.fn(),
+      pendingWriteCoordinator: createTestPendingWriteCoordinator(),
     });
 
     await expect(port.deleteAllUserData()).resolves.toMatchObject({

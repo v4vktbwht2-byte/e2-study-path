@@ -9,10 +9,6 @@ import {
 } from "../../domain/planning";
 import { createNewReviewState, type ReviewState } from "../../domain/review";
 import type { VocabularyItem } from "../../infrastructure/content/schemas";
-import {
-  countPendingUpdateWrites,
-  flushPendingUpdateWrites,
-} from "../../infrastructure/pwa";
 import { TodayPage } from "./TodayPage";
 import type { TodayDataPort, TodayDataSnapshot, TodayPageProps } from "./types";
 
@@ -138,11 +134,8 @@ describe("今日画面", () => {
         name: "今日の学習を準備しています",
       }),
     ).toBeInTheDocument();
-    await waitFor(() => expect(countPendingUpdateWrites()).toBe(1));
-
     resolveSnapshot?.(snapshot());
     await screen.findByRole("heading", { name: "今日の学習" });
-    await expect(flushPendingUpdateWrites()).resolves.toBeUndefined();
     expect(savePlan).toHaveBeenCalledTimes(1);
   });
 

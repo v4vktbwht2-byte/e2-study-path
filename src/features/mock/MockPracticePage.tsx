@@ -391,7 +391,7 @@ export function MockPracticePage({
                 <li key={question.id}>
                   <Card as="article">
                     <p className={styles.eyebrow}>{section.titleJa}</p>
-                    <h3>{question.prompt}</h3>
+                    <h3 lang="en">{question.prompt}</h3>
                     <p>
                       {correct ? "正解です。" : "今回は見直し候補です。"}{" "}
                       {question.explanationJa}
@@ -565,7 +565,7 @@ export function MockPracticePage({
       ) : null}
       {currentSection.stimulus?.kind === "script" ? (
         <Card as="section" className={styles.stimulus}>
-          <h2>{currentSection.stimulus.title}</h2>
+          <h2 lang="en">{currentSection.stimulus.title}</h2>
           {scriptRevealed ? (
             <p lang="en">{currentSection.stimulus.text}</p>
           ) : listeningAvailability?.available === true &&
@@ -597,7 +597,7 @@ export function MockPracticePage({
         </Card>
       ) : null}
       <Card as="section" padding="large">
-        <h2>{currentQuestion.prompt}</h2>
+        <h2 lang="en">{currentQuestion.prompt}</h2>
         <fieldset className={styles.choices} disabled={!canAnswer}>
           <legend>答えを1つ選択</legend>
           {currentQuestion.choices.map((choice, index) => (

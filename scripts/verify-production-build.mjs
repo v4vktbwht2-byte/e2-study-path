@@ -55,7 +55,7 @@ const requiredFiles = [
   "icons/icon-192.png",
   "icons/icon-512.png",
   "icons/icon-maskable-512.png",
-  "content/pilot-core-ja-original/0.6.0/index.json",
+  "content/pilot-core-ja-original/0.7.0/index.json",
 ];
 await Promise.all(requiredFiles.map(assertFile));
 
@@ -123,7 +123,7 @@ const workerSource = await readFile(
 assert(workerSource.includes("SKIP_WAITING"), "更新用message handlerがありません。");
 assert(
   workerSource.includes(
-    `${expectedBasePath}content/pilot-core-ja-original/0.6.0/index.json`,
+    `${expectedBasePath}content/pilot-core-ja-original/0.7.0/index.json`,
   ),
   "starter教材がbase path付きprecacheへ含まれていません。",
 );

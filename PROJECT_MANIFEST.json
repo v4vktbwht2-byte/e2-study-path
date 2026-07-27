@@ -1,10 +1,10 @@
 {
   "package": "E2 Study Path Codex Handoff Full Set",
   "packageVersion": "1.0.0",
-  "generatedAt": "2026-07-27T05:06:25+00:00",
+  "generatedAt": "2026-07-27T06:35:24+00:00",
   "manifestPolicy": "The manifest tracks repository source files and excludes PROJECT_MANIFEST.json, Git metadata, dependencies, and generated artifacts.",
-  "fileCountExcludingManifest": 455,
-  "totalSizeBytesExcludingManifest": 2606157,
+  "fileCountExcludingManifest": 456,
+  "totalSizeBytesExcludingManifest": 2683252,
   "files": [
     {
       "path": ".github/workflows/ci.yml",
@@ -33,8 +33,8 @@
     },
     {
       "path": "CHANGELOG.md",
-      "sizeBytes": 6580,
-      "sha256": "ad3907de0f50a04b2c65caf3fd57b66b426cda615ffd2d24791a6f7876c08b15"
+      "sizeBytes": 8046,
+      "sha256": "9e4bed42803931c1d0e8b755062919fb53ee813d861c634a6c04dab50b1a97d1"
     },
     {
       "path": "checklists/CODE_REVIEW.md",
@@ -43,8 +43,8 @@
     },
     {
       "path": "checklists/CONTENT_QA.md",
-      "sizeBytes": 1867,
-      "sha256": "c8683817a1abfd7bf9aa4746b9f5334a3912bc3b9d0da7a4f89749553764e6bd"
+      "sizeBytes": 4075,
+      "sha256": "ed9067046341e0161c0ee335d97dd31c5280d6bac32858ef00d58cd7e52bcce6"
     },
     {
       "path": "checklists/DEFINITION_OF_DONE.md",
@@ -53,8 +53,8 @@
     },
     {
       "path": "checklists/FINAL_RELEASE_CHECKLIST.md",
-      "sizeBytes": 1161,
-      "sha256": "1b0f41d450a484b7a695c4756d7448a857b3660c65a875b6fee87f3bb4326b7d"
+      "sizeBytes": 2481,
+      "sha256": "827a6810942ce20fe59589356cf7845aead43682070e8febb2130efb06414489"
     },
     {
       "path": "checklists/PHASE_GATE.md",
@@ -248,23 +248,23 @@
     },
     {
       "path": "docs/17_ACCEPTANCE_CRITERIA_TRACEABILITY.md",
-      "sizeBytes": 10109,
-      "sha256": "805562a9a73fda5353e4edc8150e31cf89b53635d6d49807abdbdc6e90f5cf7f"
+      "sizeBytes": 11731,
+      "sha256": "478963ca65bb835f183ded32a6984b925af64c00cf56d85a6765b4f6d4c0f4c9"
     },
     {
       "path": "docs/18_RISK_REGISTER.md",
-      "sizeBytes": 3786,
-      "sha256": "47c8e2dead5ff72c4bfd77dfc2fcb4ebf03e1a22c10cf41a606ca2995bee028a"
+      "sizeBytes": 5205,
+      "sha256": "38a6f52225e84baa5a465928b686fddd05eae71bbcbce18eb0e7a909a6ea6143"
     },
     {
       "path": "docs/19_DECISIONS_AND_OPEN_POINTS.md",
-      "sizeBytes": 6490,
-      "sha256": "c07506a92eb3e240d00810299533879ac2a35d6dd2895521599a2bdfafd31791"
+      "sizeBytes": 7079,
+      "sha256": "980a9fd2409109244f6de7611cdb0414eb43b58df744ac9e1a8ccc6534053842"
     },
     {
       "path": "docs/20_IMPLEMENTATION_STATUS.md",
-      "sizeBytes": 10447,
-      "sha256": "2d8eec0342a48853c64885ed408a5ed637779c9fc6ca49bfcf8d77b265730b9f"
+      "sizeBytes": 11549,
+      "sha256": "6bcd640b99026883d28d2ed555b5d8ed10ace2f19d605b68eab5b0f8ea13311a"
     },
     {
       "path": "docs/21_SOURCE_NOTES.md",
@@ -272,14 +272,19 @@
       "sha256": "ab6c419aecb76f700f15c0c700b2e1030d315c66fbaa364b7844a2c1628c6cb1"
     },
     {
+      "path": "docs/22_PILOT_RELEASE_AUDIT.md",
+      "sizeBytes": 15130,
+      "sha256": "1350149563ccaeae80a53fcad0755b89c1d29e1fa614c800e35f0496ff1e22ac"
+    },
+    {
       "path": "docs/backlog.md",
-      "sizeBytes": 4669,
-      "sha256": "30467ee2c95baef9bcc78b74a0e938331dabf32db3e14c2738389213ebc31fd2"
+      "sizeBytes": 5753,
+      "sha256": "14f0aefe0c9cdb200c83ce4e3e0e0847cbf6f42a6d7f8fd0300c62bd1cdea1c0"
     },
     {
       "path": "e2e/app-shell.spec.ts",
-      "sizeBytes": 4545,
-      "sha256": "a753ba414290d215db484b4e753bb4f8941825f05fec21476bc5827990e007b5"
+      "sizeBytes": 4634,
+      "sha256": "53b6a5d669392ab332ab1d6352afa1c27ef5053d105385fd324b6104393c9b90"
     },
     {
       "path": "e2e/phase03.spec.ts",
@@ -303,8 +308,8 @@
     },
     {
       "path": "e2e/phase07.spec.ts",
-      "sizeBytes": 16193,
-      "sha256": "fbe39c9d33d9c15112f7bbd688f24ce52bb687f3b9a291900a0cd40818dfc4e2"
+      "sizeBytes": 21273,
+      "sha256": "b946ed80ef5c635ca5d19cdc383c2e8ab51bf88157caeee6dd1effdda6a90bbc"
     },
     {
       "path": "e2e/phase08.spec.ts",
@@ -318,8 +323,8 @@
     },
     {
       "path": "e2e/support/indexedDb.ts",
-      "sizeBytes": 6372,
-      "sha256": "f343329b36468d62ad05fb168314145d907734ae491557c23b1c23d62883de58"
+      "sizeBytes": 6917,
+      "sha256": "2f34702e059a4eba91441e26fa9dbc6f8cbc55680e2be0636593564f581e4af8"
     },
     {
       "path": "eslint.config.js",
@@ -349,12 +354,12 @@
     {
       "path": "package-lock.json",
       "sizeBytes": 330717,
-      "sha256": "a36c9d762954de598ee1876a601c9469ea04101d86c5d533f6b5006aed0548f4"
+      "sha256": "978e45f0b5ca0c46a3cc188dd1844819f05047392de1e43951e09421ecb46e3c"
     },
     {
       "path": "package.json",
       "sizeBytes": 2374,
-      "sha256": "e8fe7413e4d910f8fc1255100c188b309a522c205b5ed6be27d0c0db4e40547e"
+      "sha256": "fb7060c4811d7a5288fbe37e683614593f495118d65ec9e637f6e49b64c679b8"
     },
     {
       "path": "planning/BACKLOG.md",
@@ -383,8 +388,8 @@
     },
     {
       "path": "PLANS.md",
-      "sizeBytes": 49105,
-      "sha256": "5d72027f8944c01de4cfa3a2eef8fd0c4c40dbe0e7c43ab5128e6765e345dde6"
+      "sizeBytes": 54878,
+      "sha256": "bf7d443820e576fdc075c5331a961269894a818927a7f4a2d41796d27fff338f"
     },
     {
       "path": "playwright.config.ts",
@@ -467,9 +472,9 @@
       "sha256": "7fea84940c6bdcc0c8b7eb2e51ff5598e2ed427f3c4b3b64236f7afdb164b5ad"
     },
     {
-      "path": "public/content/pilot-core-ja-original/0.6.0/index.json",
+      "path": "public/content/pilot-core-ja-original/0.7.0/index.json",
       "sizeBytes": 242,
-      "sha256": "3a48df316a72d4235642058ab6748d252781cdf30fc4d62641a4bddcd4804a0a"
+      "sha256": "bf250e6bfeb1b18c15c4a6c4d2897fd03a7247d16378617da238397f18cf41bf"
     },
     {
       "path": "public/icons/app-icon-source.svg",
@@ -498,8 +503,8 @@
     },
     {
       "path": "README.md",
-      "sizeBytes": 32432,
-      "sha256": "514b271f9ab3fd84c535e77e2af453001027e860602db47e70c154d600d4be32"
+      "sizeBytes": 33252,
+      "sha256": "751aadf24670dcf3ed848f8dbb764717850f87a8fca81dd913b4883c0d7a2b05"
     },
     {
       "path": "scripts/generate_manifest.py",
@@ -524,7 +529,7 @@
     {
       "path": "scripts/verify-production-build.mjs",
       "sizeBytes": 4281,
-      "sha256": "ea19ba18f91e01735a4494a5ea9f26c85ff93233d7e6971005ae1ff89b6d7cde"
+      "sha256": "cb3df1d97691257784532a8abb2c5d46a7076d192e3d8db1fa7b9c002b13afee"
     },
     {
       "path": "scripts/verify_handoff.py",
@@ -573,8 +578,8 @@
     },
     {
       "path": "src/app/featureAdapters.ts",
-      "sizeBytes": 10365,
-      "sha256": "9d97e87e70975b557b05a26b6538c860f64feb432508180fcfc1beee0501fe52"
+      "sizeBytes": 10646,
+      "sha256": "0082cf7136b31639b1f71c76b50e2dc8c5a79e26ff41789d857b8f17c1d16868"
     },
     {
       "path": "src/app/FocusHeading.tsx",
@@ -613,13 +618,13 @@
     },
     {
       "path": "src/app/router.test.tsx",
-      "sizeBytes": 1986,
-      "sha256": "5c9accc93a6312a0a517bf9dae6af908116980f18b1e50600b6ade307a91436b"
+      "sizeBytes": 1989,
+      "sha256": "d5a8200269d2431a8851155e545fbb62ca2e106ef2e4be01d608dab64348350e"
     },
     {
       "path": "src/app/router.tsx",
-      "sizeBytes": 5160,
-      "sha256": "08f252001158516e621b7a366b816ad9c5681853b6dfdcf95ff7fcab8b6aab5d"
+      "sizeBytes": 4936,
+      "sha256": "eb6d3fdd1fee2a41a379eef1c27ed0a6c6a506e6c5de7272e3b486a2b06fc568"
     },
     {
       "path": "src/app/RouterLoadingPage.module.css",
@@ -638,13 +643,13 @@
     },
     {
       "path": "src/app/routes/dataManagementAdapter.test.ts",
-      "sizeBytes": 14217,
-      "sha256": "d074c882b13d42422a9e3416e39d152b6e818bcc39102ed3f105df7eae2fb1ca"
+      "sizeBytes": 16053,
+      "sha256": "a0ca69d8fb31390e737b1dad3760d48c371d16b9ee3d0b66b8c9b2ceec012339"
     },
     {
       "path": "src/app/routes/dataManagementAdapter.ts",
-      "sizeBytes": 12263,
-      "sha256": "d1dc283e828cf2c832a8a70a5512612c00cfce68a037c6d472f47f620031e416"
+      "sizeBytes": 12938,
+      "sha256": "0de7134242e03411d9b706c4db6fcfe02adb8ba94ca39fad89e3317f01531520"
     },
     {
       "path": "src/app/routes/DataRoute.tsx",
@@ -718,8 +723,8 @@
     },
     {
       "path": "src/app/startup/initializeApplication.ts",
-      "sizeBytes": 2098,
-      "sha256": "52c28b038bb72eabd827951fad0032e5f014595169a17490ed582c1f43fc4ce0"
+      "sizeBytes": 2150,
+      "sha256": "9669be894c3aac8f3833694ace5c76f143a0da3b1fc2ea60efaf4c6a362e8649"
     },
     {
       "path": "src/app/startup/StartupGate.module.css",
@@ -754,7 +759,7 @@
     {
       "path": "src/content/pilot/pilotContentPack.ts",
       "sizeBytes": 1948,
-      "sha256": "2bef3db75d74a15c84e64b3a932c14ba763aad9cd00b1ed106dd7319c529ed2f"
+      "sha256": "dee081527675fac49d94015440c0309474d1a696419d75a31e1c8ff1b2f635ae"
     },
     {
       "path": "src/content/pilot/practiceListening.ts",
@@ -768,8 +773,8 @@
     },
     {
       "path": "src/content/pilot/practiceReading.ts",
-      "sizeBytes": 31112,
-      "sha256": "82ac2f113e9af53bd40a59d63d59e6f9958691e402cea2a04cd98815980c1e19"
+      "sizeBytes": 31132,
+      "sha256": "6b2beabb7675ecc3734c402fc4f7fc314c5b4b8e28b8aefd81ec40c7bbab8511"
     },
     {
       "path": "src/content/pilot/practiceSpeaking.ts",
@@ -778,8 +783,8 @@
     },
     {
       "path": "src/content/pilot/practiceWriting.ts",
-      "sizeBytes": 9959,
-      "sha256": "5883f2c11e66b4d8814c775712868efd69a6c8e178730ef8d7e2844f349dd732"
+      "sizeBytes": 14285,
+      "sha256": "1462ecb3317cf546c95982da70e5ef5976f7087fbea29591021917ace36b0fb2"
     },
     {
       "path": "src/content/pilot/stage0.ts",
@@ -788,8 +793,8 @@
     },
     {
       "path": "src/content/pilot/stage1.ts",
-      "sizeBytes": 28175,
-      "sha256": "79650ef3647961fe67870421ef9e6c78c8a64d212fc7d62b380af09af63358e3"
+      "sizeBytes": 28187,
+      "sha256": "356573fd023ad8a3fc48669435d2f3b1ffcb0ec74ce9c594becf37507f7c3557"
     },
     {
       "path": "src/content/pilot/upperStages.ts",
@@ -808,8 +813,8 @@
     },
     {
       "path": "src/content/pilot/vocabulary.ts",
-      "sizeBytes": 36972,
-      "sha256": "a5ec85cbe7d1083fd9e6f7b9750f6b0550a2c3ea29af10bd655888c92672d36b"
+      "sizeBytes": 37001,
+      "sha256": "d3ae9b77e3ceae6bd1b1886b16bffcaaea0eadaec3564a4fe031387066526981"
     },
     {
       "path": "src/domain/backup/errors.ts",
@@ -822,9 +827,14 @@
       "sha256": "f769de6fedc5f4fd6e99ca0deae67c5e0ae3ff972d86c5e3a07f9da390db1cf4"
     },
     {
+      "path": "src/domain/backup/mergePolicy.test.ts",
+      "sizeBytes": 2922,
+      "sha256": "87c59b079ed9a0acaf3c2eb0ef1b40a441d07c664b72cf949dc4864d8342f348"
+    },
+    {
       "path": "src/domain/backup/mergePolicy.ts",
-      "sizeBytes": 3587,
-      "sha256": "7db4d348525560b7d73ec039542f669132990e6cf1907b5de8b3745d160756ff"
+      "sizeBytes": 3972,
+      "sha256": "d1f73177c4893c93e2efeac603de880149fd7df7c483adcade31255d02de5a95"
     },
     {
       "path": "src/domain/backup/schema.test.ts",
@@ -1228,8 +1238,8 @@
     },
     {
       "path": "src/features/diagnostic/DiagnosticPage.tsx",
-      "sizeBytes": 21919,
-      "sha256": "7435d2497073759858aa6c91422c460347f0c4d1ed0310fbab680f59cfc95fb2"
+      "sizeBytes": 22722,
+      "sha256": "c6e3211b089cc49898648b36443e58da07582fa8f65b0a0d288cd7a81aec6435"
     },
     {
       "path": "src/features/diagnostic/index.ts",
@@ -1248,28 +1258,13 @@
     },
     {
       "path": "src/features/diagnostic/storage.ts",
-      "sizeBytes": 3340,
-      "sha256": "60724a1a95c16d721012fc071a139bb9eb92a20cf06bf9a601237a6c58adb730"
+      "sizeBytes": 3553,
+      "sha256": "d11ef2ae3f6b539f133b1c76fa190fa739beedb2a30755c8d7565931eb138719"
     },
     {
       "path": "src/features/diagnostic/types.ts",
       "sizeBytes": 1222,
       "sha256": "8a8b059844c689ae841f2aeb370bc2c0dba2521782a99333d262a531c5569a01"
-    },
-    {
-      "path": "src/features/foundation/index.ts",
-      "sizeBytes": 53,
-      "sha256": "6d4ad486b74237829e5d1f522042758b10a9d0bf527857df1d433233e4538148"
-    },
-    {
-      "path": "src/features/foundation/PreparationPage.module.css",
-      "sizeBytes": 1757,
-      "sha256": "3b7fdfc93b115e22eb104afe4596f00c343866281e5758d2b3fa275a8b65dd99"
-    },
-    {
-      "path": "src/features/foundation/PreparationPage.tsx",
-      "sizeBytes": 3202,
-      "sha256": "9708e36d1b2347d7cbb4e6ff59e89caee33a79b99741289adce9b846a5aa6219"
     },
     {
       "path": "src/features/help/HelpPage.module.css",
@@ -1293,13 +1288,13 @@
     },
     {
       "path": "src/features/lesson/ExerciseRenderer.test.tsx",
-      "sizeBytes": 3032,
-      "sha256": "5cf2ecffa209b27c67858db1382579dee6ef064fc6b4d68fe3231eeb84857628"
+      "sizeBytes": 4386,
+      "sha256": "f4ba0613393e9ebf934ebd35d6b0fd1b595d829f5d24621eeb89cda44110ccde"
     },
     {
       "path": "src/features/lesson/ExerciseRenderer.tsx",
-      "sizeBytes": 12487,
-      "sha256": "92b2e231318747b03b1798e86153f29c34e605d5a4fe2487da7a78c84dca0f0e"
+      "sizeBytes": 13511,
+      "sha256": "2561edb0386f06c1f11fdf0b856d7dc88c4abbdca95d8a9216fd1ec849546d12"
     },
     {
       "path": "src/features/lesson/index.ts",
@@ -1323,8 +1318,8 @@
     },
     {
       "path": "src/features/lesson/LessonRenderer.test.tsx",
-      "sizeBytes": 21950,
-      "sha256": "a837d5b5bc3f2ea86e0341fe748279601fea117569d082d76a51ce4c666b8232"
+      "sizeBytes": 22138,
+      "sha256": "cfec8a61c22db4a3adbf23ca2c4c8904eaf858aef0849b319067e1ba91496ce3"
     },
     {
       "path": "src/features/lesson/LessonRenderer.tsx",
@@ -1348,8 +1343,8 @@
     },
     {
       "path": "src/features/listening/dexieListeningStore.ts",
-      "sizeBytes": 3847,
-      "sha256": "de1fd49741413bb2c47f7aa43ec6e0983efd2144cb4ed41e33083de55cdb9796"
+      "sizeBytes": 3897,
+      "sha256": "293a94b7e53c7bc5af165201240cdc216b5a77789c0000da127281a7c8ffe501"
     },
     {
       "path": "src/features/listening/index.ts",
@@ -1368,8 +1363,8 @@
     },
     {
       "path": "src/features/listening/ListeningPage.tsx",
-      "sizeBytes": 21125,
-      "sha256": "14d48a45e82ca3db4478e7a85ca885efa746382ffb63df6ddd4206cb150f2d51"
+      "sizeBytes": 21169,
+      "sha256": "03c1b74b0360f8cf6c4252c7e98ddb889e33a1982a4a184965535a6140a0fb91"
     },
     {
       "path": "src/features/listening/model.test.ts",
@@ -1398,8 +1393,8 @@
     },
     {
       "path": "src/features/mock/dexieStore.ts",
-      "sizeBytes": 2759,
-      "sha256": "4e07ccbe3f70c9fb16f5209a9a8e2e8638b74f5fd83af2c4e0644acb1721e5d2"
+      "sizeBytes": 2806,
+      "sha256": "9c742b19594b2e726bce1f483d93fbd89181911fa0c6a7e66443e13f9b41001c"
     },
     {
       "path": "src/features/mock/index.ts",
@@ -1418,8 +1413,8 @@
     },
     {
       "path": "src/features/mock/MockPracticePage.tsx",
-      "sizeBytes": 22003,
-      "sha256": "0bcb26f766f6f4961138d51227162d07370d83302293bb3926e2de97aa196f88"
+      "sizeBytes": 22033,
+      "sha256": "cd1994cb2b28f43c588b7f5f670bafe91deae601e57b1a43cfa32c7e10e89def"
     },
     {
       "path": "src/features/mock/schema.ts",
@@ -1558,8 +1553,8 @@
     },
     {
       "path": "src/features/reading/dexieReadingStore.ts",
-      "sizeBytes": 5976,
-      "sha256": "f3dd792c8c6a00fccfcbf4638eebd9e8f09c1c35000795e1c0d7480cd266a78b"
+      "sizeBytes": 6132,
+      "sha256": "c50699f2bc6cefd4f67ad0ce77e77ab11039d91717fff818a815a22c90f705de"
     },
     {
       "path": "src/features/reading/index.ts",
@@ -1663,8 +1658,8 @@
     },
     {
       "path": "src/features/settings/dexieSettingsPort.ts",
-      "sizeBytes": 2483,
-      "sha256": "96010b010efd3b20027996cc6dfdf1212c63c6dff54a6e885cd3361e94302680"
+      "sizeBytes": 2563,
+      "sha256": "5028c5aff6da3040338a165c92e539aa39b9cdd00946070b8802867e0582dd46"
     },
     {
       "path": "src/features/settings/index.ts",
@@ -1683,8 +1678,8 @@
     },
     {
       "path": "src/features/settings/SettingsPage.tsx",
-      "sizeBytes": 21362,
-      "sha256": "0c54a45ef0d74a8f2a94c252eec654bcb9e3f6a20fa87a9f535c62be71d72c90"
+      "sizeBytes": 21175,
+      "sha256": "ac1fa53696268ae1768486b0690c87a3ef2bcfef747aece199661260b01ad603"
     },
     {
       "path": "src/features/settings/types.ts",
@@ -1703,8 +1698,8 @@
     },
     {
       "path": "src/features/speaking/dexieStore.ts",
-      "sizeBytes": 2896,
-      "sha256": "9fdae960c594e0dfc8137bd248e7df30c55f3456c0d8b8d1a9527be1a4bd7854"
+      "sizeBytes": 3108,
+      "sha256": "a9df3965345e57a5774e3690bf43c5f79c5189b98e20f8daf35f8a3d2442e94b"
     },
     {
       "path": "src/features/speaking/index.ts",
@@ -1728,8 +1723,8 @@
     },
     {
       "path": "src/features/speaking/SpeakingPracticePage.tsx",
-      "sizeBytes": 24636,
-      "sha256": "39f396bf74200e90d30b7925c56641da63192e353d613c5b779d946596a607c5"
+      "sizeBytes": 24771,
+      "sha256": "55563b92e43edf11c4a44cf258bd4196473d823a49bb74a7eaae8dc47ac8fd8b"
     },
     {
       "path": "src/features/speaking/types.ts",
@@ -1743,8 +1738,8 @@
     },
     {
       "path": "src/features/today/dexieTodayPort.ts",
-      "sizeBytes": 2430,
-      "sha256": "2b34eb6d84d1dcdb65aec5488759dab201f343f08e4be63abd08f74f3cf1daf6"
+      "sizeBytes": 2512,
+      "sha256": "e99964966ddea8674818ad0bdd947122a9edcb8e9bda277e84b8c141a548fe03"
     },
     {
       "path": "src/features/today/index.ts",
@@ -1773,13 +1768,13 @@
     },
     {
       "path": "src/features/today/TodayPage.test.tsx",
-      "sizeBytes": 11574,
-      "sha256": "ab6ef993b19621cea0cf065f8b11a7e78a80369e4483ac85575ab8d0717a4600"
+      "sizeBytes": 11333,
+      "sha256": "277246d8c876c8866be1d31e64318d61ecb4d9cd12f0759ec305257af7625565"
     },
     {
       "path": "src/features/today/TodayPage.tsx",
-      "sizeBytes": 20484,
-      "sha256": "48c4ba285f659a0b11f49bfa887c0d0d040e5d2497d49ca58ab6140a674920eb"
+      "sizeBytes": 20306,
+      "sha256": "67eee224f900503c4225aa95028efbdddf03121c6b8575a786ad6add69e51a5e"
     },
     {
       "path": "src/features/today/types.ts",
@@ -1793,8 +1788,8 @@
     },
     {
       "path": "src/features/vocabulary/dexieAdapters.ts",
-      "sizeBytes": 2963,
-      "sha256": "a6b1432e17409374cc5754194d44e9d4a17731ca08b1a0f252d8baa549fe58a6"
+      "sizeBytes": 3274,
+      "sha256": "d524d798a00ccaa7b532490e40ae8e69f1f3c6f80417c4b4b5687f238ab3e436"
     },
     {
       "path": "src/features/vocabulary/index.ts",
@@ -1858,8 +1853,8 @@
     },
     {
       "path": "src/features/vocabulary/WordDetailPage.tsx",
-      "sizeBytes": 13972,
-      "sha256": "14c005cd9ae2afe0c01949aa5928b46100f9f24c1601a18f5a4fbdb6160d0449"
+      "sizeBytes": 13922,
+      "sha256": "8e743f4bc47aac5f125987ca29c754965094777a37cfae248c12f15ddba0cd49"
     },
     {
       "path": "src/features/writing/dexieWritingPort.test.ts",
@@ -1868,8 +1863,8 @@
     },
     {
       "path": "src/features/writing/dexieWritingPort.ts",
-      "sizeBytes": 5051,
-      "sha256": "74b1819b7853e8e3a61a5e199a626d64d862bd51c383c6389ec1e430b607c74c"
+      "sizeBytes": 5303,
+      "sha256": "3bf3af7bf35c780e3b5374797ba1f850a739c026cc82ca8013e96be08d9ff32b"
     },
     {
       "path": "src/features/writing/index.ts",
@@ -1888,8 +1883,8 @@
     },
     {
       "path": "src/features/writing/schemas.test.ts",
-      "sizeBytes": 2599,
-      "sha256": "50e7df0227d267a8af9839bc417bb484b4c00ff3064a719917381191366951d5"
+      "sizeBytes": 3876,
+      "sha256": "dd51704b8f084413ac0ef33028031f0997c3c0c642ebc1be6dc522237fbd8eb5"
     },
     {
       "path": "src/features/writing/schemas.ts",
@@ -1898,8 +1893,8 @@
     },
     {
       "path": "src/features/writing/types.ts",
-      "sizeBytes": 2602,
-      "sha256": "6a46591e2648ab058cfd6173d49fa61fbdf6e530fa5c4dcc53b6ca7394a4a995"
+      "sizeBytes": 2687,
+      "sha256": "d0320ad1cd322903afdc46ed78e2f194525b698a8b0e1352eda5ea54a99825a4"
     },
     {
       "path": "src/features/writing/WritingPage.module.css",
@@ -1908,13 +1903,13 @@
     },
     {
       "path": "src/features/writing/WritingPage.test.tsx",
-      "sizeBytes": 8909,
-      "sha256": "6067bd5815d69f1263961972331366e10f4894aa98c91b0859b64f317d972434"
+      "sizeBytes": 9674,
+      "sha256": "2c201823b52132c763b2a8461ad860e1613b48c4d9f2813bb5518bc27a5322de"
     },
     {
       "path": "src/features/writing/WritingPage.tsx",
-      "sizeBytes": 29423,
-      "sha256": "44bd77db2d3e8ce1a28257d204b6863064c4944c2ebdd8c8e4a1a29903a19b2d"
+      "sizeBytes": 30104,
+      "sha256": "c95d184d7eeda075294102b2828e28cab478d7c5640ad5e53b44de8fa6d80d29"
     },
     {
       "path": "src/infrastructure/audio/audioServices.test.ts",
@@ -1948,8 +1943,8 @@
     },
     {
       "path": "src/infrastructure/backup/dexieBackupService.test.ts",
-      "sizeBytes": 12720,
-      "sha256": "b9f4d2627aba39272c6354feaacfc7b3a7bf051d84a51e6e7dcfc9b79116daa6"
+      "sizeBytes": 13470,
+      "sha256": "316a33341142e13c9f6fbe7bb6c9efc9c9c3221f80daf80312ede19495e6f351"
     },
     {
       "path": "src/infrastructure/backup/dexieBackupService.ts",
@@ -1978,13 +1973,13 @@
     },
     {
       "path": "src/infrastructure/content/practiceSchemas.ts",
-      "sizeBytes": 14855,
-      "sha256": "39d2fff24c2ed2b9f43cb95d71c69f233ad784175c4c5ffd72c8be0a103b995e"
+      "sizeBytes": 15881,
+      "sha256": "bf1eae3840ec000d7bf797dd3d14bb55a872e71dad2c53611d011d9302c2e832"
     },
     {
       "path": "src/infrastructure/content/practiceValidation.test.ts",
-      "sizeBytes": 3649,
-      "sha256": "3f8eed48959dd36704485bb493b17c92a258d50b6c852e325bd0192b79ecaf86"
+      "sizeBytes": 4209,
+      "sha256": "af983e230f360990ea5ecb4d99e14023f458b9be7a07b3cf4a9198aab7b010d4"
     },
     {
       "path": "src/infrastructure/content/schemas.ts",
@@ -2013,13 +2008,13 @@
     },
     {
       "path": "src/infrastructure/db/appDb.ts",
-      "sizeBytes": 7316,
-      "sha256": "b931885aec2caa2a25322df0d63eafb409d78c22d06c4633a8a233b4801c2b46"
+      "sizeBytes": 7744,
+      "sha256": "e2b58e876e5cfdc8108dfcdc3fa68b93d1d7d530fa56acda4f7e5a3d72f32646"
     },
     {
       "path": "src/infrastructure/db/repositories/answerCommitRepository.ts",
-      "sizeBytes": 3083,
-      "sha256": "0257003f0bf63b182a5d23ad998582cfa4e16f8dc922527772e8a912114e900f"
+      "sizeBytes": 3341,
+      "sha256": "795bf2d8943672abec4d96dd25b36ca2ecfd9eab1244df4063d1b72bdfec0b60"
     },
     {
       "path": "src/infrastructure/db/repositories/contentRepository.ts",
@@ -2033,13 +2028,13 @@
     },
     {
       "path": "src/infrastructure/db/repositories/learningRepositories.ts",
-      "sizeBytes": 2802,
-      "sha256": "8fe75b9f9b2bb7ec51e3a295f75582960d928006ca3de60f57b700c32cca7983"
+      "sizeBytes": 3506,
+      "sha256": "f3add6302b0bab8d7ceffb87f1c909095e249274daf191d78236f03ce1d52875"
     },
     {
       "path": "src/infrastructure/db/repositories/settingsRepository.ts",
-      "sizeBytes": 1238,
-      "sha256": "137c4cd04b94dfaa9c10994312f302b3d8b72af789c99a6721b4d03910e9d441"
+      "sizeBytes": 1422,
+      "sha256": "49d87429eb6e40f74088c0a29e80abfdf33ee1b1134cb80a49c9bbf8fbd9b66e"
     },
     {
       "path": "src/infrastructure/pwa/cacheManagement.ts",
@@ -2068,18 +2063,18 @@
     },
     {
       "path": "src/infrastructure/pwa/pendingWrites.test.ts",
-      "sizeBytes": 7568,
-      "sha256": "5d994f880f0001a0a114c918ff38229f4844ce847fab4129204735add7745c45"
+      "sizeBytes": 18114,
+      "sha256": "d94a610d2ec7b733ae6718f5e1c454f98affbcad817a08daa343c4a1f231517b"
     },
     {
       "path": "src/infrastructure/pwa/pendingWrites.ts",
-      "sizeBytes": 5003,
-      "sha256": "c3c5d2c9777e5d6202b175543d709bb0504a01a254678cf3f7ad1cae2233cc8d"
+      "sizeBytes": 13757,
+      "sha256": "1aa0e588b5a33690ac1810e16015de7e93c3516fa3b1c4791a72301d25028c7b"
     },
     {
       "path": "src/infrastructure/pwa/pwaInfrastructure.test.ts",
       "sizeBytes": 7899,
-      "sha256": "0240c113db15c09e49ebc2bce008e397c0b1100805648f020d0066a12cf39f1c"
+      "sha256": "95b72e89d5789d3fddf0e59288b217a2c42d3e9ae5b3086f22106d65976cafce"
     },
     {
       "path": "src/infrastructure/pwa/registerServiceWorker.ts",
@@ -2242,6 +2237,16 @@
       "sha256": "90c6f55e87f58fc943ad2cb86b39541ef874921a206aaf8d6d058eaf6cf13bcc"
     },
     {
+      "path": "src/shared/textLanguage.test.ts",
+      "sizeBytes": 1011,
+      "sha256": "c7c1015256ab3e93eaf0d8a844ecf0bd3250b20c9a8afca979b060b96d871d14"
+    },
+    {
+      "path": "src/shared/textLanguage.ts",
+      "sizeBytes": 2115,
+      "sha256": "6dfff439d5476a2e88022fa5d7c94b7006d1bd3c9f3244720700b30d16217f67"
+    },
+    {
       "path": "src/test/setup.ts",
       "sizeBytes": 427,
       "sha256": "0269db933507541c25280b2242890f406059132cc8e7a7097340a941c7f9f754"
@@ -2273,13 +2278,13 @@
     },
     {
       "path": "tsconfig.scripts.json",
-      "sizeBytes": 617,
-      "sha256": "d62753c9a467165b6db26c9cf01e48dbf2740c8ab667e7c330b879cb6d899df0"
+      "sizeBytes": 691,
+      "sha256": "b6141d90670abebdbf005443c5ff7ae549e8cda2f032a36dc7a9df01f4ea352a"
     },
     {
       "path": "vite.config.ts",
       "sizeBytes": 3362,
-      "sha256": "9c21140f9378e50dc7fc98033ba50895056545f00b8a3940a1d8b16d875b6cab"
+      "sha256": "3cc7f9aca60c4b649e4e7e67a67f6bd4d706c085d579d3615c1bc411d79034a9"
     }
   ]
 }

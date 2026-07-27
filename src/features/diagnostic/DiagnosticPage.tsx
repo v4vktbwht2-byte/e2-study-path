@@ -25,6 +25,7 @@ import {
   InlineAlert,
   ProgressBar,
 } from "../../shared/components";
+import { contentTextLanguage, segmentContentText } from "../../shared/textLanguage";
 import {
   createDiagnosticPlacement,
   createDiagnosticRun,
@@ -565,8 +566,17 @@ export function DiagnosticPage({
       ) : null}
 
       <Card as="section" padding="large" className={styles.questionCard}>
-        <h2 ref={questionHeadingRef} className={styles.questionTitle} tabIndex={-1}>
-          {currentQuestion.prompt}
+        <h2
+          ref={questionHeadingRef}
+          className={styles.questionTitle}
+          lang={contentTextLanguage(currentQuestion.prompt)}
+          tabIndex={-1}
+        >
+          {segmentContentText(currentQuestion.prompt).map((segment, index) => (
+            <span key={`${segment.text}-${index}`} lang={segment.language}>
+              {segment.text}
+            </span>
+          ))}
         </h2>
         {currentQuestion.instructionsJa ? (
           <p id={instructionsId} className={styles.instructions}>
@@ -611,6 +621,7 @@ export function DiagnosticPage({
             <label className={styles.textField}>
               <span>答えを入力</span>
               <input
+                lang="en"
                 type="text"
                 value={answer}
                 autoComplete="off"
@@ -645,7 +656,16 @@ export function DiagnosticPage({
                         setErrorMessage(undefined);
                       }}
                     />
-                    <span>{choice.label}</span>
+                    <span lang={contentTextLanguage(choice.label)}>
+                      {segmentContentText(choice.label).map((segment, segmentIndex) => (
+                        <span
+                          key={`${segment.text}-${segmentIndex}`}
+                          lang={segment.language}
+                        >
+                          {segment.text}
+                        </span>
+                      ))}
+                    </span>
                   </label>
                 ))}
               </div>

@@ -43,7 +43,7 @@ describe("アプリルーター", () => {
     ]);
   });
 
-  it.each(foundationRoutes)("$path が対応する準備画面へ一致する", (route) => {
+  it.each(foundationRoutes)("$path が対応する実装画面へ一致する", (route) => {
     const matches = matchRoutes(appRouteObjects, createSamplePath(route.path));
 
     expect(matches?.at(-1)?.route.id).toBe(route.id);
@@ -55,7 +55,7 @@ describe("アプリルーター", () => {
     expect(matches?.at(-1)?.route.id).toBe("not-found");
   });
 
-  it("各準備画面に目的・実装Phase・関連ルートがある", () => {
+  it("各ルート定義に目的・実装Phase・関連ルートがある", () => {
     for (const route of foundationRoutes) {
       expect(route.purpose.length).toBeGreaterThan(10);
       expect(route.phase).toMatch(/^Phase \d+$/);

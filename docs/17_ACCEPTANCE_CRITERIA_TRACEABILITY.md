@@ -62,7 +62,7 @@ Given 学習履歴がある
 When JSONをexportし、別の空状態へrestoreする
 Then profile、review、mastery、progressが復元される。
 
-Phase 07 verification: `e2e/phase07.spec.ts`でprofile、lesson progress、単語お気に入り・メモ、作文をJSONへ書き出し、全利用者データ削除後の空状態へ置換復元して完全一致を確認する。domain／Dexieテストではreview、mastery、attempt、session、DailyPlan、録音opt-in、merge、rollback、破損・非互換拒否を検証する。
+Phase 10 verification: `e2e/phase07.spec.ts`でprofile、settings、review、mastery、lesson progress、単語お気に入り・メモ、session、attempt、DailyPlan、作文をJSONへ書き出し、全利用者データ削除後の空状態へ置換復元して完全一致を確認する。domain／Dexieテストでは録音opt-in、merge、rollback、破損・非互換拒否を含む全主要storeの往復を検証する。
 
 ### AC-REL-010 Accessibility
 
@@ -85,7 +85,7 @@ Phase 08 verification: `e2e/phase08.spec.ts`で320px・文字200%相当と160px 
 Given bundled content
 Then source metadataがoriginalで、公式問題・公式音源・公式ロゴが含まれない。
 
-Phase 06 verification: Pilotの技能教材25セットはすべて`source.type = original`で、共通Zod検証が外部音声URL、参照切れ、ID重複、raw HTMLを拒否する。短縮模試は公式問題・公式音声・公式スコアではないと画面に明示する。
+Phase 10 verification: Pilot 140語・31レッスン・155演習・25技能セットはすべて`source.type = original`で、共通Zod検証が外部音声URL、参照切れ、ID重複、raw HTML、作文回答例の語数違反を拒否する。短縮模試は公式問題・公式音声・公式スコアではないと画面に明示する。Stage分布、人間向けspot check、修正内容は`docs/22_PILOT_RELEASE_AUDIT.md`へ記録する。
 
 ## 2. Requirement traceability summary
 
@@ -101,7 +101,7 @@ Phase 06 verification: Pilotの技能教材25セットはすべて`source.type =
 | FR-PRO             | 08                 |            08 | aggregation unit                                          |
 | FR-DAT             | 08, 14             |            07 | E2E-005                                                   |
 | FR-PWA             | 13                 |         07/09 | E2E-006                                                   |
-| NFR-A11Y           | 06, 14             |         08/09 | axe + manual                                              |
+| NFR-A11Y           | 06, 14             |      08/09/10 | axe／keyboard／reflow E2E + 実機manual pending            |
 | NFR-PRIV           | 14                 |           all | review checklist                                          |
 
 ## 3. Phase gates
@@ -170,6 +170,9 @@ Phase 06 verification: Pilotの技能教材25セットはすべて`source.type =
 
 ### Phase 10
 
-- no critical known bug
-- all release-level acceptance criteria reviewed
-- documentation current
+- Complete: `AC-REL-001`〜`AC-REL-012`を1件ずつ再確認し、すべてPassとして`docs/22_PILOT_RELEASE_AUDIT.md`へ記録した。
+- Complete: placeholder／dead route、duplicate abstraction、domain leakage、公式素材、教材件数・分布、backup完全往復、offline／update／mobile／accessibilityを横断監査した。
+- Complete: 指摘されたtimestamp比較、複数タブの破壊操作と旧世代保存、英日混在の読み上げ、教材表現、作文回答例を修正し、Blocker 0／P1 0／P2 0まで再レビューした。
+- Complete: app `0.2.0`、Pilot content `0.7.0`、DB schema `2`としてREADME、CHANGELOG、checklist、status、plan、backlogを同期した。
+- Baseline evidence: clean install、75 test files・547/547件、coverage 79.98% statements／71.77% branches／77.12% functions／80.33% lines、全E2E desktop/320px 70/70、root/subpath build、artifact 70ファイル、教材検証をPass。最終write coordination修正後はlint／typecheck／format／静的経路監査をPassし、動的ゲートは環境制限で未再実行。詳細値は`docs/20_IMPLEMENTATION_STATUS.md`、受入・教材・手動確認matrixは`docs/22_PILOT_RELEASE_AUDIT.md`を正本とする。
+- Pending: 最終コード状態のunit／coverage／root・subpath build／artifact／E2E、最新registry audit、remote Actions／Pages、iOS／Android PWA、waiting Service Worker、NVDA／VoiceOver、実zoom／forced colors、実機録音・Web Speech。

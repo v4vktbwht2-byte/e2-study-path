@@ -1,4 +1,5 @@
 import { z } from "zod";
+import { countWritingWords } from "../../domain/writing/wordCount";
 import { contentSourceSchema, practiceSetSchema } from "./schemas";
 
 const rawHtmlPattern = /<\/?[a-z][^>]*>/iu;
@@ -309,10 +310,24 @@ export const summaryPromptPayloadSchema = z
     sourceText: z.string().trim().min(40),
     keyPoints: z.array(z.string().trim().min(1)).min(2),
     focusJa: z.string().trim().min(1),
+    sampleAnswer: z.string().trim().min(40),
     targetWordMin: z.literal(45),
     targetWordMax: z.literal(55),
   })
-  .strict();
+  .strict()
+  .superRefine((payload, context) => {
+    const sampleWordCount = countWritingWords(payload.sampleAnswer);
+    if (
+      sampleWordCount < payload.targetWordMin ||
+      sampleWordCount > payload.targetWordMax
+    ) {
+      context.addIssue({
+        code: "custom",
+        path: ["sampleAnswer"],
+        message: "要約の回答例は45〜55語にしてください。",
+      });
+    }
+  });
 
 export const opinionPromptPayloadSchema = z
   .object({
@@ -320,10 +335,25 @@ export const opinionPromptPayloadSchema = z
     topic: z.string().trim().min(10),
     topicJa: z.string().trim().min(1),
     points: z.array(z.string().trim().min(1)).min(3),
+    reasonExamples: z.array(z.string().trim().min(1)).min(2),
+    sampleAnswer: z.string().trim().min(80),
     targetWordMin: z.literal(80),
     targetWordMax: z.literal(100),
   })
-  .strict();
+  .strict()
+  .superRefine((payload, context) => {
+    const sampleWordCount = countWritingWords(payload.sampleAnswer);
+    if (
+      sampleWordCount < payload.targetWordMin ||
+      sampleWordCount > payload.targetWordMax
+    ) {
+      context.addIssue({
+        code: "custom",
+        path: ["sampleAnswer"],
+        message: "意見英作文の回答例は80〜100語にしてください。",
+      });
+    }
+  });
 
 export const speakingPayloadSchema = z
   .object({

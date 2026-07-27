@@ -21,6 +21,10 @@ import {
 } from "../../domain/planning";
 import type { ReviewState } from "../../domain/review/types";
 import type { Exercise, Lesson, PracticeSet, VocabularyItem } from "../content/schemas";
+import {
+  pendingUpdateWriteCoordinator as defaultPendingUpdateWriteCoordinator,
+  type PendingUpdateWriteCoordinator,
+} from "../pwa/pendingWrites";
 
 export const DB_NAME = "e2-study-path";
 export const DB_VERSION = 2;
@@ -185,7 +189,11 @@ export class AppDb extends Dexie {
   writingSubmissions!: EntityTable<WritingSubmission, "id">;
   speakingRecordings!: EntityTable<SpeakingRecording, "id">;
 
-  constructor(name = DB_NAME, options?: DexieOptions) {
+  constructor(
+    name = DB_NAME,
+    options?: DexieOptions,
+    readonly pendingWriteCoordinator: PendingUpdateWriteCoordinator = defaultPendingUpdateWriteCoordinator,
+  ) {
     super(name, options);
     this.version(1).stores(DB_VERSION_1_STORES);
     this.version(DB_VERSION)
@@ -204,6 +212,10 @@ export class AppDb extends Dexie {
             }
           });
       });
+  }
+
+  runUserDataWrite<T>(key: string, write: () => Promise<T>): Promise<T> {
+    return this.pendingWriteCoordinator.trackPendingUpdateWrite(key, write);
   }
 }
 

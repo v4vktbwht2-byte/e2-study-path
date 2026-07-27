@@ -20,10 +20,14 @@ export function createDexieSpeakingStore(db: AppDb): SpeakingPracticeStore {
       });
     },
     async saveRecording(recording) {
-      await db.speakingRecordings.put(recording);
+      await db.runUserDataWrite(`speaking:recording:${recording.id}`, () =>
+        db.speakingRecordings.put(recording),
+      );
     },
     async deleteRecording(recordingId) {
-      await db.speakingRecordings.delete(recordingId);
+      await db.runUserDataWrite(`speaking:recording:${recordingId}`, () =>
+        db.speakingRecordings.delete(recordingId),
+      );
     },
     async complete(input) {
       if (
@@ -38,10 +42,8 @@ export function createDexieSpeakingStore(db: AppDb): SpeakingPracticeStore {
       ) {
         throw new Error("スピーキングの回答と学習セッションが一致しません。");
       }
-      await db.transaction(
-        "rw",
-        [db.attempts, db.sessions, db.dailyPlans],
-        async () => {
+      await db.runUserDataWrite(`speaking:complete:${input.session.id}`, () =>
+        db.transaction("rw", [db.attempts, db.sessions, db.dailyPlans], async () => {
           await db.attempts.put(input.attempt);
           await db.sessions.put(input.session);
           if (input.planContext === undefined) {
@@ -65,7 +67,7 @@ export function createDexieSpeakingStore(db: AppDb): SpeakingPracticeStore {
           await db.dailyPlans.put(
             completeDailyPlanBlock(plan, input.planContext.blockId),
           );
-        },
+        }),
       );
     },
   };

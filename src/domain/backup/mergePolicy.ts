@@ -26,6 +26,15 @@ export function recordsEqual(left: unknown, right: unknown): boolean {
   return JSON.stringify(stableValue(left)) === JSON.stringify(stableValue(right));
 }
 
+function compareDateTimes(left: string, right: string): number {
+  const leftTime = Date.parse(left);
+  const rightTime = Date.parse(right);
+  if (!Number.isFinite(leftTime) || !Number.isFinite(rightTime)) {
+    throw new BackupError("INVALID_SCHEMA", "バックアップ内の日時を比較できません。");
+  }
+  return leftTime - rightTime;
+}
+
 export function chooseNewer<T>(
   current: T | undefined,
   incoming: T,
@@ -34,7 +43,7 @@ export function chooseNewer<T>(
   if (current === undefined) {
     return incoming;
   }
-  return timestamp(incoming).localeCompare(timestamp(current)) >= 0
+  return compareDateTimes(timestamp(incoming), timestamp(current)) >= 0
     ? incoming
     : current;
 }
@@ -76,7 +85,7 @@ export function mergeStudySession(
   if (
     current.type !== incoming.type ||
     current.studyDate !== incoming.studyDate ||
-    current.startedAt !== incoming.startedAt
+    compareDateTimes(current.startedAt, incoming.startedAt) !== 0
   ) {
     throw new BackupError(
       "INVALID_SCHEMA",
@@ -88,7 +97,7 @@ export function mergeStudySession(
       ? incoming.endedAt
       : incoming.endedAt === undefined
         ? current.endedAt
-        : current.endedAt.localeCompare(incoming.endedAt) >= 0
+        : compareDateTimes(current.endedAt, incoming.endedAt) >= 0
           ? current.endedAt
           : incoming.endedAt;
   return {
@@ -112,7 +121,7 @@ export function mergeDailyPlan(
   if (current === undefined) {
     return incoming;
   }
-  return incoming.generatedAt.localeCompare(current.generatedAt) >= 0
+  return compareDateTimes(incoming.generatedAt, current.generatedAt) >= 0
     ? mergeDailyPlanCompletions(current, incoming)
     : mergeDailyPlanCompletions(incoming, current);
 }

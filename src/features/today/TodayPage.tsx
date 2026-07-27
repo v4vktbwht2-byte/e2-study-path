@@ -8,7 +8,6 @@ import {
   InlineAlert,
   ProgressBar,
 } from "../../shared/components";
-import { trackPendingUpdateWrite } from "../../infrastructure/pwa";
 import {
   buildCompletionSummary,
   buildTodayPlanPreviews,
@@ -83,7 +82,7 @@ export function TodayPage({
     let active = true;
     setState({ status: "loading" });
     setSaveError(undefined);
-    void trackPendingUpdateWrite("today-plan", () => loadToday(port, clock))
+    void loadToday(port, clock)
       .then((loaded) => {
         if (!active) {
           return;
@@ -145,9 +144,7 @@ export function TodayPage({
           return;
         }
         const recalculatedPlan = loaded.plan;
-        const persistedPlan = await trackPendingUpdateWrite("today-plan", () =>
-          port.savePlan(recalculatedPlan),
-        );
+        const persistedPlan = await port.savePlan(recalculatedPlan);
         const persistedLoaded = {
           ...loaded,
           plan: persistedPlan,

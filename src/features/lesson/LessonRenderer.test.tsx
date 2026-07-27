@@ -249,7 +249,10 @@ describe("レッスンレンダラー", () => {
         onExerciseResult={onExerciseResult}
       />,
     );
-    await screen.findByText("hello の意味を選んでください。");
+    await screen.findByRole("heading", {
+      level: 3,
+      name: "helloの意味を選んでください。",
+    });
     const user = userEvent.setup();
     await user.click(screen.getByRole("button", { name: "ヒントを見る" }));
     expect(screen.getByText("会ったときに使います。")).toBeInTheDocument();
@@ -296,7 +299,10 @@ describe("レッスンレンダラー", () => {
         clock={clock}
       />,
     );
-    await screen.findByText("hello の意味を選んでください。");
+    await screen.findByRole("heading", {
+      level: 3,
+      name: "helloの意味を選んでください。",
+    });
     const user = userEvent.setup();
 
     await user.click(screen.getByRole("button", { name: "次へ" }));
@@ -327,7 +333,10 @@ describe("レッスンレンダラー", () => {
         clock={clock}
       />,
     );
-    await screen.findByText("hello の意味を選んでください。");
+    await screen.findByRole("heading", {
+      level: 3,
+      name: "helloの意味を選んでください。",
+    });
     const user = userEvent.setup();
     await user.click(screen.getByLabelText("こんにちは"));
     await user.click(screen.getByRole("button", { name: "答えを確認" }));
@@ -365,7 +374,10 @@ describe("レッスンレンダラー", () => {
         clock={clock}
       />,
     );
-    await screen.findByText("hello の意味を思い出してください。");
+    await screen.findByRole("heading", {
+      level: 3,
+      name: "helloの意味を思い出してください。",
+    });
     const user = userEvent.setup();
     await user.click(screen.getByRole("button", { name: "回答例を確認" }));
     await screen.findByText("回答例を確認しましょう");

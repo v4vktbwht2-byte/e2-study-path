@@ -9,7 +9,6 @@ import {
   type WritingRubricChecks,
   type WritingRubricDimension,
 } from "../../domain/writing";
-import { trackPendingUpdateWrite } from "../../infrastructure/pwa";
 import {
   Button,
   Card,
@@ -143,6 +142,15 @@ function PromptMaterial({ prompt }: { prompt: WritingPrompt }) {
             ))}
           </ul>
         </details>
+        <details className={styles.guide}>
+          <summary>回答例を見る</summary>
+          <p>
+            これは一つのまとめ方です。正解は一つではないため、先に自分で書いてから比べてください。
+          </p>
+          <p className={styles.sourceText} lang="en">
+            {prompt.payload.sampleAnswer}
+          </p>
+        </details>
       </Card>
     );
   }
@@ -163,6 +171,22 @@ function PromptMaterial({ prompt }: { prompt: WritingPrompt }) {
           </li>
         ))}
       </ul>
+      <details className={styles.guide}>
+        <summary>理由と回答の例を見る</summary>
+        <p>
+          次は考え方の例で、賛成・反対のどちらにも正解があります。そのまま写さず、自分の理由を選んでください。
+        </p>
+        <ul>
+          {prompt.payload.reasonExamples.map((reason) => (
+            <li key={reason} lang="en">
+              {reason}
+            </li>
+          ))}
+        </ul>
+        <p className={styles.sourceText} lang="en">
+          {prompt.payload.sampleAnswer}
+        </p>
+      </details>
     </Card>
   );
 }
@@ -322,9 +346,7 @@ export function WritingPage({
       setSaveError(undefined);
       try {
         const record = toWritingSubmissionRecord(editor, clock.now());
-        await trackPendingUpdateWrite(`writing-draft:${record.id}`, () =>
-          port.saveDraft(record),
-        );
+        await port.saveDraft(record);
         if (
           activeSubmissionIdRef.current === submissionId &&
           revisionRef.current === revision
@@ -406,9 +428,7 @@ export function WritingPage({
       const pending = pendingDraftRef.current;
       if (pending !== undefined && hasWritingDraftContent(pending.editor)) {
         const record = toWritingSubmissionRecord(pending.editor, clock.now());
-        void trackPendingUpdateWrite(`writing-draft:${record.id}`, () =>
-          port.saveDraft(record),
-        ).catch((error: unknown) => {
+        void port.saveDraft(record).catch((error: unknown) => {
           globalThis.console.error(
             "画面遷移時のライティング下書き保存に失敗しました。",
             error,
@@ -482,10 +502,7 @@ export function WritingPage({
         studyDate: data.session.studyDate,
         ...(planContext === undefined ? {} : { planContext }),
       });
-      const result = await trackPendingUpdateWrite(
-        `writing-draft:${data.editor.submissionId}`,
-        () => port.commitSubmission(commit),
-      );
+      const result = await port.commitSubmission(commit);
       setDirty(false);
       setSaveStatus("saved");
       setLoadState({
@@ -668,6 +685,7 @@ export function WritingPage({
                     <span>{field.label}</span>
                     <input
                       type="text"
+                      lang="en"
                       value={data.editor.opinionOutline[field.key]}
                       placeholder={field.placeholder}
                       onChange={(event) => {

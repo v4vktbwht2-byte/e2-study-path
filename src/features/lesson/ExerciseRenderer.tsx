@@ -1,5 +1,6 @@
 import { useId, useMemo, useState } from "react";
 import { Button, InlineAlert } from "../../shared/components";
+import { contentTextLanguage, segmentContentText } from "../../shared/textLanguage";
 import styles from "./Lesson.module.css";
 import { gradeExerciseResponse } from "./lessonModel";
 import type { Exercise, LessonExerciseResult } from "./types";
@@ -142,7 +143,13 @@ export function ExerciseRenderer({ exercise, onResult }: ExerciseRendererProps) 
 
   return (
     <section className={styles.exercise} aria-labelledby={`${groupName}-prompt`}>
-      <h3 id={`${groupName}-prompt`}>{exercise.prompt}</h3>
+      <h3 id={`${groupName}-prompt`} lang={contentTextLanguage(exercise.prompt)}>
+        {segmentContentText(exercise.prompt).map((segment, index) => (
+          <span key={`${segment.text}-${index}`} lang={segment.language}>
+            {segment.text}
+          </span>
+        ))}
+      </h3>
       {exercise.instructionsJa !== undefined ? (
         <p className={styles.instructions}>{exercise.instructionsJa}</p>
       ) : null}
@@ -205,7 +212,16 @@ export function ExerciseRenderer({ exercise, onResult }: ExerciseRendererProps) 
                     setSaveError(undefined);
                   }}
                 />
-                <span>{choice}</span>
+                <span lang={contentTextLanguage(choice)}>
+                  {segmentContentText(choice).map((segment, segmentIndex) => (
+                    <span
+                      key={`${segment.text}-${segmentIndex}`}
+                      lang={segment.language}
+                    >
+                      {segment.text}
+                    </span>
+                  ))}
+                </span>
               </label>
             ))}
           </fieldset>
@@ -263,7 +279,13 @@ export function ExerciseRenderer({ exercise, onResult }: ExerciseRendererProps) 
                   setSaveError(undefined);
                 }}
               />
-              <span>{choice}</span>
+              <span lang={contentTextLanguage(choice)}>
+                {segmentContentText(choice).map((segment, segmentIndex) => (
+                  <span key={`${segment.text}-${segmentIndex}`} lang={segment.language}>
+                    {segment.text}
+                  </span>
+                ))}
+              </span>
             </label>
           ))}
         </fieldset>
@@ -280,6 +302,7 @@ export function ExerciseRenderer({ exercise, onResult }: ExerciseRendererProps) 
           </span>
           {isOpenResponseExercise(exercise) ? (
             <textarea
+              lang="en"
               rows={4}
               value={textResponse}
               disabled={saving}
@@ -290,6 +313,7 @@ export function ExerciseRenderer({ exercise, onResult }: ExerciseRendererProps) 
             />
           ) : (
             <input
+              lang="en"
               value={textResponse}
               autoComplete="off"
               disabled={saving}

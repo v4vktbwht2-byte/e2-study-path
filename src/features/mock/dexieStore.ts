@@ -38,10 +38,8 @@ export function createDexieMockStore(db: AppDb): MockPracticeStore {
       ) {
         throw new Error("短縮模試の回答と学習セッションが一致しません。");
       }
-      await db.transaction(
-        "rw",
-        [db.attempts, db.sessions, db.dailyPlans],
-        async () => {
+      await db.runUserDataWrite(`mock:complete:${input.session.id}`, () =>
+        db.transaction("rw", [db.attempts, db.sessions, db.dailyPlans], async () => {
           await db.attempts.bulkPut([...input.attempts]);
           await db.sessions.put(input.session);
           if (input.planContext === undefined) {
@@ -65,7 +63,7 @@ export function createDexieMockStore(db: AppDb): MockPracticeStore {
           await db.dailyPlans.put(
             completeDailyPlanBlock(plan, input.planContext.blockId),
           );
-        },
+        }),
       );
     },
   };

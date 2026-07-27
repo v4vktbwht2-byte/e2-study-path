@@ -33,7 +33,7 @@ export const pilotDiagnosticExercises: readonly Exercise[] = pilotExercises.filt
 export const pilotContentPack = {
   id: "pilot-core-ja-original",
   schemaVersion: "1.0.0",
-  contentVersion: "0.6.0",
+  contentVersion: "0.7.0",
   locale: "ja-JP",
   title: "E2 Study Path Pilot オリジナル教材",
   description:

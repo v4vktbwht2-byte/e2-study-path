@@ -4,8 +4,8 @@
 
 ## 現在のPhase
 
-- Phase: 09 — Full Test Suite, CI, and Static Deployment
-- Status: Phase 09完了・Phase 10開始待ち
+- Phase: 10 — Final Audit and Pilot Release
+- Status: Phase 10完了・Pilot Release 0.2.0引き渡し可能
 - Last updated: 2026-07-27
 
 ## Phase 00〜10 高水準計画
@@ -15,7 +15,7 @@
 |    00 | 資料・環境・矛盾・Git基準点の監査                   | ハンドオフ一式 | `verify_handoff.py`                             |
 |    01 | React/Vite基盤、Hash Router、共通UI、品質スクリプト | 00             | lint / typecheck / test / build / app-shell E2E |
 |    02 | 純粋ドメイン、Dexie、Repository、コンテンツ検証     | 01             | domain / DB / content gate                      |
-|    03 | オンボーディング、診断、コース、14レッスン          | 02             | first-run / lesson E2E                          |
+|    03 | オンボーディング、診断、コース、31レッスン          | 02             | first-run / lesson E2E                          |
 |    04 | 140語、単語集中、5軸習熟度、適応復習                | 02・03         | vocabulary / review E2E                         |
 |    05 | 今日のプラン、滞留救済、レッスン統合                | 03・04         | daily-plan / backlog E2E                        |
 |    06 | 読解・聞き取り・作文・会話・短縮模試                | 02・05         | skill-module E2E                                |
@@ -597,3 +597,76 @@ python scripts/verify_handoff.py
 - Windows以外の起動手順、Firefox／Safari、実端末PWA、実配信環境の更新・rollbackは手動確認が必要。
 - offline auditは最新registry照会の代わりにはならない。依存メタデータの外部送信承認が得られなかったため、公開前に接続可能な承認済み環境で全依存の`npm audit`と本番依存の`npm audit --omit=dev`を再実行する。
 - `vite-plugin-pwa`内部の`inlineDynamicImports`非推奨警告は継続しているが、root／subpath双方のService Worker生成とartifact検証は成功している。
+
+## Phase 10 — Final Audit and Pilot Release
+
+**Goal**
+
+仕様、実装、テスト、教材、PWA、文書を横断監査し、`AC-REL-001`〜`AC-REL-012`を満たすPilot Releaseとして再現可能な引き渡し状態にする。
+
+**Files and areas expected to change**
+
+- release acceptance、risk、decision、status、checklist、backlog、README、CHANGELOG
+- backup／update safetyとそのunit／E2E
+- 教材schema、Pilot教材、言語指定、教材catalog version
+- 到達不能な準備画面
+- `PROJECT_MANIFEST.json`
+
+**Implementation steps**
+
+1. 全repositoryのdiff、placeholder、dead route、TODO、duplicate abstraction、domain leakage、secret、公式素材を検索する。
+2. `AC-REL-001`〜`AC-REL-012`をテスト証跡と実装に照らして1件ずつ判定する。
+3. Pilot件数・Stage分布・技能分布を集計し、全件validationと代表spot checkを行う。
+4. offline、update、backup、restore、delete、mobile、keyboard、focus、screen reader semanticsを再監査する。
+5. 指摘されたtimestamp merge、backup完全往復、複数タブ競合、英日混在言語指定、作文回答例、教材表現を修正する。
+6. app／content version、README、CHANGELOG、checklist、status、backlog、manifestを同期する。
+7. clean install後にmandatory commands、root／subpath artifact、offline audit、handoff検証を実行する。
+8. Blocker／P1／P2を再レビューし、Critical／High実装不具合0件を確認する。
+
+**Verification commands**
+
+```powershell
+npm ci --offline --no-audit
+npm run lint
+npm run typecheck
+npm run test:coverage
+npm run validate:content
+npm run build
+npm run verify:dist
+npm run test:e2e
+$env:VITE_BASE_PATH = "/e2-study-path/"
+npm run build
+npm run verify:dist
+Remove-Item Env:VITE_BASE_PATH
+npm audit --offline
+npm audit --omit=dev --offline
+python scripts/verify_handoff.py
+```
+
+**Decisions made**
+
+- Release versionはapp `0.2.0`、Pilot content `0.7.0`、IndexedDB schema `2`とする。
+- `AC-REL-001`〜`AC-REL-012`は引き続き全件release blockerとして扱い、各結果を`docs/22_PILOT_RELEASE_AUDIT.md`へ残す。
+- 複数タブの破壊操作はorigin単位のexclusive lock、通常保存はshared lockと世代検証で調停する。安全な調停APIがない環境では破壊操作をfail-closedにする。
+- 作文の回答例は唯一解として扱わず、一例であると明示する。要約45〜55語、意見80〜100語を教材validationで保証する。
+- 実機・実配信・remote・最新registry照会は自動検証と区別し、再現手順、成功条件、fallbackを記録して実公開前の外部ゲートとする。
+
+**Results**
+
+- 到達不能な準備画面を削除し、主要routeのplaceholder、fake button、説明のないTODOを0件にした。
+- backupの主要store完全往復、timezone offsetが異なるtimestamp merge、全通常保存のorigin-wide shared lock、削除・置換後の旧autosave復活防止、世代を進めないbackup snapshot barrierを追加した。
+- 英日混在教材の英語部分、技能教材の英文、英語入力欄へ`lang`を明示した。
+- 要約・意見8件へ範囲内の回答例を追加し、複数解を認めるUIと語数validationを追加した。教材読み合わせで見つけた訳・collocation・図書室の開館時間表現も修正した。
+- Pilot 140語・31レッスン・155演習・25技能セットのStage／技能分布、spot check、original metadataを監査し、教材・UXレビューをBlocker 0／P1 0／P2 0にした。
+- `AC-REL-001`〜`AC-REL-012`をすべてPassと判定し、release auditと手動確認matrixを`docs/22_PILOT_RELEASE_AUDIT.md`へ記録した。
+- `npm ci --offline --no-audit`で533 packagesを再構築後、`npm run check`を成功させた。`npm run test:coverage`は75 test files・547/547件、Statements 79.98%、Branches 71.77%、Functions 77.12%、Lines 80.33%だった。
+- 全Playwright E2Eはdesktop／320px 70/70件をretry 0で成功。実行中に見つかったIndexedDB初期化待ちと初期route focus待ちの2競合は、明示的な安定条件を追加して再発を防いだ。
+- root／`/e2-study-path/` build、manifest／Service Worker／教材catalog／asset／source map方針を含む70ファイルのartifact検証、全依存・本番依存のoffline audit 0件、format、diff、handoff検証を成功させた。entryは209.96 kB、PWA precacheは69件だった。
+- 上記全実行後の最終レビュー指摘を受け、全user-data mutatorを中央ゲートへ移し、snapshot競合を含む回帰テスト6件を追加した。変更後のlint、typecheck、formatと独立した静的書込み経路監査はPass。Vitest再実行はsandbox `spawn EPERM`後の権限付き実行が利用上限で拒否されたため、追加6件を含む動的ゲートは公開前に通常環境で再実行する。
+
+**Known limitations**
+
+- 最新registry dependency audit、remote GitHub Actions／Pages、実配信waiting Service Worker、iOS／Android PWA、NVDA／VoiceOver、実zoom／forced colors、MediaRecorder、Web Speech、人間の英語校閲者による全件レビューを外部確認として残す。
+- 最終競合修正後の`npm run check`、`npm run test:coverage`、root／subpath build・artifact検証、`npm run test:e2e`は環境制限で未再実行。直前の全実行値と変更後の静的検証を証跡として残し、実公開前のHigh gateとする。
+- offline audit、artifact、E2E、fallbackはローカルで確認するが、実公開はHigh priorityの最新registry audit完了後に行う。
+- 公開ライセンス、正式名称、最終公開先はリポジトリ所有者の判断待ち。

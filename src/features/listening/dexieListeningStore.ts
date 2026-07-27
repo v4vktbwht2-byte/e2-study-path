@@ -67,10 +67,8 @@ export function createDexieListeningStudyStore(db: AppDb): ListeningStudyStore {
 
     async commitCompletion(input) {
       validateCompletion(input);
-      return db.transaction(
-        "rw",
-        [db.attempts, db.sessions, db.dailyPlans],
-        async () => {
+      return db.runUserDataWrite(`listening:commit:${input.session.id}`, () =>
+        db.transaction("rw", [db.attempts, db.sessions, db.dailyPlans], async () => {
           await db.attempts.add(input.attempt);
           await db.sessions.put(input.session);
 
@@ -110,7 +108,7 @@ export function createDexieListeningStudyStore(db: AppDb): ListeningStudyStore {
             session: input.session,
             ...(dailyPlan === undefined ? {} : { dailyPlan }),
           };
-        },
+        }),
       );
     },
   };

@@ -80,8 +80,8 @@ export default defineConfig(({ mode }) => {
           ],
           additionalManifestEntries: [
             {
-              url: `${basePath}content/pilot-core-ja-original/0.6.0/index.json`,
-              revision: "0.6.0",
+              url: `${basePath}content/pilot-core-ja-original/0.7.0/index.json`,
+              revision: "0.7.0",
             },
           ],
           maximumFileSizeToCacheInBytes: 4 * 1024 * 1024,

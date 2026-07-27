@@ -542,8 +542,8 @@ export function ListeningPage({
             {selectedSet.payload.script.sentences.map((sentence, index) => (
               <li key={sentence.id}>
                 <div>
-                  <strong>{sentence.speaker}</strong>
-                  <p>{sentence.text}</p>
+                  <strong lang="en">{sentence.speaker}</strong>
+                  <p lang="en">{sentence.text}</p>
                 </div>
                 {mode === "review" ? (
                   <Button
@@ -569,6 +569,7 @@ export function ListeningPage({
           <label>
             聞こえた英文
             <textarea
+              lang="en"
               rows={3}
               value={dictation}
               onChange={(event: ChangeEvent<HTMLTextAreaElement>) => {

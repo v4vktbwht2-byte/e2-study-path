@@ -101,14 +101,22 @@ export class AppDbDiagnosticSessionStore implements DiagnosticSessionStore {
 
   async save(run: SavedDiagnosticRun): Promise<void> {
     const parsed = savedDiagnosticRunSchema.parse(run);
-    await this.db.appMeta.put({
-      key: storageKey(run.mode),
-      value: JSON.stringify(parsed),
-      updatedAt: run.updatedAt,
-    });
+    const key = storageKey(run.mode);
+    await this.db.runUserDataWrite(key, () =>
+      this.db.appMeta
+        .put({
+          key,
+          value: JSON.stringify(parsed),
+          updatedAt: run.updatedAt,
+        })
+        .then(() => undefined),
+    );
   }
 
   async clear(mode: DiagnosticMode): Promise<void> {
-    await this.db.appMeta.delete(storageKey(mode));
+    const key = storageKey(mode);
+    await this.db.runUserDataWrite(key, () =>
+      this.db.appMeta.delete(key).then(() => undefined),
+    );
   }
 }

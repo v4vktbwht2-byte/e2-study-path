@@ -46,6 +46,46 @@ describe("問題レンダラーの教材表示", () => {
     );
   });
 
+  it("英語だけの問題文・選択肢へlang=enを付け、日本語混在はページ既定を使う", () => {
+    render(
+      <ExerciseRenderer
+        exercise={{
+          ...exercise("multipleChoice", {
+            choices: ["We study English.", "日本語の選択肢"],
+          }),
+          prompt: "Choose the best answer.",
+        }}
+      />,
+    );
+
+    expect(
+      screen.getByRole("heading", { name: "Choose the best answer." }),
+    ).toHaveAttribute("lang", "en");
+    expect(screen.getByText("We study English.")).toHaveAttribute("lang", "en");
+    expect(screen.getByText("日本語の選択肢")).not.toHaveAttribute("lang");
+  });
+
+  it("英日混在の問題文では英文部分だけにlang=enを付ける", () => {
+    render(
+      <ExerciseRenderer
+        exercise={{
+          ...exercise("multipleChoice", {
+            choices: ["is", "are"],
+          }),
+          prompt: "She ___ a teacher. の空所に入る語を選びます。",
+        }}
+      />,
+    );
+
+    const heading = screen.getByRole("heading", {
+      name: "She ___ a teacher.の空所に入る語を選びます。",
+    });
+    expect(heading.querySelector('span[lang="en"]')).toHaveTextContent(
+      "She ___ a teacher.",
+    );
+    expect(screen.getByText("の空所に入る語を選びます。")).not.toHaveAttribute("lang");
+  });
+
   it("Web Speech非対応時はspeechTextを明示して表示する", () => {
     vi.stubGlobal("speechSynthesis", undefined);
     vi.stubGlobal("SpeechSynthesisUtterance", undefined);

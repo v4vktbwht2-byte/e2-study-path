@@ -238,10 +238,35 @@ describe("DexieBackupService", () => {
     await service.restoreBackup(artifact.envelope, "replace");
 
     expect(await db.profiles.toArray()).toEqual([profile()]);
+    expect(await db.settings.toArray()).toEqual([DEFAULT_SETTINGS]);
     expect(await db.reviewStates.toArray()).toEqual([reviewState()]);
+    expect(await db.mastery.toArray()).toEqual([
+      {
+        itemKey: "vocab:word-1",
+        recognition: 20,
+        recall: 10,
+        listening: 0,
+        spelling: 0,
+        context: 0,
+        lastUpdatedAt: NOW,
+      },
+    ]);
     expect(await db.vocabularyUserStates.toArray()).toEqual([
       expect.objectContaining({ favorite: true, note: "重要" }),
     ]);
+    expect(await db.lessonProgress.toArray()).toEqual([
+      {
+        lessonId: "lesson-1",
+        status: "completed",
+        currentSectionIndex: 3,
+        bestScore: 1,
+        completedAt: NOW,
+        updatedAt: NOW,
+      },
+    ]);
+    expect(await db.sessions.toArray()).toEqual([session()]);
+    expect(await db.attempts.toArray()).toEqual([attempt()]);
+    expect(await db.dailyPlans.toArray()).toEqual([dailyPlan(true)]);
     expect(await db.writingSubmissions.toArray()).toEqual([writing()]);
     const restored = await db.speakingRecordings.get("recording-1");
     expect(restored).toMatchObject({

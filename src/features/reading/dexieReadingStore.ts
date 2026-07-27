@@ -100,10 +100,8 @@ export function createDexieReadingLearningStore(db: AppDb): ReadingLearningStore
       assertCompletionInput(input);
       const itemKey = readingItemKey(input.setId);
 
-      return db.transaction(
-        "rw",
-        [db.attempts, db.sessions, db.dailyPlans],
-        async () => {
+      return db.runUserDataWrite(`reading:complete:${input.session.id}`, () =>
+        db.transaction("rw", [db.attempts, db.sessions, db.dailyPlans], async () => {
           await db.attempts.bulkPut(input.attempts);
           const session = completedSession(input.session, itemKey, input.completedAt);
           await db.sessions.put(session);
@@ -135,29 +133,31 @@ export function createDexieReadingLearningStore(db: AppDb): ReadingLearningStore
             attempts: [...input.attempts],
             ...(dailyPlan === undefined ? {} : { dailyPlan }),
           };
-        },
+        }),
       );
     },
 
     async addVocabularyFavorite(vocabularyItemId, updatedAt) {
       const itemKey = `vocab:${vocabularyItemId}`;
-      await db.transaction("rw", [db.vocabulary, db.vocabularyUserStates], async () => {
-        const vocabulary = await db.vocabulary.get(vocabularyItemId);
-        if (vocabulary === undefined) {
-          throw new ReadingPersistenceError(
-            "VOCABULARY_NOT_FOUND",
-            "追加する単語が単語帳に見つかりません。",
-          );
-        }
-        const current = await db.vocabularyUserStates.get(itemKey);
-        await db.vocabularyUserStates.put({
-          itemKey,
-          favorite: true,
-          note: current?.note ?? "",
-          suspended: current?.suspended ?? false,
-          updatedAt,
-        });
-      });
+      await db.runUserDataWrite(`reading:favorite:${itemKey}`, () =>
+        db.transaction("rw", [db.vocabulary, db.vocabularyUserStates], async () => {
+          const vocabulary = await db.vocabulary.get(vocabularyItemId);
+          if (vocabulary === undefined) {
+            throw new ReadingPersistenceError(
+              "VOCABULARY_NOT_FOUND",
+              "追加する単語が単語帳に見つかりません。",
+            );
+          }
+          const current = await db.vocabularyUserStates.get(itemKey);
+          await db.vocabularyUserStates.put({
+            itemKey,
+            favorite: true,
+            note: current?.note ?? "",
+            suspended: current?.suspended ?? false,
+            updatedAt,
+          });
+        }),
+      );
     },
 
     getVocabularyUserState(itemKey) {

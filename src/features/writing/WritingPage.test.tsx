@@ -3,7 +3,6 @@ import userEvent from "@testing-library/user-event";
 import { describe, expect, it, vi } from "vitest";
 import { pilotWritingPracticeSets } from "../../content/pilot/practiceWriting";
 import type { PracticeSet } from "../../infrastructure/content/schemas";
-import { flushPendingUpdateWrites } from "../../infrastructure/pwa";
 import { WritingPage } from "./WritingPage";
 import type {
   WritingCommitInput,
@@ -90,6 +89,15 @@ describe("WritingPage", () => {
       screen.getByText("45〜55語は練習の目安です。", { exact: false }),
     ).toBeVisible();
     expect(screen.getAllByRole("checkbox")).toHaveLength(4);
+    await user.click(screen.getByText("回答例を見る"));
+    expect(
+      screen.getByText(
+        "これは一つのまとめ方です。正解は一つではないため、先に自分で書いてから比べてください。",
+      ),
+    ).toBeVisible();
+    expect(
+      screen.getByText(/Green Town's community center uses a shared refrigerator/),
+    ).toHaveAttribute("lang", "en");
     fireEvent.change(editor, {
       target: {
         value: Array.from({ length: 45 }, () => "word").join(" "),
@@ -107,6 +115,15 @@ describe("WritingPage", () => {
     expect(screen.getByLabelText("理由2")).toBeVisible();
     expect(screen.getByLabelText("説明2")).toBeVisible();
     expect(screen.getByLabelText("結論")).toBeVisible();
+    await user.click(screen.getByText("理由と回答の例を見る"));
+    expect(
+      screen.getByText(
+        "次は考え方の例で、賛成・反対のどちらにも正解があります。そのまま写さず、自分の理由を選んでください。",
+      ),
+    ).toBeVisible();
+    expect(
+      screen.getByText("Digital files reduce paper use and are easy to update."),
+    ).toHaveAttribute("lang", "en");
     expect(
       screen.getByText("80〜100語は練習の目安です。", { exact: false }),
     ).toBeVisible();
@@ -143,9 +160,10 @@ describe("WritingPage", () => {
 
     view.unmount();
 
-    await flushPendingUpdateWrites();
-    expect([...port.records.values()][0]?.draft).toBe(
-      "Save this draft before navigation.",
+    await waitFor(() =>
+      expect([...port.records.values()][0]?.draft).toBe(
+        "Save this draft before navigation.",
+      ),
     );
   });
 

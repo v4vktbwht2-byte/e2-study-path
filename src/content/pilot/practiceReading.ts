@@ -34,7 +34,7 @@ export const pilotReadingPracticeSets = [
         {
           id: "erl-p2",
           roleJa: "取り組み",
-          summaryJa: "週2日は開館を遅らせ、学生が手伝った。",
+          summaryJa: "週2日は開館時間を延長し、学生が手伝った。",
           sentences: [
             {
               id: "erl-s3",
@@ -79,7 +79,7 @@ export const pilotReadingPracticeSets = [
           correctChoiceIndex: 0,
           evidenceSentenceIds: ["erl-s2", "erl-s3"],
           explanationJa:
-            "5時に閉まるため仕事後に利用できない人が多く、週2日の閉館を8時へ延ばしました。",
+            "5時に閉まるため仕事後に利用できない人が多く、火曜と金曜の閉館時刻を8時へ延ばしました。",
           choiceFeedbackJa: [
             {
               choiceIndex: 1,

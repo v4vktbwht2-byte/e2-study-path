@@ -1,5 +1,6 @@
 import { describe, expect, it } from "vitest";
 import { pilotWritingPracticeSets } from "../../content/pilot/practiceWriting";
+import { countWritingWords } from "../../domain/writing";
 import { practiceSetSchema } from "../../infrastructure/content/schemas";
 import {
   parseWritingPracticeSet,
@@ -19,6 +20,11 @@ describe("ライティング課題payload検証", () => {
     expect(prompts.filter((prompt) => prompt.type === "summary")).toHaveLength(4);
     expect(prompts.filter((prompt) => prompt.type === "opinion")).toHaveLength(4);
     expect(prompts.every((prompt) => prompt.source.type === "original")).toBe(true);
+    for (const prompt of prompts) {
+      const wordCount = countWritingWords(prompt.payload.sampleAnswer);
+      expect(wordCount).toBeGreaterThanOrEqual(prompt.payload.targetWordMin);
+      expect(wordCount).toBeLessThanOrEqual(prompt.payload.targetWordMax);
+    }
   });
 
   it("要約payloadの原文・key points不足を拒否する", () => {
@@ -56,6 +62,37 @@ describe("ライティング課題payload検証", () => {
           topic: "Should people study every day?",
           topicJa: "毎日勉強すべきですか。",
           points: ["Time", "Learning"],
+        },
+      }),
+    ).toThrow(WritingContentValidationError);
+  });
+
+  it("回答例が指定語数より短い教材を拒否する", () => {
+    const summary = pilotWritingPracticeSets.find(
+      (candidate) => candidate.type === "summary",
+    );
+    const opinion = pilotWritingPracticeSets.find(
+      (candidate) => candidate.type === "opinion",
+    );
+    if (summary === undefined || opinion === undefined) {
+      throw new Error("作文課題が不足しています。");
+    }
+
+    expect(() =>
+      parseWritingPracticeSet({
+        ...summary,
+        payload: {
+          ...summary.payload,
+          sampleAnswer: Array.from({ length: 44 }, () => "word").join(" "),
+        },
+      }),
+    ).toThrow(WritingContentValidationError);
+    expect(() =>
+      parseWritingPracticeSet({
+        ...opinion,
+        payload: {
+          ...opinion.payload,
+          sampleAnswer: Array.from({ length: 79 }, () => "word").join(" "),
         },
       }),
     ).toThrow(WritingContentValidationError);

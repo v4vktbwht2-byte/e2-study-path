@@ -24,14 +24,14 @@ describe("PWA runtime cache判定", () => {
     expect(
       isVersionedContentRequest(
         new URL(
-          "https://example.com/study/content/pilot-core-ja-original/0.6.0/index.json",
+          "https://example.com/study/content/pilot-core-ja-original/0.7.0/index.json",
         ),
         scope,
       ),
     ).toBe(true);
     expect(
       isVersionedContentRequest(
-        new URL("https://example.com/content/pilot-core-ja-original/0.6.0/index.json"),
+        new URL("https://example.com/content/pilot-core-ja-original/0.7.0/index.json"),
         scope,
       ),
     ).toBe(false);

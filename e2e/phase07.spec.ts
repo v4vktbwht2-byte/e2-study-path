@@ -1,4 +1,5 @@
 import { expect, test, type Page } from "@playwright/test";
+import { seedAppDatabase } from "./support/indexedDb";
 
 const DATABASE_NAME = "e2-study-path";
 const LESSON_ID = "lesson-s0-u1";
@@ -24,6 +25,24 @@ interface UserDataSnapshot {
   readonly writingSubmission: {
     readonly id: string;
     readonly draft: string;
+  } | null;
+  readonly reviewState: {
+    readonly itemKey: string;
+    readonly status: string;
+    readonly intervalDays: number;
+  } | null;
+  readonly mastery: {
+    readonly itemKey: string;
+    readonly recognition: number;
+    readonly recall: number;
+  } | null;
+  readonly studySession: {
+    readonly id: string;
+    readonly completedItemKeys: readonly string[];
+  } | null;
+  readonly dailyPlan: {
+    readonly date: string;
+    readonly completedBlockIds: readonly string[];
   } | null;
   readonly settingsCount: number;
   readonly attemptCount: number;
@@ -141,6 +160,107 @@ async function seedPhase07UserData(page: Page) {
   );
 }
 
+async function seedPhase07RoundTripData(page: Page) {
+  const now = "2026-07-27T06:00:00.000Z";
+  await seedAppDatabase(page, [
+    {
+      storeName: "reviewStates",
+      records: [
+        {
+          itemKey: "vocabulary:vocab-s0-001",
+          status: "review",
+          learningStep: 0,
+          intervalDays: 2,
+          easeBias: 1,
+          dueAt: "2026-07-29T06:00:00.000Z",
+          reviewCount: 2,
+          lapseCount: 0,
+          consecutiveSuccesses: 2,
+          updatedAt: now,
+        },
+      ],
+    },
+    {
+      storeName: "mastery",
+      records: [
+        {
+          itemKey: "vocabulary:vocab-s0-001",
+          recognition: 20,
+          recall: 10,
+          listening: 0,
+          spelling: 0,
+          context: 0,
+          lastUpdatedAt: now,
+        },
+      ],
+    },
+    {
+      storeName: "sessions",
+      records: [
+        {
+          id: "phase07-session",
+          type: "practice",
+          startedAt: now,
+          endedAt: now,
+          studyDate: "2026-07-27",
+          itemKeys: ["practice:phase07"],
+          completedItemKeys: ["practice:phase07"],
+          interrupted: false,
+        },
+      ],
+    },
+    {
+      storeName: "attempts",
+      records: [
+        {
+          id: "phase07-attempt",
+          itemKey: "practice:phase07",
+          sessionId: "phase07-session",
+          createdAt: now,
+          studyDate: "2026-07-27",
+          mode: "readingQuestion",
+          response: { answer: 1 },
+          correct: true,
+          score: 1,
+          responseTimeMs: 500,
+          hintCount: 0,
+        },
+      ],
+    },
+    {
+      storeName: "dailyPlans",
+      records: [
+        {
+          date: "2026-07-27",
+          generatedAt: now,
+          targetMinutes: 5,
+          mode: "light",
+          blocks: [
+            {
+              blockId: "phase07-block",
+              itemId: "practice:phase07",
+              category: "skillPractice",
+              estimatedSeconds: 60,
+              status: "completed",
+              skill: "reading",
+            },
+          ],
+          completedBlockIds: ["phase07-block"],
+          sourceSnapshot: { dueCount: 1, overdueCount: 0, newLimit: 0 },
+          capacity: {
+            requestedMinutes: 5,
+            effectiveMinutes: 5,
+            budgetSeconds: 300,
+            estimatedReviewItemCapacity: 20,
+          },
+          plannedSeconds: 60,
+          remainingBudgetSeconds: 240,
+        },
+      ],
+    },
+  ]);
+}
+
 async function readUserDataSnapshot(page: Page): Promise<UserDataSnapshot> {
   return page.evaluate(
     async ({ databaseName, lessonId }) => {
@@ -156,6 +276,10 @@ async function readUserDataSnapshot(page: Page): Promise<UserDataSnapshot> {
           "lessonProgress",
           "vocabularyUserStates",
           "writingSubmissions",
+          "reviewStates",
+          "mastery",
+          "sessions",
+          "dailyPlans",
           "settings",
           "attempts",
         ],
@@ -167,21 +291,39 @@ async function readUserDataSnapshot(page: Page): Promise<UserDataSnapshot> {
           value.onerror = () =>
             reject(value.error ?? new Error("保存データを読み込めませんでした。"));
         });
-      const [profile, progress, vocabularyState, writing, settingsCount, attempts] =
-        await Promise.all([
-          request<unknown>(transaction.objectStore("profiles").get("local-user")),
-          request<unknown>(transaction.objectStore("lessonProgress").get(lessonId)),
-          request<unknown>(
-            transaction
-              .objectStore("vocabularyUserStates")
-              .get("vocabulary:vocab-s0-001"),
-          ),
-          request<unknown>(
-            transaction.objectStore("writingSubmissions").get("phase07-writing"),
-          ),
-          request<number>(transaction.objectStore("settings").count()),
-          request<number>(transaction.objectStore("attempts").count()),
-        ]);
+      const [
+        profile,
+        progress,
+        vocabularyState,
+        writing,
+        review,
+        masteryRecord,
+        session,
+        plan,
+        settingsCount,
+        attempts,
+      ] = await Promise.all([
+        request<unknown>(transaction.objectStore("profiles").get("local-user")),
+        request<unknown>(transaction.objectStore("lessonProgress").get(lessonId)),
+        request<unknown>(
+          transaction
+            .objectStore("vocabularyUserStates")
+            .get("vocabulary:vocab-s0-001"),
+        ),
+        request<unknown>(
+          transaction.objectStore("writingSubmissions").get("phase07-writing"),
+        ),
+        request<unknown>(
+          transaction.objectStore("reviewStates").get("vocabulary:vocab-s0-001"),
+        ),
+        request<unknown>(
+          transaction.objectStore("mastery").get("vocabulary:vocab-s0-001"),
+        ),
+        request<unknown>(transaction.objectStore("sessions").get("phase07-session")),
+        request<unknown>(transaction.objectStore("dailyPlans").get("2026-07-27")),
+        request<number>(transaction.objectStore("settings").count()),
+        request<number>(transaction.objectStore("attempts").count()),
+      ]);
       await new Promise<void>((resolve, reject) => {
         transaction.oncomplete = () => resolve();
         transaction.onerror = () =>
@@ -204,6 +346,14 @@ async function readUserDataSnapshot(page: Page): Promise<UserDataSnapshot> {
       const vocabularyUserState = vocabularyState as
         { itemKey: string; favorite: boolean; note: string } | undefined;
       const writingSubmission = writing as { id: string; draft: string } | undefined;
+      const reviewState = review as
+        { itemKey: string; status: string; intervalDays: number } | undefined;
+      const mastery = masteryRecord as
+        { itemKey: string; recognition: number; recall: number } | undefined;
+      const studySession = session as
+        { id: string; completedItemKeys: string[] } | undefined;
+      const dailyPlan = plan as
+        { date: string; completedBlockIds: string[] } | undefined;
       return {
         profile:
           userProfile === undefined
@@ -236,6 +386,36 @@ async function readUserDataSnapshot(page: Page): Promise<UserDataSnapshot> {
             : {
                 id: writingSubmission.id,
                 draft: writingSubmission.draft,
+              },
+        reviewState:
+          reviewState === undefined
+            ? null
+            : {
+                itemKey: reviewState.itemKey,
+                status: reviewState.status,
+                intervalDays: reviewState.intervalDays,
+              },
+        mastery:
+          mastery === undefined
+            ? null
+            : {
+                itemKey: mastery.itemKey,
+                recognition: mastery.recognition,
+                recall: mastery.recall,
+              },
+        studySession:
+          studySession === undefined
+            ? null
+            : {
+                id: studySession.id,
+                completedItemKeys: studySession.completedItemKeys,
+              },
+        dailyPlan:
+          dailyPlan === undefined
+            ? null
+            : {
+                date: dailyPlan.date,
+                completedBlockIds: dailyPlan.completedBlockIds,
               },
         settingsCount,
         attemptCount: attempts,
@@ -280,7 +460,7 @@ test.describe("Phase 07 PWA・オフライン・バックアップ", () => {
     expect(workerResponse.ok()).toBe(true);
     const workerSource = await workerResponse.text();
     expect(workerSource).toContain("SKIP_WAITING");
-    expect(workerSource).toContain("content/pilot-core-ja-original/0.6.0/index.json");
+    expect(workerSource).toContain("content/pilot-core-ja-original/0.7.0/index.json");
 
     for (const iconPath of [
       "/icons/icon-192.png",
@@ -365,6 +545,7 @@ test.describe("Phase 07 PWA・オフライン・バックアップ", () => {
     await page.goto("/#/");
     await waitForApplication(page);
     await seedPhase07UserData(page);
+    await seedPhase07RoundTripData(page);
     const before = await readUserDataSnapshot(page);
 
     await page.goto("/#/settings/data");
@@ -397,6 +578,10 @@ test.describe("Phase 07 PWA・オフライン・バックアップ", () => {
       lessonProgress: null,
       vocabularyUserState: null,
       writingSubmission: null,
+      reviewState: null,
+      mastery: null,
+      studySession: null,
+      dailyPlan: null,
       settingsCount: 1,
       attemptCount: 0,
     });

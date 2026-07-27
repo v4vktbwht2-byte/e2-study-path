@@ -195,7 +195,7 @@ const stage1Seeds = [
           "Ken and I are friends. ___ play tennis. の空所に入る語を選んでください。",
         choices: ["We", "He", "She", "It"],
         answer: 0,
-        explanation: "Ken and Iは「ケンと私たち」なのでWeで言い換えます。",
+        explanation: "Ken and Iは「ケンと私」の二人を表すので、Weで言い換えます。",
         hint: "自分を含む複数の人を表します。",
         targetSkills: ["grammar"],
         targetMasteryDimensions: ["context", "recall"],

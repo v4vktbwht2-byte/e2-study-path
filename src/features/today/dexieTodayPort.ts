@@ -71,13 +71,15 @@ export function createDexieTodayPort(db: AppDb): TodayDataPort {
       );
     },
     async savePlan(plan) {
-      return db.transaction("rw", db.dailyPlans, async () => {
-        const latest = await db.dailyPlans.get(plan.date);
-        const persisted =
-          latest === undefined ? plan : mergeDailyPlanCompletions(latest, plan);
-        await db.dailyPlans.put(persisted);
-        return persisted;
-      });
+      return db.runUserDataWrite(`today-plan:${plan.date}`, () =>
+        db.transaction("rw", db.dailyPlans, async () => {
+          const latest = await db.dailyPlans.get(plan.date);
+          const persisted =
+            latest === undefined ? plan : mergeDailyPlanCompletions(latest, plan);
+          await db.dailyPlans.put(persisted);
+          return persisted;
+        }),
+      );
     },
   };
 }

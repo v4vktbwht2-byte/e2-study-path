@@ -92,57 +92,61 @@ export function createDexieWritingLearningPort(db: AppDb): WritingLearningPort {
           "提出済みの作文を下書きとして上書きできません。",
         );
       }
-      await db.transaction("rw", db.writingSubmissions, async () => {
-        const existing = await db.writingSubmissions.get(validated.id);
-        if (existing?.submittedAt !== undefined) {
-          throw new WritingPersistenceError(
-            "DRAFT_ALREADY_SUBMITTED",
-            "提出済みの作文を下書きとして上書きできません。",
-          );
-        }
-        await db.writingSubmissions.put(validated);
-      });
+      await db.runUserDataWrite(`writing-draft:${validated.id}`, () =>
+        db.transaction("rw", db.writingSubmissions, async () => {
+          const existing = await db.writingSubmissions.get(validated.id);
+          if (existing?.submittedAt !== undefined) {
+            throw new WritingPersistenceError(
+              "DRAFT_ALREADY_SUBMITTED",
+              "提出済みの作文を下書きとして上書きできません。",
+            );
+          }
+          await db.writingSubmissions.put(validated);
+        }),
+      );
     },
 
     async commitSubmission(input): Promise<WritingCommitResult> {
       assertCommitInput(input);
-      return db.transaction(
-        "rw",
-        [db.writingSubmissions, db.attempts, db.sessions, db.dailyPlans],
-        async () => {
-          await db.writingSubmissions.put(input.submission);
-          await db.attempts.add(input.attempt);
-          await db.sessions.put(input.session);
+      return db.runUserDataWrite(`writing-submission:${input.submission.id}`, () =>
+        db.transaction(
+          "rw",
+          [db.writingSubmissions, db.attempts, db.sessions, db.dailyPlans],
+          async () => {
+            await db.writingSubmissions.put(input.submission);
+            await db.attempts.add(input.attempt);
+            await db.sessions.put(input.session);
 
-          let dailyPlan;
-          if (input.planContext !== undefined) {
-            const plan = await db.dailyPlans.get(input.planContext.planDate);
-            if (plan === undefined) {
-              throw new WritingPersistenceError(
-                "DAILY_PLAN_NOT_FOUND",
-                "今日の学習プランが見つかりません。",
+            let dailyPlan;
+            if (input.planContext !== undefined) {
+              const plan = await db.dailyPlans.get(input.planContext.planDate);
+              if (plan === undefined) {
+                throw new WritingPersistenceError(
+                  "DAILY_PLAN_NOT_FOUND",
+                  "今日の学習プランが見つかりません。",
+                );
+              }
+              const block = plan.blocks.find(
+                (candidate) => candidate.blockId === input.planContext?.blockId,
               );
+              if (block === undefined || block.itemId !== input.planContext.itemKey) {
+                throw new WritingPersistenceError(
+                  "DAILY_PLAN_ITEM_MISMATCH",
+                  "日次プランの項目と作文課題が一致しません。",
+                );
+              }
+              dailyPlan = completeDailyPlanBlock(plan, input.planContext.blockId);
+              await db.dailyPlans.put(dailyPlan);
             }
-            const block = plan.blocks.find(
-              (candidate) => candidate.blockId === input.planContext?.blockId,
-            );
-            if (block === undefined || block.itemId !== input.planContext.itemKey) {
-              throw new WritingPersistenceError(
-                "DAILY_PLAN_ITEM_MISMATCH",
-                "日次プランの項目と作文課題が一致しません。",
-              );
-            }
-            dailyPlan = completeDailyPlanBlock(plan, input.planContext.blockId);
-            await db.dailyPlans.put(dailyPlan);
-          }
 
-          return {
-            submission: input.submission,
-            attempt: input.attempt,
-            session: input.session,
-            ...(dailyPlan === undefined ? {} : { dailyPlan }),
-          };
-        },
+            return {
+              submission: input.submission,
+              attempt: input.attempt,
+              session: input.session,
+              ...(dailyPlan === undefined ? {} : { dailyPlan }),
+            };
+          },
+        ),
       );
     },
   };

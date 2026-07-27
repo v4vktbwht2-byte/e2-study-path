@@ -14,7 +14,7 @@ Codexは各フェーズ完了時に更新する。
 - [x] Phase 07 PWA, offline, backup
 - [x] Phase 08 Progress, UX, accessibility
 - [x] Phase 09 Tests, CI, deployment
-- [ ] Phase 10 Final audit and release
+- [x] Phase 10 Final audit and release
 - [ ] Phase 11 Content expansion (separate)
 
 ## Feature status
@@ -37,7 +37,7 @@ Codexは各フェーズ完了時に更新する。
 | Backup/restore   | Complete | backup/adapter tests + Phase 07 E2E  | 厳密JSON、preview、merge/replace、安全backup、録音opt-in、分離削除          |
 | PWA/offline      | Complete | PWA tests + Phase 07 E2E             | install/iOS案内、offline、用途別cache、更新前write flush、base path         |
 | Accessibility    | Complete | axe + component + Phase 08 E2E       | landmark、h1、route focus、live region、Dialog、44px、320px・200%相当       |
-| CI/deploy        | Complete | clean install + CI/Pages + 70 E2E    | CI成功commit限定、failure artifact、root/subpath、Pages OIDC、汎用dist      |
+| CI/deploy        | Complete | workflow + root/subpath artifact     | CI成功commit限定、failure artifact、Pages OIDCを実装。remote実行は確認待ち |
 
 ## Quality gates
 
@@ -46,13 +46,13 @@ Codexは各フェーズ完了時に更新する。
 | npm ci                   | Pass (workspace直下をclean後、lockfileから533 packages)                                       | 2026-07-27 |
 | npm run lint             | Pass                                                                                          | 2026-07-27 |
 | npm run typecheck        | Pass                                                                                          | 2026-07-27 |
-| npm run test             | Pass (531/531)                                                                                | 2026-07-27 |
-| npm run test:coverage    | Pass (79.80% statements / 71.62% branches / 76.75% functions / 80.14% lines)                  | 2026-07-27 |
+| npm run test             | Baseline Pass (547/547)。最終競合修正で追加した6件は環境制限により未再実行                    | 2026-07-27 |
+| npm run test:coverage    | Baseline Pass (79.98% statements / 71.77% branches / 77.12% functions / 80.33% lines)         | 2026-07-27 |
 | npm run validate:content | Pass (Pilot 140 vocabulary / 31 lessons / 155 exercises / 25 practice sets + contract sample) | 2026-07-27 |
-| npm run build            | Pass (root/subpath、entry 210.34 kB、PWA precache 70件)                                       | 2026-07-27 |
-| npm run verify:dist      | Pass (root/subpath、manifest/SW/asset/source map、71 files)                                   | 2026-07-27 |
-| npm run test:e2e         | Pass (all desktop/320px 70/70; Phase 09 6/6)                                                  | 2026-07-27 |
-| npm run check            | Pass (lint、typecheck、unit、content validation、build)                                       | 2026-07-27 |
+| npm run build            | Baseline Pass (root/subpath、entry 209.96 kB、PWA precache 69件)                              | 2026-07-27 |
+| npm run verify:dist      | Baseline Pass (root/subpath、manifest/SW/asset/source map、70 files)                          | 2026-07-27 |
+| npm run test:e2e         | Baseline Pass (all desktop/320px 70/70、retry 0)。最終競合修正後は未再実行                    | 2026-07-27 |
+| npm run check            | Baseline Pass。最終競合修正後はlint／typecheck／format／静的経路監査がPass                    | 2026-07-27 |
 
 ## Known issues
 
@@ -60,10 +60,11 @@ Codexは各フェーズ完了時に更新する。
 - Web Speechの声質・発音・端末差は実機未確認。
 - MediaRecorderの録音・権限拒否とWeb Speechの音声品質・端末差は対応端末での実機確認が必要。非対応時のtext fallbackは自動テスト済み。
 - 実際のwaiting Service Worker差替え、`beforeinstallprompt`、Storage永続化、iOS standaloneは配信環境・対応実機で最終確認が必要。
-- `vite-plugin-pwa`内部の`inlineDynamicImports`非推奨警告が残るが、Service Worker生成と70件のprecache注入は成功している。
-- GitHub Actions／Pagesはremote未設定のため実workflowと公開URLで未確認。localでworkflow構文、root/subpath build、71ファイルのartifactを検証済み。
+- `vite-plugin-pwa`内部の`inlineDynamicImports`非推奨警告が残るが、Service Worker生成と69件のprecache注入は成功している。
+- GitHub Actions／Pagesはremote未設定のため実workflowと公開URLで未確認。localでworkflow構文、root/subpath build、70ファイルのartifactを検証済み。
 - 公開先とソフトウェアライセンスはリポジトリ所有者の最終判断待ち。実装を停止する要因ではない。
 - offline dependency auditは本番・全依存とも0件。build時依存`glob@11.1.0`は既知CVEの修正版だが非推奨警告が残り、最新registry auditは外部送信承認が得られず未実施。公開前に承認済み環境で`npm audit`と`npm audit --omit=dev`を再実行する。
+- 最終コードレビュー後に全user-data write gateとbackup snapshot barrier、回帰テスト6件を追加した。変更後のlint／typecheck／format／静的経路監査はPassしたが、Vitestはsandbox `spawn EPERM`、権限付き再実行は利用上限で拒否された。公開前に通常環境で`npm run check`、`npm run test:coverage`、`npm run test:e2e`を再実行する。
 
 ## Phase notes
 
@@ -77,3 +78,4 @@ Codexは各フェーズ完了時に更新する。
 - 2026-07-27 Phase 07: prompt更新型PWA、manifest・自作icon・offline fallback・用途別cache、共通offline/install/iOS/update UI、失敗済み書込み・controller切替時の再確認・全置換/全削除の排他バリアを含む更新安全制御を実装。厳密backup v1.0.0、録音opt-in、preview、原子的merge/replace、安全backup、分離削除をデータ管理へ接続した。484 unit/component tests、全E2E desktop/320px 54/54、root/subpath production buildが成功した。
 - 2026-07-27 Phase 08: 7日・30日記録、6技能傾向、弱点、Stage進行、7設定の即時保存・反映、route focus、単一main・h1、live region、Dialog復帰、44px操作領域、320px・文字200%相当reflowを実装。518 unit/component tests、全E2E desktop/320px 64/64、主要route axe serious／critical 0件、`npm run check`が成功した。
 - 2026-07-27 Phase 09: clean install、CI、失敗時Playwright artifact、CI成功commit限定のGitHub Pages OIDC deploy、repository base path、production artifact検証、同期例外rollback対応の共通IndexedDB seed helper、v1 migration／破損backup／DST／MediaRecorderテスト、第三者向け運用READMEを実装。531 unit/component tests、coverage lines 80.14%、全E2E desktop/320px 70/70、root/subpath build、71ファイルのartifact検証が成功した。
+- 2026-07-27 Phase 10: `AC-REL-001`〜`012`、全repository、教材、PWA、backup、mobile、accessibility、文書を監査。backup完全往復、timezone offset merge、全user-data write gate、backup snapshot barrier、英日混在lang、作文回答例、教材表現、E2E初期化待ちを補強し、app 0.2.0／content 0.7.0／DB 2を確定した。全品質ゲートは75 test files・547/547件、coverage lines 80.33%、全E2E 70/70、root/subpath 70ファイル、教材検証をPass。最終競合修正後はlint／typecheck／format／静的経路監査をPassし、動的再実行を環境制限として記録した。

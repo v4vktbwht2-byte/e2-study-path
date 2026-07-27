@@ -45,37 +45,39 @@ export function createDexieVocabularyStudyStore(db: AppDb): VocabularyStudyStore
     },
 
     async saveWordState(input) {
-      await db.transaction(
-        "rw",
-        [db.vocabularyUserStates, db.reviewStates],
-        async () => {
-          await db.vocabularyUserStates.put(input.userState);
-          if (input.reviewState !== undefined) {
-            await db.reviewStates.put(input.reviewState);
-          }
-        },
+      await db.runUserDataWrite(
+        `vocabulary-word-state:${input.userState.itemKey}`,
+        () =>
+          db.transaction("rw", [db.vocabularyUserStates, db.reviewStates], async () => {
+            await db.vocabularyUserStates.put(input.userState);
+            if (input.reviewState !== undefined) {
+              await db.reviewStates.put(input.reviewState);
+            }
+          }),
       );
     },
 
     async startSession(session) {
-      await db.transaction("rw", db.sessions, async () => {
-        const unfinished = (await db.sessions.toArray()).filter(
-          (candidate) =>
-            candidate.id !== session.id &&
-            candidate.endedAt === undefined &&
-            (candidate.type === "vocabulary" || candidate.type === "review"),
-        );
-        if (unfinished.length > 0) {
-          await db.sessions.bulkPut(
-            unfinished.map((candidate) => ({
-              ...candidate,
-              endedAt: session.startedAt,
-              interrupted: true,
-            })),
+      await db.runUserDataWrite(`vocabulary-session-start:${session.id}`, () =>
+        db.transaction("rw", db.sessions, async () => {
+          const unfinished = (await db.sessions.toArray()).filter(
+            (candidate) =>
+              candidate.id !== session.id &&
+              candidate.endedAt === undefined &&
+              (candidate.type === "vocabulary" || candidate.type === "review"),
           );
-        }
-        await db.sessions.put(session);
-      });
+          if (unfinished.length > 0) {
+            await db.sessions.bulkPut(
+              unfinished.map((candidate) => ({
+                ...candidate,
+                endedAt: session.startedAt,
+                interrupted: true,
+              })),
+            );
+          }
+          await db.sessions.put(session);
+        }),
+      );
     },
 
     commitAnswer(input) {
@@ -83,15 +85,17 @@ export function createDexieVocabularyStudyStore(db: AppDb): VocabularyStudyStore
     },
 
     async finishSession(sessionId, endedAt) {
-      return db.transaction("rw", db.sessions, async () => {
-        const session = await db.sessions.get(sessionId);
-        if (session === undefined) {
-          throw new Error(`学習セッション ${sessionId} が見つかりません。`);
-        }
-        const finished = { ...session, endedAt, interrupted: false };
-        await db.sessions.put(finished);
-        return finished;
-      });
+      return db.runUserDataWrite(`vocabulary-session-finish:${sessionId}`, () =>
+        db.transaction("rw", db.sessions, async () => {
+          const session = await db.sessions.get(sessionId);
+          if (session === undefined) {
+            throw new Error(`学習セッション ${sessionId} が見つかりません。`);
+          }
+          const finished = { ...session, endedAt, interrupted: false };
+          await db.sessions.put(finished);
+          return finished;
+        }),
+      );
     },
   };
 }

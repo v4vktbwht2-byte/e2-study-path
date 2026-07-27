@@ -8,7 +8,6 @@ import {
 } from "react";
 import { Link } from "react-router-dom";
 import type { AppSettings, ReviewIntensity, Theme } from "../../domain/models";
-import { trackPendingUpdateWrite } from "../../infrastructure/pwa";
 import { Button, Card, ErrorState, InlineAlert } from "../../shared/components";
 import { PwaInstallPanel } from "../pwa";
 import { applyAppearanceSettings } from "./appearance";
@@ -199,12 +198,8 @@ export function SettingsPage({ port }: SettingsPageProps) {
         .catch(() => undefined)
         .then(() => resolvedPort.save(nextPreferences));
       saveQueueRef.current = queuedSave;
-      const trackedSave = trackPendingUpdateWrite(
-        "settings-preferences",
-        () => queuedSave,
-      );
 
-      void trackedSave.then(
+      void queuedSave.then(
         () => {
           if (!mountedRef.current) {
             return;

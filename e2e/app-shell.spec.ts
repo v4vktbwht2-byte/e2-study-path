@@ -30,6 +30,7 @@ test.describe("app shell", () => {
 
   test("キーボードで下部ナビゲーションを操作できる", async ({ page }) => {
     await page.goto("/#/vocabulary");
+    await expect(page.getByRole("heading", { level: 1, name: "単語" })).toBeFocused();
 
     const courseLink = page
       .getByRole("navigation", { name: "メインメニュー" })

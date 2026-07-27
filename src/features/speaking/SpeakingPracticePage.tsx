@@ -666,6 +666,7 @@ export function SpeakingPracticePage({
             ))}
           </div>
           <h3>答えを組み立てるヒント</h3>
+          <p>回答は一つではありません。次は自分の考えを整理するための一例です。</p>
           <ul>
             {selected.payload.sampleStructureJa.map((hint) => (
               <li key={hint}>{hint}</li>
@@ -725,6 +726,7 @@ function ResponseField({
     <label className={styles.responseField}>
       <span>{label}</span>
       <textarea
+        lang="en"
         rows={5}
         value={value}
         onChange={(event) => onChange(event.currentTarget.value)}

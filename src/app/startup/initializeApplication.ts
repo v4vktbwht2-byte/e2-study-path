@@ -29,7 +29,7 @@ export async function initializeApplication(
   db: AppDb = getAppDb(),
 ): Promise<StartupSnapshot> {
   try {
-    await db.open();
+    await db.runUserDataWrite("startup:database-open", () => db.open());
   } catch (error) {
     throw new StartupError(
       "DB_OPEN_FAILED",

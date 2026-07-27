@@ -33,7 +33,9 @@ export class DexieReviewStateRepository implements ReviewStateRepository {
   }
 
   async save(state: ReviewState) {
-    await this.db.reviewStates.put(state);
+    await this.db.runUserDataWrite(`review-state:${state.itemKey}`, () =>
+      this.db.reviewStates.put(state).then(() => undefined),
+    );
   }
 }
 
@@ -45,7 +47,9 @@ export class DexieMasteryRepository implements MasteryRepository {
   }
 
   async save(profile: MasteryProfile) {
-    await this.db.mastery.put(profile);
+    await this.db.runUserDataWrite(`mastery:${profile.itemKey}`, () =>
+      this.db.mastery.put(profile).then(() => undefined),
+    );
   }
 }
 
@@ -57,7 +61,9 @@ export class DexieVocabularyUserStateRepository implements VocabularyUserStateRe
   }
 
   async save(state: VocabularyUserState) {
-    await this.db.vocabularyUserStates.put(state);
+    await this.db.runUserDataWrite(`vocabulary-user-state:${state.itemKey}`, () =>
+      this.db.vocabularyUserStates.put(state).then(() => undefined),
+    );
   }
 }
 
@@ -69,7 +75,9 @@ export class DexieLessonProgressRepository implements LessonProgressRepository {
   }
 
   async save(progress: LessonProgress) {
-    await this.db.lessonProgress.put(progress);
+    await this.db.runUserDataWrite(`lesson-progress:${progress.lessonId}`, () =>
+      this.db.lessonProgress.put(progress).then(() => undefined),
+    );
   }
 }
 
@@ -81,7 +89,9 @@ export class DexieStudySessionRepository implements StudySessionRepository {
   }
 
   async save(session: StudySession) {
-    await this.db.sessions.put(session);
+    await this.db.runUserDataWrite(`study-session:${session.id}`, () =>
+      this.db.sessions.put(session).then(() => undefined),
+    );
   }
 }
 
@@ -93,7 +103,9 @@ export class DexieDailyPlanRepository implements DailyPlanRepository {
   }
 
   async save(plan: DailyPlan) {
-    await this.db.dailyPlans.put(plan);
+    await this.db.runUserDataWrite(`daily-plan:${plan.date}`, () =>
+      this.db.dailyPlans.put(plan).then(() => undefined),
+    );
   }
 }
 
@@ -105,7 +117,9 @@ export class DexieWritingSubmissionRepository implements WritingSubmissionReposi
   }
 
   async save(submission: WritingSubmission) {
-    await this.db.writingSubmissions.put(submission);
+    await this.db.runUserDataWrite(`writing-submission:${submission.id}`, () =>
+      this.db.writingSubmissions.put(submission).then(() => undefined),
+    );
   }
 
   listByPrompt(promptId: string) {

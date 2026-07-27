@@ -17,6 +17,7 @@ export interface SummaryPromptPayload {
   sourceText: string;
   keyPoints: readonly string[];
   focusJa: string;
+  sampleAnswer: string;
   targetWordMin: 45;
   targetWordMax: 55;
 }
@@ -26,6 +27,8 @@ export interface OpinionPromptPayload {
   topic: string;
   topicJa: string;
   points: readonly string[];
+  reasonExamples: readonly string[];
+  sampleAnswer: string;
   targetWordMin: 80;
   targetWordMax: 100;
 }

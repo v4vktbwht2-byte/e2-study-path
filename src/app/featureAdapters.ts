@@ -318,16 +318,22 @@ export function createPhase03FeatureAdapters(
         return progressRepository.save(progress);
       },
       recordAttempt(input) {
-        return recordLessonAttempt(db, input);
+        return db.runUserDataWrite(`lesson-attempt:${input.attempt.id}`, () =>
+          recordLessonAttempt(db, input),
+        );
       },
       saveReviewCheckpoint(input) {
-        return saveLessonReviewCheckpoint(db, input);
+        return db.runUserDataWrite(`lesson-review-checkpoint:${input.lessonId}`, () =>
+          saveLessonReviewCheckpoint(db, input),
+        );
       },
-      async commitTerminal(input) {
-        const settings = (await db.settings.get("settings")) ?? DEFAULT_SETTINGS;
-        return commitLessonTerminal(db, input, {
-          timeZone,
-          hour: settings.studyDayStartHour,
+      commitTerminal(input) {
+        return db.runUserDataWrite(`lesson-terminal:${input.lesson.id}`, async () => {
+          const settings = (await db.settings.get("settings")) ?? DEFAULT_SETTINGS;
+          return commitLessonTerminal(db, input, {
+            timeZone,
+            hour: settings.studyDayStartHour,
+          });
         });
       },
     },

@@ -55,7 +55,22 @@ async function evaluateWithExistingDatabase<T>(
           };
         });
 
-      const database = await openExistingDatabase();
+      const initializationDeadline = Date.now() + 5_000;
+      let database: IDBDatabase;
+      while (true) {
+        try {
+          database = await openExistingDatabase();
+          break;
+        } catch (error) {
+          const initializationPending =
+            error instanceof Error &&
+            error.message.includes("初期化される前にテストデータ操作");
+          if (!initializationPending || Date.now() >= initializationDeadline) {
+            throw error;
+          }
+          await new Promise((resolve) => globalThis.setTimeout(resolve, 25));
+        }
+      }
       try {
         if (operationName === "seed") {
           const seeds = operationPayload.seeds as Array<{

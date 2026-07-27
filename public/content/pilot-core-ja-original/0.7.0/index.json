@@ -1,7 +1,7 @@
 {
   "schemaVersion": "1.0.0",
   "packId": "pilot-core-ja-original",
-  "contentVersion": "0.6.0",
+  "contentVersion": "0.7.0",
   "locale": "ja-JP",
   "delivery": "bundled-starter",
   "title": "E2 Study Path オリジナル Pilot教材",

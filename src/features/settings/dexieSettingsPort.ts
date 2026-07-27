@@ -56,17 +56,19 @@ export function createDexieSettingsPort(
     },
 
     async save(preferences: SettingsPreferences): Promise<void> {
-      await db.transaction("rw", [db.profiles, db.settings], async () => {
-        const profile = await db.profiles.get("local-user");
-        if (profile !== undefined) {
-          await db.profiles.put({
-            ...profile,
-            dailyMinutes: preferences.dailyMinutes,
-            updatedAt: now(),
-          });
-        }
-        await db.settings.put(preferences.appSettings);
-      });
+      await db.runUserDataWrite("settings:save", () =>
+        db.transaction("rw", [db.profiles, db.settings], async () => {
+          const profile = await db.profiles.get("local-user");
+          if (profile !== undefined) {
+            await db.profiles.put({
+              ...profile,
+              dailyMinutes: preferences.dailyMinutes,
+              updatedAt: now(),
+            });
+          }
+          await db.settings.put(preferences.appSettings);
+        }),
+      );
     },
   };
 }

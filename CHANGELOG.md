@@ -2,6 +2,18 @@
 
 ## Unreleased
 
+- 予定されている変更はありません。
+
+## 0.2.0 - 2026-07-27
+
+- Phase 10「最終監査・Pilot Release」を完了。
+  - `AC-REL-001`〜`AC-REL-012`を再確認し、教材件数・Stage分布・人間向けspot check・手動確認matrixを`docs/22_PILOT_RELEASE_AUDIT.md`へ記録。
+  - backupの全主要store往復、timezone offsetを含むtimestamp merge、複数タブの削除・置換と旧autosaveの競合を修正・回帰テスト。
+  - 全ユーザーデータ保存をorigin-wide shared lockへ集約し、世代を進めないbackup snapshot barrierと回帰テスト6件を追加。
+  - 英日混在教材の言語指定、作文の回答例と語数validation、読解・語彙・collocationの表現を校正。
+  - 到達不能な準備画面を削除し、app `0.2.0`、Pilot content `0.7.0`、DB schema `2`へversionを確定。
+  - 最終レビューはBlocker 0／P1 0／P2 0。実機・実配信・最新registry auditは公開前の外部確認として記録。
+- Phase 10検証としてclean install、75 test files・547/547件、coverage lines 80.33%、全E2E desktop/320px 70/70、Pilot教材140語・31レッスン・155演習・25技能セット、root/subpath build、70ファイルのartifact検証が成功。最終競合修正後はlint／typecheck／format／静的経路監査をPassし、追加6回帰テストを含む動的ゲート再実行は環境制限のため公開前確認へ記録。
 - Phase 09「全テスト・CI・静的デプロイ」を完了。
   - clean install、lint、型検査、unit/component、coverage、教材、build、artifact、E2Eを実行するGitHub Actions CIと、失敗時Playwright artifactを追加。
   - repository base pathを自動設定し、secret不要のOIDCでPages artifactを公開するGitHub Pages workflowを追加。
@@ -9,7 +21,7 @@
   - manifest、Service Worker、icon、starter教材、全asset参照、source map方針を検証するproduction artifact validatorを追加。
   - Windows、macOS／Linux、WSL、テスト、教材、PWA、backup、deploy、更新・rollback、troubleshootingをREADMEへ追加。
 - Phase 09検証としてclean install、73 test files・531/531件、coverage lines 80.14%、全E2E desktop/320px 70/70（Phase 09固有6/6）、root/subpath build、71ファイルのartifact検証が成功。
-- 次のPhaseをPhase 10「最終監査・Pilot Release」へ更新。
+- 次の開発batchをPhase 11「教材拡張・公開前実機確認」へ更新。
 - Phase 08「記録・設定・UX状態・アクセシビリティ」を完了。
   - 7日・30日の学習記録、6技能傾向、弱点候補、Stage進行を端末内の実データから集計する記録画面を追加。
   - 学習時間、新規上限、復習強度、読み上げ速度、テーマ、文字倍率、動き軽減の即時保存・即時反映を追加。

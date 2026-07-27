@@ -7,6 +7,7 @@ import { pilotWritingPracticeSets } from "../../content/pilot/practiceWriting";
 import {
   listeningPayloadSchema,
   mockPayloadSchema,
+  opinionPromptPayloadSchema,
   speakingPayloadSchema,
   summaryPromptPayloadSchema,
 } from "./practiceSchemas";
@@ -65,6 +66,23 @@ describe("技能教材の共通検証", () => {
       summaryPromptPayloadSchema.safeParse({
         ...source,
         targetWordMin: 44,
+      }).success,
+    ).toBe(false);
+
+    expect(
+      summaryPromptPayloadSchema.safeParse({
+        ...source,
+        sampleAnswer: Array.from({ length: 44 }, () => "word").join(" "),
+      }).success,
+    ).toBe(false);
+
+    const opinionSource = opinionPromptPayloadSchema.parse(
+      pilotWritingPracticeSets.find((set) => set.type === "opinion")!.payload,
+    );
+    expect(
+      opinionPromptPayloadSchema.safeParse({
+        ...opinionSource,
+        sampleAnswer: Array.from({ length: 101 }, () => "word").join(" "),
       }).success,
     ).toBe(false);
   });

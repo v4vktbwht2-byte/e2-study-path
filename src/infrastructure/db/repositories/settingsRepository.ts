@@ -27,7 +27,9 @@ export class DexieProfileRepository implements ProfileRepository {
   }
 
   async save(profile: UserProfile) {
-    await this.db.profiles.put(profile);
+    await this.db.runUserDataWrite(`profile:${profile.id}`, () =>
+      this.db.profiles.put(profile).then(() => undefined),
+    );
   }
 }
 
@@ -39,7 +41,9 @@ export class DexieSettingsRepository implements SettingsRepository {
   }
 
   async save(settings: AppSettings) {
-    await this.db.settings.put(settings);
+    await this.db.runUserDataWrite(`settings:${settings.id}`, () =>
+      this.db.settings.put(settings).then(() => undefined),
+    );
   }
 
   async getOrCreate() {

@@ -16,6 +16,8 @@
   "include": [
     "scripts/**/*.ts",
     "src/content/pilot/*.ts",
+    "src/domain/writing/types.ts",
+    "src/domain/writing/wordCount.ts",
     "src/infrastructure/content/practiceSchemas.ts",
     "src/infrastructure/content/schemas.ts",
     "src/infrastructure/content/validatePack.ts"

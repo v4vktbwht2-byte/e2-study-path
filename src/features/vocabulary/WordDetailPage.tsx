@@ -7,7 +7,6 @@ import {
 } from "../../domain/review";
 import type { MasteryProfile, VocabularyUserState } from "../../domain/models";
 import type { VocabularyItem } from "../../infrastructure/content/schemas";
-import { trackPendingUpdateWrite } from "../../infrastructure/pwa";
 import {
   Button,
   Card,
@@ -177,9 +176,7 @@ export function WordDetailPage({
       updatedAt: clock.now().toISOString(),
     };
     try {
-      await trackPendingUpdateWrite(`vocabulary-word:${wordId}`, () =>
-        store.saveWordState({ userState: nextUserState }),
-      );
+      await store.saveWordState({ userState: nextUserState });
       updateReadyRecord(nextUserState);
       setMessage("お気に入りとメモを保存しました。");
     } catch (error: unknown) {
@@ -210,12 +207,10 @@ export function WordDetailPage({
       updatedAt: now.toISOString(),
     };
     try {
-      await trackPendingUpdateWrite(`vocabulary-word:${wordId}`, () =>
-        store.saveWordState({
-          userState: nextUserState,
-          reviewState: nextReview,
-        }),
-      );
+      await store.saveWordState({
+        userState: nextUserState,
+        reviewState: nextReview,
+      });
       updateReadyRecord(nextUserState, nextReview);
       setMessage(
         willSuspend
@@ -244,12 +239,10 @@ export function WordDetailPage({
       updatedAt: now.toISOString(),
     };
     try {
-      await trackPendingUpdateWrite(`vocabulary-word:${wordId}`, () =>
-        store.saveWordState({
-          userState: nextUserState,
-          reviewState: nextReview,
-        }),
-      );
+      await store.saveWordState({
+        userState: nextUserState,
+        reviewState: nextReview,
+      });
       updateReadyRecord(nextUserState, nextReview);
       setConfirmReset(false);
       setMessage("復習状態を未学習へ戻しました。回答履歴は残っています。");
@@ -311,13 +304,27 @@ export function WordDetailPage({
         <h2>関連表現</h2>
         <p>
           コロケーション:{" "}
-          {item.collocations.length > 0 ? item.collocations.join("、") : "登録なし"}
+          {item.collocations.length > 0 ? (
+            <span lang="en">{item.collocations.join(", ")}</span>
+          ) : (
+            "登録なし"
+          )}
         </p>
         <p>
-          類義語: {item.synonyms.length > 0 ? item.synonyms.join("、") : "登録なし"}
+          類義語:{" "}
+          {item.synonyms.length > 0 ? (
+            <span lang="en">{item.synonyms.join(", ")}</span>
+          ) : (
+            "登録なし"
+          )}
         </p>
         <p>
-          反意語: {item.antonyms.length > 0 ? item.antonyms.join("、") : "登録なし"}
+          反意語:{" "}
+          {item.antonyms.length > 0 ? (
+            <span lang="en">{item.antonyms.join(", ")}</span>
+          ) : (
+            "登録なし"
+          )}
         </p>
         <h3>混同しやすい語</h3>
         {data.confusionItems.length > 0 ? (

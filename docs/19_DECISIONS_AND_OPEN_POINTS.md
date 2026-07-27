@@ -25,6 +25,8 @@
 | D-019 | backup mergeは非削除・新しいrecord優先                     | 現在データを残しつつ進捗を後退させない。settingsは取込側、内容が異なるAttempt・録音の同一IDは拒否し、DailyPlan完了と提出済み作文を保持する              |
 | D-020 | app cache、音声cache、録音、全利用者データを別操作にする   | cache recoveryでIndexedDBを消さず、利用者が削除対象を誤認しないようにする                                                                               |
 | D-021 | Service Worker更新前に画面外の保留書込みも中央で待機する   | 作文のunmount保存や復元処理はroute participant解除後も続き得るため、Promiseをcomponent外で追跡し、失敗時は更新をfail-closedにする                       |
+| D-022 | Pilot Releaseをapp 0.2.0／content 0.7.0／DB 2とする        | Phase 00〜10の実装完了をapp versionで示し、教材校正・作文回答例・言語指定の変更をcontent versionで再seed対象にし、既存DB migrationとの境界を明示する    |
+| D-023 | 破壊操作と通常保存をorigin単位の世代・排他lockで調停する   | 複数タブの旧autosaveが全削除・置換復元後にデータを復活させないよう、shared／exclusive lock取得後に世代を検証し、調停API非対応時は破壊操作をfail-closedにする |
 
 ## Open points for repository owner after Pilot
 

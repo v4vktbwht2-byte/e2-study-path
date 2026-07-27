@@ -16,20 +16,16 @@ import type {
 } from "../../features/data";
 import { DexieBackupService } from "../../infrastructure/backup";
 import type { AppDb } from "../../infrastructure/db/appDb";
-import {
-  DEFAULT_SETTINGS,
-  DexieSettingsRepository,
-} from "../../infrastructure/db/repositories";
+import { DEFAULT_SETTINGS } from "../../infrastructure/db/repositories";
 import {
   clearOptionalAudioCache,
   inspectApplicationCaches,
   inspectStorage,
   recoverApplicationCaches,
   requestPersistentStorage,
-  runExclusivePendingUpdateWrite,
-  trackPendingUpdateWrite,
   type CacheRecoveryResult,
   type CacheStorageSummary as PwaCacheStorageSummary,
+  type PendingUpdateWriteCoordinator,
   type StorageSnapshot,
 } from "../../infrastructure/pwa";
 import { APP_VERSION } from "../../shared/appMetadata";
@@ -63,6 +59,12 @@ export interface DataManagementAdapterDependencies {
   readonly reloadPage: () => void;
   readonly now: () => Date;
   readonly appVersion: string;
+  readonly pendingWriteCoordinator: Pick<
+    PendingUpdateWriteCoordinator,
+    | "runExclusivePendingUpdateWrite"
+    | "runPendingUpdateSnapshotBarrier"
+    | "trackPendingUpdateWrite"
+  >;
 }
 
 function totalImportedRecords(result: DomainBackupRestoreResult): number {
@@ -169,11 +171,16 @@ export class DataManagementAdapter implements DataManagementPort {
     recordingCount: number;
     sizeBytes: number;
   }> {
-    const artifact = await this.dependencies.backupService.exportBackup({
-      appVersion: this.dependencies.appVersion,
-      now: this.dependencies.now(),
-      includeSpeakingRecordings: options.includeRecordings,
-    });
+    const artifact =
+      await this.dependencies.pendingWriteCoordinator.runPendingUpdateSnapshotBarrier(
+        "data-management:export-backup",
+        () =>
+          this.dependencies.backupService.exportBackup({
+            appVersion: this.dependencies.appVersion,
+            now: this.dependencies.now(),
+            includeSpeakingRecordings: options.includeRecordings,
+          }),
+      );
     await this.dependencies.downloadBackup(artifact);
     return {
       fileName: artifact.fileName,
@@ -194,7 +201,7 @@ export class DataManagementAdapter implements DataManagementPort {
   }
 
   async restoreBackup(input: RestoreBackupInput): Promise<RestoreBackupResult> {
-    return runExclusivePendingUpdateWrite(
+    return this.dependencies.pendingWriteCoordinator.runExclusivePendingUpdateWrite(
       "data-management:restore-backup",
       () => this.restoreBackupUntracked(input),
       { discardPriorFailures: input.mode === "replace" },
@@ -238,8 +245,9 @@ export class DataManagementAdapter implements DataManagementPort {
   }
 
   deleteRecordings(): Promise<DataOperationResult> {
-    return trackPendingUpdateWrite("data-management:delete-recordings", () =>
-      this.deleteRecordingsUntracked(),
+    return this.dependencies.pendingWriteCoordinator.trackPendingUpdateWrite(
+      "data-management:delete-recordings",
+      () => this.deleteRecordingsUntracked(),
     );
   }
 
@@ -254,8 +262,9 @@ export class DataManagementAdapter implements DataManagementPort {
   }
 
   clearAudioCache(): Promise<DataOperationResult> {
-    return trackPendingUpdateWrite("data-management:clear-audio-cache", () =>
-      this.clearAudioCacheUntracked(),
+    return this.dependencies.pendingWriteCoordinator.trackPendingUpdateWrite(
+      "data-management:clear-audio-cache",
+      () => this.clearAudioCacheUntracked(),
     );
   }
 
@@ -269,8 +278,9 @@ export class DataManagementAdapter implements DataManagementPort {
   }
 
   rebuildAppCache(): Promise<DataOperationResult> {
-    return trackPendingUpdateWrite("data-management:rebuild-app-cache", () =>
-      this.rebuildAppCacheUntracked(),
+    return this.dependencies.pendingWriteCoordinator.trackPendingUpdateWrite(
+      "data-management:rebuild-app-cache",
+      () => this.rebuildAppCacheUntracked(),
     );
   }
 
@@ -285,7 +295,7 @@ export class DataManagementAdapter implements DataManagementPort {
   }
 
   async deleteAllUserData(): Promise<DataOperationResult> {
-    return runExclusivePendingUpdateWrite(
+    return this.dependencies.pendingWriteCoordinator.runExclusivePendingUpdateWrite(
       "data-management:delete-all-user-data",
       () => this.deleteAllUserDataUntracked(),
       { discardPriorFailures: true },
@@ -338,7 +348,6 @@ export function createDataManagementPort(
   overrides: Partial<DataManagementAdapterDependencies> = {},
 ): DataManagementPort {
   const backupService = new DexieBackupService(db);
-  const settingsRepository = new DexieSettingsRepository(db);
   return new DataManagementAdapter({
     backupService,
     inspectStorage,
@@ -348,7 +357,10 @@ export function createDataManagementPort(
     recoverCaches: recoverApplicationCaches,
     loadRecordingSummary: createRecordingSummaryLoader(db),
     ensureDefaultSettings: async () => {
-      await settingsRepository.getOrCreate();
+      const existingSettings = await db.settings.get(DEFAULT_SETTINGS.id);
+      if (existingSettings === undefined) {
+        await db.settings.put(DEFAULT_SETTINGS);
+      }
       // 明示的に既定値が再生成されたことを保証する。
       const settings = await db.settings.get(DEFAULT_SETTINGS.id);
       if (settings === undefined) {
@@ -359,6 +371,7 @@ export function createDataManagementPort(
     reloadPage: () => window.location.reload(),
     now: () => new Date(),
     appVersion: DATA_MANAGEMENT_APP_VERSION,
+    pendingWriteCoordinator: db.pendingWriteCoordinator,
     ...overrides,
   });
 }
