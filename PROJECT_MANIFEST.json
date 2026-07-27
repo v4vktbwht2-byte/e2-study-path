@@ -1,10 +1,10 @@
 {
   "package": "E2 Study Path Codex Handoff Full Set",
   "packageVersion": "1.0.0",
-  "generatedAt": "2026-07-27T14:19:50+00:00",
+  "generatedAt": "2026-07-27T14:54:10+00:00",
   "manifestPolicy": "The manifest tracks repository source files and excludes PROJECT_MANIFEST.json, Git metadata, dependencies, and generated artifacts.",
   "fileCountExcludingManifest": 456,
-  "totalSizeBytesExcludingManifest": 2690242,
+  "totalSizeBytesExcludingManifest": 2693107,
   "files": [
     {
       "path": ".github/workflows/ci.yml",
@@ -13,8 +13,8 @@
     },
     {
       "path": ".github/workflows/deploy-pages.yml",
-      "sizeBytes": 2622,
-      "sha256": "b7871a3cb9296b8d62f2bcc16b3228be4d19fb22b94c22d705c0a9cb3a8f8da2"
+      "sizeBytes": 2723,
+      "sha256": "b36313d50d2898249a4de5112c4b8937639bad77a2f1f8d29172a67db8d10fdc"
     },
     {
       "path": ".gitignore",
@@ -33,8 +33,8 @@
     },
     {
       "path": "CHANGELOG.md",
-      "sizeBytes": 8779,
-      "sha256": "198f1e833c12ed09c450c550e5d2b26f0b6fff96f1cc4184f0585627890386a8"
+      "sizeBytes": 9010,
+      "sha256": "68effccae45eb2801628225ca0404bdfa0122bb10e94689acab7025d82fd3803"
     },
     {
       "path": "checklists/CODE_REVIEW.md",
@@ -53,8 +53,8 @@
     },
     {
       "path": "checklists/FINAL_RELEASE_CHECKLIST.md",
-      "sizeBytes": 2593,
-      "sha256": "39464b20a68db6d3524863e25d72c27ea914e7bf2ee93171f689992b969ebab8"
+      "sizeBytes": 2681,
+      "sha256": "a316062fcaec6b1bca7ee45e426dfb3314346940cd9de1ad0109dcdcef19f4d7"
     },
     {
       "path": "checklists/PHASE_GATE.md",
@@ -243,28 +243,28 @@
     },
     {
       "path": "docs/16_DEPLOYMENT_OPERATIONS.md",
-      "sizeBytes": 2438,
-      "sha256": "f84ec02e3e3bdec275e6edf8e34cf1a5c5ff04c0d503d45f9af5f8f56c4846e6"
+      "sizeBytes": 2535,
+      "sha256": "4ee594c615b354ee3b709fdc0c2d91d0579e82156120a9950659962bc4c3b396"
     },
     {
       "path": "docs/17_ACCEPTANCE_CRITERIA_TRACEABILITY.md",
-      "sizeBytes": 11847,
-      "sha256": "8752ecd2b710e1b7a977504e264b6cce4c7ac16128179a3154b71dfe0f580cb8"
+      "sizeBytes": 12025,
+      "sha256": "8dc465b10f0d924632125462641195ec75436702eca197a8d341997204e9a7ec"
     },
     {
       "path": "docs/18_RISK_REGISTER.md",
-      "sizeBytes": 5480,
-      "sha256": "370b8c86d977a614740edb78c81b28b670e7e58ac7d2125293d3261c3366e3bb"
+      "sizeBytes": 5515,
+      "sha256": "04de317f212ecca274b21b3083ef3cd482a415da52baae96a95557704f9ea9d5"
     },
     {
       "path": "docs/19_DECISIONS_AND_OPEN_POINTS.md",
-      "sizeBytes": 7604,
-      "sha256": "3c35a0b141d182f305901a8d878124e4102dd8c7fc03632486acc3ac90ca8e71"
+      "sizeBytes": 7658,
+      "sha256": "266a6574773632372f68f936b97dc7e6ec80a0b0b724d67c57f250d82da776e5"
     },
     {
       "path": "docs/20_IMPLEMENTATION_STATUS.md",
-      "sizeBytes": 11664,
-      "sha256": "71d623d2184bee05fe2a6408d9859cb65288eb8053b304d9f1d18170e3c54f38"
+      "sizeBytes": 11746,
+      "sha256": "4a6603554f3e6dad271c0279177477971b53abde994073fd544d2c5e3a924537"
     },
     {
       "path": "docs/21_SOURCE_NOTES.md",
@@ -273,13 +273,13 @@
     },
     {
       "path": "docs/22_PILOT_RELEASE_AUDIT.md",
-      "sizeBytes": 14547,
-      "sha256": "c53273e9d6b118ec5436bfa363e84d789ab6ffa5e2a3b4d10585c0eac2b29a9e"
+      "sizeBytes": 14685,
+      "sha256": "e8a36c37052b074ad9a1d1b5c15f1b685fabf31c17de6cca67ed53b9e89a6a83"
     },
     {
       "path": "docs/backlog.md",
-      "sizeBytes": 6243,
-      "sha256": "0d4018dd638ed4e2449231230f4f72d3789b73d356bc1694be336708f81a8932"
+      "sizeBytes": 6579,
+      "sha256": "596a6ba3875fea4f162584951cb1ba90df76d0f5442135575c2bf71515e93cf3"
     },
     {
       "path": "e2e/app-shell.spec.ts",
@@ -388,8 +388,8 @@
     },
     {
       "path": "PLANS.md",
-      "sizeBytes": 58221,
-      "sha256": "c1e42f99a1d11f80ff721d12b2b9759bd8f6eebf670320eb57d476fd752c6812"
+      "sizeBytes": 58953,
+      "sha256": "47f123f0519823181ce0684aa5e8d8725615ef6b77f30d8731960846d40b7b68"
     },
     {
       "path": "playwright.config.ts",
@@ -503,8 +503,8 @@
     },
     {
       "path": "README.md",
-      "sizeBytes": 34102,
-      "sha256": "194eab7e43ba2adfff338a97950726c8360ae20508a401e6948885a9707abb53"
+      "sizeBytes": 34601,
+      "sha256": "1e6bf116b0f690dacfa937205055f5d95643b8783cb39e884432cafa0b4c8581"
     },
     {
       "path": "scripts/generate_manifest.py",
@@ -1228,8 +1228,8 @@
     },
     {
       "path": "src/features/diagnostic/diagnostic.test.tsx",
-      "sizeBytes": 10332,
-      "sha256": "741d0f9babbba5ff2276a46bb2001289a13955504b4cdd658857f3bcaa3ae079"
+      "sizeBytes": 10626,
+      "sha256": "39ca340dbe734ea9af22875730e5ccd373d17fc60e14565163eb80beb49c8aa9"
     },
     {
       "path": "src/features/diagnostic/DiagnosticPage.module.css",
