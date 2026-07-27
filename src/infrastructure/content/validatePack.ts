@@ -1,5 +1,13 @@
 import type { z } from "zod";
 import {
+  listeningPayloadSchema,
+  mockPayloadSchema,
+  opinionPromptPayloadSchema,
+  readingPracticeSetSchema,
+  speakingPayloadSchema,
+  summaryPromptPayloadSchema,
+} from "./practiceSchemas";
+import {
   contentPackEnvelopeSchema,
   exerciseSchema,
   lessonSchema,
@@ -29,6 +37,15 @@ export interface ContentValidationResult {
 }
 
 const rawHtmlPattern = /<\/?[a-z][^>]*>|on[a-z]+\s*=/i;
+
+const REQUIRED_PILOT_PRACTICE_COUNTS = {
+  reading: 6,
+  listening: 6,
+  summary: 4,
+  opinion: 4,
+  speaking: 4,
+  mock: 1,
+} as const satisfies Readonly<Record<PracticeSet["type"], number>>;
 
 function issueMessage(error: z.ZodError) {
   return error.issues
@@ -223,6 +240,110 @@ function validateReferences(
   }
 }
 
+function findRawHtmlInPayload(value: unknown, path: string): string | undefined {
+  if (typeof value === "string") {
+    return rawHtmlPattern.test(value) ? path : undefined;
+  }
+  if (Array.isArray(value)) {
+    for (const [index, item] of value.entries()) {
+      const found = findRawHtmlInPayload(item, `${path}.${index}`);
+      if (found !== undefined) {
+        return found;
+      }
+    }
+    return undefined;
+  }
+  if (value !== null && typeof value === "object") {
+    for (const [key, item] of Object.entries(value)) {
+      const found = findRawHtmlInPayload(item, `${path}.${key}`);
+      if (found !== undefined) {
+        return found;
+      }
+    }
+  }
+  return undefined;
+}
+
+function validatePracticePayloads(
+  practiceSets: readonly PracticeSet[],
+  vocabulary: readonly VocabularyItem[],
+  issues: ContentValidationIssue[],
+) {
+  const vocabularyIds = new Set(vocabulary.map((item) => item.id));
+  for (const set of practiceSets) {
+    if (set.type === "reading") {
+      const readingResult = readingPracticeSetSchema.safeParse(set);
+      if (!readingResult.success) {
+        issues.push({
+          scope: "practiceSet",
+          itemId: set.id,
+          message: `技能別payloadが不正です: ${issueMessage(readingResult.error)}`,
+        });
+        continue;
+      }
+      for (const item of readingResult.data.payload.keyVocabulary) {
+        if (!vocabularyIds.has(item.vocabularyItemId)) {
+          issues.push({
+            scope: "reference",
+            itemId: set.id,
+            message: `重要語句の単語 ${item.vocabularyItemId} が存在しません。`,
+          });
+        }
+      }
+    }
+
+    const result =
+      set.type === "reading"
+        ? undefined
+        : set.type === "listening"
+          ? listeningPayloadSchema.safeParse(set.payload)
+          : set.type === "summary"
+            ? summaryPromptPayloadSchema.safeParse(set.payload)
+            : set.type === "opinion"
+              ? opinionPromptPayloadSchema.safeParse(set.payload)
+              : set.type === "speaking"
+                ? speakingPayloadSchema.safeParse(set.payload)
+                : mockPayloadSchema.safeParse(set.payload);
+    if (result !== undefined && !result.success) {
+      issues.push({
+        scope: "practiceSet",
+        itemId: set.id,
+        message: `技能別payloadが不正です: ${issueMessage(result.error)}`,
+      });
+      continue;
+    }
+
+    const rawHtmlPath = findRawHtmlInPayload(set, "practiceSet");
+    if (rawHtmlPath !== undefined) {
+      issues.push({
+        scope: "practiceSet",
+        itemId: set.id,
+        message: `${rawHtmlPath}: raw HTMLは使用できません。`,
+      });
+    }
+  }
+}
+
+export function validatePilotPracticeCoverage(
+  practiceSets: readonly PracticeSet[],
+): readonly ContentValidationIssue[] {
+  const issues: ContentValidationIssue[] = [];
+  for (const [type, minimum] of Object.entries(REQUIRED_PILOT_PRACTICE_COUNTS) as [
+    PracticeSet["type"],
+    number,
+  ][]) {
+    const count = practiceSets.filter((set) => set.type === type).length;
+    if (count < minimum) {
+      issues.push({
+        scope: "practiceSet",
+        itemId: `coverage:${type}`,
+        message: `${type}教材は${minimum}セット以上必要です（現在${count}セット）。`,
+      });
+    }
+  }
+  return issues;
+}
+
 export function validateContentPack(input: unknown): ContentValidationResult {
   const envelope = contentPackEnvelopeSchema.safeParse(input);
   if (!envelope.success) {
@@ -287,6 +408,10 @@ export function validateContentPack(input: unknown): ContentValidationResult {
     issues,
   );
   validateReferences(validVocabulary, validLessons, validExercises, issues);
+  validatePracticePayloads(validPracticeSets, validVocabulary, issues);
+  if (envelope.data.id === "pilot-core-ja-original") {
+    issues.push(...validatePilotPracticeCoverage(validPracticeSets));
+  }
 
   const pack: ContentPack = {
     id: envelope.data.id,

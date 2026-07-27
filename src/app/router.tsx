@@ -68,6 +68,36 @@ function lazyFoundationRoute(routeId: FoundationRouteId) {
         const { ReviewRoute } = await import("./routes/VocabularyRoutes");
         return { Component: ReviewRoute };
       };
+    case "practice":
+      return async () => {
+        const { PracticeEntryRoute } = await import("./routes/PracticeEntryRoute");
+        return { Component: PracticeEntryRoute };
+      };
+    case "reading":
+      return async () => {
+        const { ReadingRoute } = await import("./routes/ReadingRoute");
+        return { Component: ReadingRoute };
+      };
+    case "listening":
+      return async () => {
+        const { ListeningRoute } = await import("./routes/ListeningRoute");
+        return { Component: ListeningRoute };
+      };
+    case "writing":
+      return async () => {
+        const { WritingRoute } = await import("./routes/WritingRoute");
+        return { Component: WritingRoute };
+      };
+    case "speaking":
+      return async () => {
+        const { SpeakingRoute } = await import("./routes/SpeakingRoute");
+        return { Component: SpeakingRoute };
+      };
+    case "mock":
+      return async () => {
+        const { MockRoute } = await import("./routes/MockRoute");
+        return { Component: MockRoute };
+      };
     default:
       return lazyPreparationRoute(routeId);
   }

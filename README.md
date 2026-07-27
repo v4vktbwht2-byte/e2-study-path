@@ -22,19 +22,19 @@
 
 ## 現在の実装状況
 
-Phase 00〜05が完了し、現在はPhase 06「読解・聞き取り・作文・会話・短縮模試」を実装中です。
+Phase 00〜06が完了し、次はPhase 07「PWA・オフライン・バックアップ・復元」です。
 
-Phase 05では、5/15/30/45分とcustom、light/standard/thorough/all、期限超過から技能練習までの優先編成、80件超の滞留救済を「今日の学習」へ統合しました。完了済みblockを維持する再計算、IANAタイムゾーンと開始時刻による学習日境界、単語セッション途中再開、完了レッスンの翌学習日復習にも対応しています。学習結果とDailyPlan進捗はIndexedDBへ原子的に保存され、別タブの古い再計算でも完了を巻き戻しません。復習レッスンはセクション位置と回答済み問題から再開できます。
+Phase 06では、読解6、聞き取り6、要約4、意見4、会話4、短縮模試1の計25セットを追加しました。読解の根拠・解説、聞き取りの本番風／復習モードと音声fallback、作文の語数・自動保存・rubric、会話の時間制御・録音／text fallback、短縮模試の中断警告・結果・弱点導線を実装しています。「今日の学習」から各技能へ移動でき、学習履歴とDailyPlan進捗はIndexedDBへ原子的に保存されます。教材はすべてオリジナルとして構造・参照・音声パス・非公式表記をruntimeとCIで検証します。
 
-最新のPhase 05検証は次のとおりです。
+最新のPhase 06検証は次のとおりです。
 
-- unit/componentテスト: 322/322件成功
-- Playwright E2E: 全フローdesktop/320pxで34/34成功（Phase 05固有8/8）
-- Pilot教材検証: 140語・31レッスン・155演習
+- unit/componentテスト: 55ファイル・407/407件成功
+- Playwright E2E: 全フローdesktop/320pxで46/46成功（Phase 06固有12/12）
+- Pilot教材検証: 140語・31レッスン・155演習・技能25セット
 - `npm run check`: 成功
-- production build: 成功（メイン初期chunk 616.87 kBの警告はPhase 07/09で再評価）
+- production build: 成功（メイン初期chunk 676.50 kBの警告はPhase 07/09で再評価）
 
-Web Speechの声質・発音、iPhone Safari／ホーム画面PWA、スクリーンリーダーは実機未確認です。画面・問題切替時のフォーカス管理はPhase 08で仕上げます。`npm install`が報告したhigh severity advisory 2件の`npm audit --json`は、依存メタデータの外部送信を伴う実行承認が得られず未実施で、Phase 09で承認条件を確認して再試行します。
+Web Speechの声質・発音、MediaRecorderの権限・録音・再生、iPhone Safari／ホーム画面PWA、スクリーンリーダーは実機未確認です。画面・問題切替時のフォーカス管理はPhase 08で仕上げます。`npm install`が報告したhigh severity advisory 2件の`npm audit --json`は、依存メタデータの外部送信を伴う実行承認が得られず未実施で、Phase 09で承認条件を確認して再試行します。
 
 ## ローカル起動
 

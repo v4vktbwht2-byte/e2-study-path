@@ -4,6 +4,11 @@ import type {
   Lesson,
 } from "../../infrastructure/content/schemas";
 import { ORIGINAL_CONTENT_SOURCE } from "./factories";
+import { pilotListeningPracticeSets } from "./practiceListening";
+import { mockPracticeSets } from "./practiceMock";
+import { pilotReadingPracticeSets } from "./practiceReading";
+import { speakingPracticeSets } from "./practiceSpeaking";
+import { pilotWritingPracticeSets } from "./practiceWriting";
 import { stage0Exercises, stage0Lessons } from "./stage0";
 import { stage1Exercises, stage1Lessons } from "./stage1";
 import { upperStageExercises, upperStageLessons } from "./upperStages";
@@ -28,7 +33,7 @@ export const pilotDiagnosticExercises: readonly Exercise[] = pilotExercises.filt
 export const pilotContentPack = {
   id: "pilot-core-ja-original",
   schemaVersion: "1.0.0",
-  contentVersion: "0.4.0",
+  contentVersion: "0.6.0",
   locale: "ja-JP",
   title: "E2 Study Path Pilot オリジナル教材",
   description:
@@ -38,7 +43,13 @@ export const pilotContentPack = {
   vocabulary: [...pilotVocabulary],
   lessons: [...pilotLessons],
   exercises: [...pilotExercises],
-  practiceSets: [],
+  practiceSets: [
+    ...pilotReadingPracticeSets,
+    ...pilotListeningPracticeSets,
+    ...pilotWritingPracticeSets,
+    ...speakingPracticeSets,
+    ...mockPracticeSets,
+  ],
 } satisfies ContentPack;
 
 export function getPilotLessonsByStage(stage: number): readonly Lesson[] {

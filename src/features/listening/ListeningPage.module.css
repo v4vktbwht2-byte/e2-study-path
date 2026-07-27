@@ -1,0 +1,265 @@
+.page {
+  display: grid;
+  gap: var(--space-6);
+  width: min(100%, 52rem);
+  margin-inline: auto;
+}
+
+.page h1,
+.page h2,
+.page p {
+  margin: 0;
+}
+
+.header,
+.sectionHeading {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: var(--space-4);
+}
+
+.header > div,
+.sectionHeading > div {
+  display: grid;
+  gap: var(--space-2);
+  min-width: 0;
+}
+
+.eyebrow,
+.stage {
+  color: var(--color-primary-strong);
+  font-size: var(--font-size-sm);
+  font-weight: 800;
+}
+
+.history {
+  color: var(--color-text-muted);
+}
+
+.setList,
+.script {
+  display: grid;
+  gap: var(--space-3);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.setCard,
+.modeCard,
+.practiceCard,
+.scriptCard,
+.dictationCard,
+.questionCard,
+.resultCard {
+  display: grid;
+  gap: var(--space-4);
+}
+
+.setCard {
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: center;
+}
+
+.setCard > div {
+  display: grid;
+  gap: var(--space-2);
+  min-width: 0;
+}
+
+.setCard small,
+.modeCard p,
+.practiceCard p,
+.dictationCard p {
+  color: var(--color-text-muted);
+}
+
+.modeGrid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--space-4);
+}
+
+.modeCard {
+  align-content: space-between;
+}
+
+.rateChoices,
+.questionCard fieldset {
+  min-width: 0;
+  margin: 0;
+  border: 0;
+  padding: 0;
+}
+
+.rateChoices {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+}
+
+.rateChoices legend,
+.questionCard legend {
+  width: 100%;
+  margin-bottom: var(--space-3);
+  padding: 0;
+  font-weight: 800;
+}
+
+.hiddenScript {
+  border-radius: var(--radius-sm);
+  padding: var(--space-3);
+  background: var(--color-surface-muted);
+}
+
+.script {
+  counter-reset: listening-sentence;
+}
+
+.script li {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: center;
+  gap: var(--space-3);
+  border-top: 1px solid var(--color-border);
+  padding-top: var(--space-3);
+  counter-increment: listening-sentence;
+}
+
+.script li:first-child {
+  border-top: 0;
+  padding-top: 0;
+}
+
+.script li > div {
+  display: grid;
+  grid-template-columns: minmax(5rem, auto) minmax(0, 1fr);
+  gap: var(--space-3);
+}
+
+.script strong::before {
+  content: counter(listening-sentence) ". ";
+  color: var(--color-primary-strong);
+}
+
+.dictationCard label {
+  display: grid;
+  gap: var(--space-2);
+  font-weight: 700;
+}
+
+.dictationCard textarea {
+  width: 100%;
+  min-height: 6rem;
+  resize: vertical;
+  border: 1px solid var(--color-border-strong);
+  border-radius: var(--radius-button);
+  padding: var(--space-3);
+  color: var(--color-text);
+  background: var(--color-surface);
+  line-height: var(--line-height-body);
+}
+
+.feedback {
+  border-radius: var(--radius-sm);
+  padding: var(--space-3);
+  color: var(--color-primary-strong);
+  background: var(--color-info-surface);
+}
+
+.choiceList {
+  display: grid;
+  gap: var(--space-2);
+}
+
+.choice {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  align-items: center;
+  gap: var(--space-3);
+  min-height: var(--tap-target-min);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-button);
+  padding: var(--space-3);
+  cursor: pointer;
+}
+
+.choice:has(input:checked) {
+  border-color: var(--color-primary);
+  background: var(--color-info-surface);
+}
+
+.choice input {
+  width: 1.25rem;
+  height: 1.25rem;
+}
+
+.actions {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  gap: var(--space-3);
+}
+
+.resultCard {
+  justify-items: center;
+  text-align: center;
+}
+
+.completeMark {
+  display: grid;
+  width: 3rem;
+  height: 3rem;
+  place-items: center;
+  border-radius: 999px;
+  color: var(--color-success);
+  background: var(--color-success-surface);
+  font-size: var(--font-size-xl);
+  font-weight: 800;
+}
+
+@media (max-width: 32rem) {
+  .header,
+  .sectionHeading,
+  .setCard,
+  .script li {
+    grid-template-columns: 1fr;
+  }
+
+  .header,
+  .sectionHeading {
+    display: grid;
+  }
+
+  .modeGrid {
+    grid-template-columns: 1fr;
+  }
+
+  .header button,
+  .sectionHeading button,
+  .setCard button,
+  .script li > button {
+    width: 100%;
+  }
+
+  .script li > div {
+    grid-template-columns: 1fr;
+    gap: var(--space-1);
+  }
+}
+
+@media (max-width: 20rem) {
+  .page {
+    gap: var(--space-4);
+  }
+
+  .actions {
+    display: grid;
+    grid-template-columns: 1fr;
+  }
+
+  .actions button {
+    width: 100%;
+  }
+}

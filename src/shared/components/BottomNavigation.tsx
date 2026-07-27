@@ -17,11 +17,13 @@ export interface BottomNavigationProps extends Omit<
 > {
   items: readonly BottomNavigationItem[];
   ariaLabel?: string;
+  onItemSelect?: (item: BottomNavigationItem) => void;
 }
 
 export function BottomNavigation({
   items,
   ariaLabel = "メインナビゲーション",
+  onItemSelect,
   className,
   ...navProps
 }: BottomNavigationProps) {
@@ -53,6 +55,12 @@ export function BottomNavigation({
                   .join(" ")}
                 href={item.href}
                 aria-current={item.isCurrent ? "page" : undefined}
+                onClick={(event) => {
+                  if (onItemSelect !== undefined) {
+                    event.preventDefault();
+                    onItemSelect(item);
+                  }
+                }}
               >
                 {item.icon ? (
                   <span className={styles.icon} aria-hidden="true">

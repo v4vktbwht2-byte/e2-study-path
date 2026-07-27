@@ -1,0 +1,316 @@
+.page,
+.studyPage {
+  width: min(100%, 52rem);
+  margin: 0 auto;
+  padding: var(--space-4);
+  display: grid;
+  gap: var(--space-6);
+}
+
+.studyPage {
+  padding-bottom: calc(var(--space-8) + env(safe-area-inset-bottom));
+}
+
+.pageHeader,
+.studyHeader {
+  display: grid;
+  gap: var(--space-2);
+}
+
+.pageHeader h1,
+.pageHeader h2,
+.pageHeader p,
+.studyHeader h1,
+.studyHeader p,
+.setCard h2,
+.setCard p,
+.questionCard h2,
+.feedback h3,
+.resultCard h2 {
+  margin: 0;
+}
+
+.studyHeader {
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: start;
+}
+
+.eyebrow {
+  color: var(--color-text-muted);
+  font-size: var(--font-size-sm);
+  font-weight: 700;
+  letter-spacing: 0.04em;
+}
+
+.timer {
+  min-width: 6.5rem;
+  padding: var(--space-2) var(--space-3);
+  border-radius: 999px;
+  background: var(--color-surface-muted);
+  font-variant-numeric: tabular-nums;
+  text-align: center;
+}
+
+.setList,
+.reasonList,
+.summaryList,
+.vocabularyList {
+  margin: 0;
+  padding: 0;
+}
+
+.setList {
+  display: grid;
+  gap: var(--space-4);
+  list-style: none;
+}
+
+.setCard {
+  display: grid;
+  gap: var(--space-4);
+}
+
+.setCard > div {
+  display: grid;
+  gap: var(--space-2);
+}
+
+.meta,
+.localResultNote {
+  color: var(--color-text-muted);
+  font-size: var(--font-size-sm);
+}
+
+.readerTools {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-3);
+}
+
+.inlineActions {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+}
+
+.inlineActions output {
+  min-width: 3.5rem;
+  text-align: center;
+  font-variant-numeric: tabular-nums;
+}
+
+.passage {
+  display: grid;
+  gap: var(--space-4);
+}
+
+.passage h2 {
+  margin: 0;
+  font-family: Georgia, "Times New Roman", serif;
+}
+
+.passageText {
+  display: grid;
+  gap: 1.15em;
+  line-height: 1.85;
+  overflow-wrap: anywhere;
+}
+
+.passageText p {
+  margin: 0;
+}
+
+.paragraphNumber {
+  display: inline-grid;
+  width: 1.75em;
+  height: 1.75em;
+  place-items: center;
+  border-radius: 999px;
+  background: var(--color-surface-muted);
+  color: var(--color-text-muted);
+  font-family: var(--font-family-sans);
+  font-size: 0.75em;
+  font-weight: 700;
+}
+
+.stickyActions {
+  position: sticky;
+  bottom: calc(var(--space-3) + env(safe-area-inset-bottom));
+  z-index: 2;
+  display: flex;
+  justify-content: flex-end;
+  gap: var(--space-3);
+  padding: var(--space-3);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-card);
+  background: color-mix(in srgb, var(--color-surface) 92%, transparent);
+  box-shadow: var(--shadow-card);
+}
+
+.questionCard,
+.feedback {
+  display: grid;
+  gap: var(--space-6);
+}
+
+.choiceGroup,
+.evidenceGroup {
+  min-width: 0;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  display: grid;
+  gap: var(--space-3);
+}
+
+.choiceGroup legend,
+.evidenceGroup legend {
+  margin-bottom: var(--space-3);
+  font-weight: 700;
+}
+
+.choice,
+.evidenceChoice {
+  min-height: 3rem;
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  align-items: start;
+  gap: var(--space-3);
+  padding: var(--space-3);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-button);
+  background: var(--color-surface);
+  cursor: pointer;
+  line-height: 1.6;
+}
+
+.choice:focus-within,
+.evidenceChoice:focus-within {
+  outline: 3px solid var(--focus-ring);
+  outline-offset: 2px;
+}
+
+.choice input,
+.evidenceChoice input {
+  width: 1.25rem;
+  height: 1.25rem;
+  margin-top: 0.15rem;
+}
+
+.evidenceParagraph {
+  color: var(--color-text-muted);
+  font-size: var(--font-size-sm);
+  font-weight: 700;
+}
+
+.evidenceAnswer {
+  padding: var(--space-3);
+  border-left: 4px solid var(--color-success);
+  background: var(--color-surface-muted);
+}
+
+.evidenceAnswer p {
+  margin: 0 0 var(--space-2);
+  line-height: 1.7;
+}
+
+.evidenceAnswer p:last-child {
+  margin-bottom: 0;
+}
+
+.reasonList,
+.summaryList {
+  padding-left: 1.4rem;
+  display: grid;
+  gap: var(--space-2);
+}
+
+.vocabularyList {
+  display: grid;
+  gap: var(--space-2);
+  list-style: none;
+}
+
+.vocabularyList li {
+  min-height: 3rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-3);
+  padding: var(--space-3);
+  border-radius: var(--radius-button);
+  background: var(--color-surface-muted);
+}
+
+.resultCard {
+  display: grid;
+  gap: var(--space-4);
+}
+
+.resultGrid {
+  margin: 0;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--space-3);
+}
+
+.resultGrid > div {
+  min-width: 0;
+  padding: var(--space-3);
+  border-radius: var(--radius-button);
+  background: var(--color-surface-muted);
+}
+
+.resultGrid dt {
+  color: var(--color-text-muted);
+  font-size: var(--font-size-sm);
+}
+
+.resultGrid dd {
+  margin: var(--space-1) 0 0;
+  font-size: var(--font-size-lg);
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+}
+
+@media (max-width: 24rem) {
+  .page,
+  .studyPage {
+    padding-inline: var(--space-3);
+  }
+
+  .studyHeader {
+    grid-template-columns: 1fr;
+  }
+
+  .timer {
+    justify-self: start;
+  }
+
+  .readerTools,
+  .vocabularyList li {
+    align-items: stretch;
+    flex-direction: column;
+  }
+
+  .inlineActions {
+    justify-content: space-between;
+  }
+
+  .stickyActions {
+    display: grid;
+    grid-template-columns: 1fr;
+  }
+
+  .resultGrid {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (min-width: 40rem) {
+  .setCard {
+    grid-template-columns: minmax(0, 1fr) auto;
+    align-items: center;
+  }
+}

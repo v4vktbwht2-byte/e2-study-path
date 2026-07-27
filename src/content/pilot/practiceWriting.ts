@@ -1,0 +1,193 @@
+import type { PracticeSet } from "../../infrastructure/content/schemas";
+import { ORIGINAL_CONTENT_SOURCE } from "./factories";
+
+export const pilotWritingPracticeSets = [
+  {
+    id: "writing-summary-community-fridge",
+    schemaVersion: "1.0.0",
+    contentRevision: 1,
+    type: "summary",
+    stage: 5,
+    titleJa: "地域の冷蔵庫と食品ロス",
+    descriptionJa: "取り組みの目的、仕組み、課題を読み取り、中心内容をまとめます。",
+    estimatedMinutes: 12,
+    payload: {
+      instructionsJa:
+        "次の英文を読み、内容を45〜55語の英語でまとめてください。自分の意見は加えません。",
+      sourceText:
+        "A community center in Green Town placed a shared refrigerator near its entrance. Local shops put safe, unsold food in it at the end of the day, and residents can take what they need for free. The project has reduced food waste and helped some families save money. Volunteers check the food and clean the refrigerator every morning. However, the center sometimes receives more bread than people can use. It is now asking nearby farms and restaurants to share different kinds of food so that the service can provide a better balance.",
+      keyPoints: [
+        "店が売れ残った安全な食品を共有冷蔵庫へ入れる",
+        "食品ロス削減と家計支援につながっている",
+        "食品の種類の偏りを改善しようとしている",
+      ],
+      focusJa: "目的・効果・今後の改善を一つずつ拾いましょう。",
+      targetWordMin: 45,
+      targetWordMax: 55,
+    },
+    tags: ["writing", "summary", "community", "food-waste", "original"],
+    source: ORIGINAL_CONTENT_SOURCE,
+  },
+  {
+    id: "writing-summary-library-of-things",
+    schemaVersion: "1.0.0",
+    contentRevision: 1,
+    type: "summary",
+    stage: 5,
+    titleJa: "道具も借りられる図書館",
+    descriptionJa: "新しい貸し出しサービスの利点と運営上の工夫をまとめます。",
+    estimatedMinutes: 12,
+    payload: {
+      instructionsJa:
+        "次の英文を読み、内容を45〜55語の英語でまとめてください。細かな例をすべて写す必要はありません。",
+      sourceText:
+        "A city library has started lending tools and household items as well as books. Members can borrow a small drill, a sewing machine, or camping equipment for one week. The library hopes the service will save people money and reduce the number of rarely used products that are thrown away. Before borrowing an item, members watch a short safety video. The service is popular, but some items have long waiting lists. The library plans to use reservation data to decide what to add next year.",
+      keyPoints: [
+        "本以外の道具や生活用品を貸し出している",
+        "節約と廃棄物削減が目的である",
+        "安全説明と予約データを運営に活用している",
+      ],
+      focusJa: "サービスの内容・目的・課題への対応をまとめましょう。",
+      targetWordMin: 45,
+      targetWordMax: 55,
+    },
+    tags: ["writing", "summary", "library", "sharing", "original"],
+    source: ORIGINAL_CONTENT_SOURCE,
+  },
+  {
+    id: "writing-summary-short-breaks",
+    schemaVersion: "1.0.0",
+    contentRevision: 1,
+    type: "summary",
+    stage: 6,
+    titleJa: "仕事中の短い休憩",
+    descriptionJa: "実験の方法、見られた変化、注意点を整理します。",
+    estimatedMinutes: 12,
+    payload: {
+      instructionsJa:
+        "次の英文を読み、内容を45〜55語の英語でまとめてください。結果だけでなく注意点も含めましょう。",
+      sourceText:
+        "A small design company tested a new break schedule for one month. Employees were encouraged to leave their screens for five minutes after every hour of focused work. Many workers said they felt less tired in the afternoon, and project leaders noticed fewer simple mistakes. The schedule did not reduce the amount of work completed. Still, some employees found fixed break times difficult when they were meeting clients. The company will keep the idea but allow teams to choose when each short break fits their work.",
+      keyPoints: [
+        "1時間の集中作業後に5分休む方法を試した",
+        "疲労感と単純なミスが減り、仕事量は落ちなかった",
+        "業務に合わせて休憩時刻を柔軟にする",
+      ],
+      focusJa: "実験・結果・柔軟な改善策の三つをつなげましょう。",
+      targetWordMin: 45,
+      targetWordMax: 55,
+    },
+    tags: ["writing", "summary", "work", "well-being", "original"],
+    source: ORIGINAL_CONTENT_SOURCE,
+  },
+  {
+    id: "writing-summary-bus-information",
+    schemaVersion: "1.0.0",
+    contentRevision: 1,
+    type: "summary",
+    stage: 6,
+    titleJa: "バス停のリアルタイム表示",
+    descriptionJa: "交通情報表示の効果と、残された利用上の課題をまとめます。",
+    estimatedMinutes: 12,
+    payload: {
+      instructionsJa:
+        "次の英文を読み、内容を45〜55語の英語でまとめてください。主な利点と課題を両方含めます。",
+      sourceText:
+        "Riverside City installed electronic signs at twenty busy bus stops. The signs show how many minutes remain before each bus arrives. In a city survey, passengers said the information made waiting less stressful and helped them choose another route when a bus was delayed. The signs use solar power, so they can work without new electrical cables. However, smaller stops still have no signs, and not every passenger owns a smartphone. The city is studying lower-cost displays that could serve more neighborhoods.",
+      keyPoints: [
+        "到着までの時間を表示する電子案内を設置した",
+        "待つ不安を減らし、遅延時の経路選択に役立つ",
+        "小規模な停留所にも広げる方法を検討している",
+      ],
+      focusJa: "導入したもの・利用者への効果・今後の課題を残しましょう。",
+      targetWordMin: 45,
+      targetWordMax: 55,
+    },
+    tags: ["writing", "summary", "transport", "technology", "original"],
+    source: ORIGINAL_CONTENT_SOURCE,
+  },
+  {
+    id: "writing-opinion-digital-handouts",
+    schemaVersion: "1.0.0",
+    contentRevision: 1,
+    type: "opinion",
+    stage: 5,
+    titleJa: "授業の資料はデジタル中心がよいか",
+    descriptionJa: "学びやすさと環境・機器の面から意見を組み立てます。",
+    estimatedMinutes: 15,
+    payload: {
+      instructionsJa:
+        "TOPICについて、POINTSから二つを参考にしながら、あなたの意見と理由を80〜100語の英語で書いてください。",
+      topic: "Should schools use mainly digital handouts in class?",
+      topicJa: "学校の授業では、主にデジタル資料を使うべきでしょうか。",
+      points: ["Cost", "Learning", "Environment"],
+      targetWordMin: 80,
+      targetWordMax: 100,
+    },
+    tags: ["writing", "opinion", "education", "technology", "original"],
+    source: ORIGINAL_CONTENT_SOURCE,
+  },
+  {
+    id: "writing-opinion-volunteer-day",
+    schemaVersion: "1.0.0",
+    contentRevision: 1,
+    type: "opinion",
+    stage: 5,
+    titleJa: "地域活動の日を設けるべきか",
+    descriptionJa: "地域とのつながり、時間、経験を手がかりに考えます。",
+    estimatedMinutes: 15,
+    payload: {
+      instructionsJa:
+        "TOPICについて、POINTSから二つを参考にしながら、あなたの意見と理由を80〜100語の英語で書いてください。",
+      topic: "Should companies give workers one volunteer day each year?",
+      topicJa: "会社は従業員に、年1日の地域ボランティア休暇を与えるべきでしょうか。",
+      points: ["Community", "Time", "Experience"],
+      targetWordMin: 80,
+      targetWordMax: 100,
+    },
+    tags: ["writing", "opinion", "work", "community", "original"],
+    source: ORIGINAL_CONTENT_SOURCE,
+  },
+  {
+    id: "writing-opinion-more-parks",
+    schemaVersion: "1.0.0",
+    contentRevision: 1,
+    type: "opinion",
+    stage: 6,
+    titleJa: "市街地に公園を増やすべきか",
+    descriptionJa: "健康、費用、地域環境という異なる観点から理由を考えます。",
+    estimatedMinutes: 15,
+    payload: {
+      instructionsJa:
+        "TOPICについて、POINTSから二つを参考にしながら、あなたの意見と理由を80〜100語の英語で書いてください。",
+      topic: "Should cities create more small parks in busy areas?",
+      topicJa: "都市は人通りの多い地域に小さな公園を増やすべきでしょうか。",
+      points: ["Health", "Cost", "Neighborhoods"],
+      targetWordMin: 80,
+      targetWordMax: 100,
+    },
+    tags: ["writing", "opinion", "city", "health", "original"],
+    source: ORIGINAL_CONTENT_SOURCE,
+  },
+  {
+    id: "writing-opinion-secondhand",
+    schemaVersion: "1.0.0",
+    contentRevision: 1,
+    type: "opinion",
+    stage: 6,
+    titleJa: "中古品の利用を広げるべきか",
+    descriptionJa: "価格、品質、環境への影響を比べながら意見を述べます。",
+    estimatedMinutes: 15,
+    payload: {
+      instructionsJa:
+        "TOPICについて、POINTSから二つを参考にしながら、あなたの意見と理由を80〜100語の英語で書いてください。",
+      topic: "Should people buy secondhand products more often?",
+      topicJa: "人々は中古品をもっと積極的に買うべきでしょうか。",
+      points: ["Price", "Quality", "Waste"],
+      targetWordMin: 80,
+      targetWordMax: 100,
+    },
+    tags: ["writing", "opinion", "shopping", "environment", "original"],
+    source: ORIGINAL_CONTENT_SOURCE,
+  },
+] satisfies readonly PracticeSet[];

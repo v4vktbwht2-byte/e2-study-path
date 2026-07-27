@@ -5,7 +5,7 @@
 ## 現在のPhase
 
 - Phase: 06 — Reading, Listening, Writing, Speaking, and Mock Practice
-- Status: 計画確定・実装開始
+- Status: 完了（次はPhase 07）
 - Last updated: 2026-07-27
 
 ## Phase 00〜10 高水準計画
@@ -339,9 +339,8 @@ npm run check
 
 **Known limitations / follow-up**
 
-- Phase 06で実装する技能別教材が未接続の場合、skill rotationは現在利用可能な候補だけで編成する。
 - Web Speechの声質・発音、iPhone Safari／ホーム画面PWA、スクリーンリーダーは実機未確認。
-- メイン初期chunk 616.87 kBはPhase 07/09で分割と配信構成を再評価する。
+- メイン初期chunk 676.50 kBはPhase 07/09で分割と配信構成を再評価する。
 - `npm audit --json`は依存メタデータの外部送信を伴う実行承認が得られず未実施。Phase 09で承認条件を確認して再試行する。
 
 ## Phase 06 — Reading, Listening, Writing, Speaking, and Mock Practice
@@ -392,9 +391,16 @@ npm run check
 
 **Results**
 
-- 計画確定。技能別domain・教材契約を確認し、読解・聞き取り・作文・会話・短縮模試を並行実装する段階。
+- 読解6、聞き取り6、要約4、意見4、会話4、短縮模試1のオリジナル教材をPilot Content Packへ追加し、全25セットを共通Zod schema、参照整合性、ID一意性、語数目標、ローカル音声パス、非公式表記で検証した。
+- 読解の一覧・reader・文字サイズ・回答時間・根拠文・採点・解説・重要語句のお気に入り、聞き取りの本番風1回再生・復習・速度・一文再生・script・dictationを実装した。
+- 要約45〜55語・意見80〜100語のeditor、Unicode対応word count、即時autosave、履歴、4観点rubricを実装し、自由作文を自動正誤判定しない設計にした。
+- 会話練習の20秒タイマー、音読、No.1根拠、3場面説明、No.3/4、録音・再生・削除、権限拒否・非対応時のtext response／self-practiceを実装した。権限待ちの中断、二重開始、stream解放、保存失敗も処理する。
+- オリジナル短縮模試へsection timer、中断警告、asset／Web Speech／text fallbackによる聞き取り、結果、弱点練習リンク、非公式スコア表記を実装した。
+- Todayのskill rotationから各技能へqueryを保持して振り分け、Attempt・StudySession・DailyPlanを同一transactionで原子的に保存する。plan対象外教材への切替と不整合保存を防止した。
+- `npm run check`が成功し、55 test files・407/407件、教材25セット、production buildを確認した。全E2Eはdesktop/320pxで46/46件（Phase 06固有12/12件）が成功した。
 
 **Known limitations / follow-up**
 
 - 実音声の収録はPilot Releaseの必須条件にせず、asset audioがない教材ではWeb Speechまたは明示されたtext fallbackを使う。
-- MediaRecorder、Web Speech、iPhone Safariの挙動と音声品質は、対応する実機・ブラウザーでの最終確認が必要。
+- MediaRecorder、Web Speech、iPhone Safari、ホーム画面PWA、スクリーンリーダーの挙動と音声品質は、対応する実機・ブラウザーでの最終確認が必要。
+- production buildは成功するが、メイン初期chunk 676.50 kBの警告をPhase 07/09で再評価する。

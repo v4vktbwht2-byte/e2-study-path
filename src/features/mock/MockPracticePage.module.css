@@ -1,0 +1,161 @@
+.page {
+  display: grid;
+  gap: var(--space-4);
+  width: min(100%, 58rem);
+  margin: 0 auto;
+  padding: var(--space-4);
+}
+
+.header,
+.exerciseHeader {
+  display: grid;
+  gap: var(--space-2);
+}
+
+.header h1,
+.header p,
+.exerciseHeader h1,
+.exerciseHeader p {
+  margin: 0;
+}
+
+.exerciseHeader {
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: start;
+}
+
+.eyebrow {
+  color: var(--color-text-muted);
+  font-size: var(--font-size-sm);
+  font-weight: 700;
+  letter-spacing: 0.04em;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 16rem), 1fr));
+  gap: var(--space-4);
+}
+
+.setCard,
+.resultSummary {
+  display: grid;
+  align-content: start;
+  gap: var(--space-3);
+}
+
+.setCard h2,
+.setCard p,
+.resultSummary h2,
+.resultSummary p {
+  margin: 0;
+}
+
+.sectionList,
+.reviewList {
+  display: grid;
+  gap: var(--space-3);
+  padding: 0;
+  list-style: none;
+}
+
+.sectionList li {
+  display: flex;
+  justify-content: space-between;
+  gap: var(--space-3);
+  padding-block: var(--space-2);
+  border-bottom: 1px solid var(--color-border);
+}
+
+.timer,
+.timerExpired {
+  min-width: 6.5rem;
+  padding: var(--space-2) var(--space-3);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-button);
+  background: var(--color-surface-muted);
+  font-weight: 700;
+  text-align: center;
+}
+
+.timerExpired {
+  border-color: var(--color-warning);
+  color: var(--color-warning);
+  background: var(--color-warning-surface);
+}
+
+.stimulus {
+  display: grid;
+  gap: var(--space-3);
+}
+
+.stimulus h2,
+.stimulus p {
+  margin: 0;
+}
+
+.stimulus p {
+  line-height: 1.85;
+}
+
+.choices {
+  display: grid;
+  gap: var(--space-2);
+  margin: var(--space-4) 0;
+  padding: 0;
+  border: 0;
+}
+
+.choices legend {
+  margin-bottom: var(--space-2);
+  font-weight: 700;
+}
+
+.choices label {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: var(--space-3);
+  align-items: start;
+  min-height: var(--tap-target-min);
+  padding: var(--space-3);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-button);
+  cursor: pointer;
+}
+
+.choices input {
+  width: 1.15rem;
+  height: 1.15rem;
+  margin-top: 0.2rem;
+}
+
+.actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-3);
+  align-items: center;
+}
+
+.reviewList h3,
+.reviewList p {
+  margin-block: 0 var(--space-2);
+}
+
+@media (max-width: 30rem) {
+  .page {
+    padding: var(--space-3);
+  }
+
+  .exerciseHeader {
+    grid-template-columns: 1fr;
+  }
+
+  .timer,
+  .timerExpired {
+    width: fit-content;
+  }
+
+  .sectionList li {
+    display: grid;
+  }
+}

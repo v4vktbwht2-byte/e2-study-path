@@ -1,0 +1,367 @@
+.page {
+  display: grid;
+  gap: var(--space-6);
+  width: min(100%, 72rem);
+  margin: 0 auto;
+  padding: var(--space-6);
+}
+
+.header,
+.editorHeader,
+.historyHeader,
+.historyMeta,
+.actions {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-3);
+}
+
+.header {
+  align-items: flex-start;
+}
+
+.header h1,
+.editorHeader h2,
+.historyHeader h2,
+.material h2,
+.material h3 {
+  margin-block: 0;
+}
+
+.header p,
+.editorHeader p {
+  max-width: 44rem;
+  margin-block: var(--space-2) 0;
+}
+
+.eyebrow,
+.kind {
+  color: var(--color-text-muted);
+  font-size: var(--font-size-sm);
+  font-weight: 700;
+}
+
+.promptList {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(13rem, 100%), 1fr));
+  gap: var(--space-2);
+}
+
+.promptButton {
+  display: grid;
+  gap: var(--space-1);
+  min-height: 5.5rem;
+  padding: var(--space-3);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-card);
+  color: var(--color-text);
+  background: var(--color-surface);
+  text-align: left;
+  cursor: pointer;
+}
+
+.promptButton:hover {
+  border-color: var(--color-primary);
+}
+
+.promptButton:focus-visible,
+.draft:focus-visible,
+.notes input:focus-visible,
+.notes textarea:focus-visible {
+  outline: 3px solid var(--focus-ring);
+  outline-offset: 2px;
+}
+
+.promptButton span,
+.promptButton small {
+  color: var(--color-text-muted);
+}
+
+.promptButtonCurrent {
+  border-color: var(--color-primary);
+  background: var(--color-info-surface);
+}
+
+.workspace {
+  display: grid;
+  gap: var(--space-4);
+}
+
+.editorHeader {
+  align-items: flex-start;
+}
+
+.localBadge {
+  flex: 0 0 auto;
+  padding: var(--space-1) var(--space-2);
+  border-radius: 999px;
+  color: var(--color-text-muted);
+  background: var(--color-surface-muted);
+  font-size: var(--font-size-sm);
+  font-weight: 700;
+}
+
+.material,
+.notes,
+.editorCard,
+.rubric {
+  display: grid;
+  gap: var(--space-3);
+}
+
+.instructions {
+  font-weight: 700;
+}
+
+.sourceText,
+.topic {
+  margin: 0;
+  line-height: 1.8;
+}
+
+.sourceText {
+  white-space: pre-wrap;
+}
+
+.topic {
+  font-size: var(--font-size-lg);
+  font-weight: 700;
+}
+
+.guide {
+  padding-block-start: var(--space-2);
+  border-block-start: 1px solid var(--color-border);
+}
+
+.guide summary {
+  min-height: 2.75rem;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.points {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.points li {
+  padding: var(--space-1) var(--space-3);
+  border-radius: 999px;
+  background: var(--color-surface-muted);
+  font-weight: 700;
+}
+
+.notes fieldset,
+.rubric fieldset {
+  display: grid;
+  gap: var(--space-3);
+  min-width: 0;
+  margin: 0;
+  padding: 0;
+  border: 0;
+}
+
+.notes legend,
+.rubric legend,
+.editorCard > label {
+  padding: 0;
+  font-size: var(--font-size-lg);
+  font-weight: 700;
+}
+
+.notes p,
+.rubric p,
+.editorCard p {
+  margin: 0;
+  color: var(--color-text-muted);
+}
+
+.notes textarea,
+.notes input,
+.draft {
+  width: 100%;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm);
+  color: var(--color-text);
+  background: var(--color-surface);
+  font: inherit;
+}
+
+.notes textarea,
+.draft {
+  resize: vertical;
+}
+
+.notes textarea,
+.draft {
+  padding: var(--space-3);
+}
+
+.notes input {
+  min-height: 2.75rem;
+  padding-inline: var(--space-3);
+}
+
+.outlineGrid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--space-3);
+}
+
+.outlineGrid label {
+  display: grid;
+  gap: var(--space-1);
+  font-weight: 700;
+}
+
+.draft {
+  min-height: 15rem;
+  line-height: 1.7;
+}
+
+.wordCount {
+  padding: var(--space-2) var(--space-3);
+  border-radius: var(--radius-sm);
+  font-weight: 700;
+}
+
+.short {
+  color: var(--color-text);
+  background: var(--color-surface-muted);
+}
+
+.within {
+  color: var(--color-success);
+  background: var(--color-success-surface);
+}
+
+.long {
+  color: var(--color-warning);
+  background: var(--color-warning-surface);
+}
+
+.rubricGrid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--space-2);
+}
+
+.rubricGrid label {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--space-2);
+  min-height: 3.5rem;
+  padding: var(--space-3);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+}
+
+.rubricGrid input {
+  width: 1.25rem;
+  height: 1.25rem;
+  margin-block-start: 0.125rem;
+}
+
+.rubricGrid span {
+  display: grid;
+  gap: var(--space-1);
+}
+
+.saveArea {
+  display: grid;
+  gap: var(--space-3);
+}
+
+.saveStatus {
+  min-height: 1.5rem;
+  margin: 0;
+  color: var(--color-text-muted);
+}
+
+.actions {
+  justify-content: flex-end;
+  flex-wrap: wrap;
+}
+
+.history {
+  display: grid;
+  gap: var(--space-3);
+  padding-block-start: var(--space-4);
+  border-block-start: 1px solid var(--color-border);
+}
+
+.historyList {
+  display: grid;
+  gap: var(--space-3);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.historyList article {
+  display: grid;
+  gap: var(--space-2);
+}
+
+.historyList p {
+  margin: 0;
+  white-space: pre-wrap;
+}
+
+.historyMeta {
+  justify-content: flex-start;
+  flex-wrap: wrap;
+  color: var(--color-text-muted);
+  font-size: var(--font-size-sm);
+}
+
+.noScore {
+  color: var(--color-text-muted);
+  font-size: var(--font-size-sm);
+}
+
+@media (max-width: 40rem) {
+  .page {
+    gap: var(--space-4);
+    padding: var(--space-3);
+  }
+
+  .header,
+  .editorHeader {
+    align-items: stretch;
+    flex-direction: column;
+  }
+
+  .promptList,
+  .outlineGrid,
+  .rubricGrid {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .promptList {
+    display: flex;
+    overflow-x: auto;
+    padding-block-end: var(--space-2);
+    scroll-snap-type: x proximity;
+  }
+
+  .promptButton {
+    flex: 0 0 min(16rem, calc(100vw - 3rem));
+    scroll-snap-align: start;
+  }
+
+  .actions {
+    align-items: stretch;
+    flex-direction: column;
+  }
+
+  .actions > * {
+    width: 100%;
+  }
+}

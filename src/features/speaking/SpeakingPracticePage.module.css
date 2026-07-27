@@ -1,0 +1,146 @@
+.page {
+  display: grid;
+  gap: var(--space-4);
+  width: min(100%, 58rem);
+  margin: 0 auto;
+  padding: var(--space-4);
+}
+
+.header {
+  display: grid;
+  gap: var(--space-2);
+}
+
+.header h1,
+.header p {
+  margin: 0;
+}
+
+.eyebrow {
+  color: var(--color-text-muted);
+  font-size: var(--font-size-sm);
+  font-weight: 700;
+  letter-spacing: 0.04em;
+}
+
+.setGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 15rem), 1fr));
+  gap: var(--space-4);
+}
+
+.setCard {
+  display: grid;
+  align-content: start;
+  gap: var(--space-3);
+}
+
+.setCard h2,
+.setCard p {
+  margin: 0;
+}
+
+.recorder,
+.playback,
+.actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-3);
+}
+
+.recorder h2 {
+  width: 100%;
+  margin: 0;
+}
+
+.playback audio {
+  max-width: 100%;
+}
+
+.timer {
+  width: fit-content;
+  margin: 0 0 var(--space-3);
+  padding: var(--space-2) var(--space-3);
+  border-radius: var(--radius-button);
+  background: var(--color-surface-muted);
+  font-weight: 700;
+}
+
+.passage,
+.question {
+  font-size: 1.08em;
+  line-height: 1.8;
+}
+
+.responseField,
+.rubric {
+  display: grid;
+  gap: var(--space-2);
+  margin-block: var(--space-4);
+  font-weight: 700;
+}
+
+.responseField textarea,
+.rubric select {
+  width: 100%;
+  min-height: 2.75rem;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-button);
+  background: var(--color-surface);
+  color: var(--color-text);
+  font: inherit;
+}
+
+.responseField textarea {
+  padding: var(--space-3);
+  resize: vertical;
+}
+
+.rubric {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.rubric label {
+  display: grid;
+  gap: var(--space-2);
+}
+
+.rubric select {
+  padding-inline: var(--space-3);
+}
+
+.scenes {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: var(--space-3);
+  padding: 0;
+  list-style: none;
+}
+
+.scenes li {
+  display: grid;
+  align-content: start;
+  gap: var(--space-2);
+  min-width: 0;
+  padding: var(--space-3);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-button);
+  background: var(--color-surface-muted);
+}
+
+.scenes span {
+  overflow-wrap: anywhere;
+  line-height: 1.55;
+}
+
+@media (max-width: 36rem) {
+  .page {
+    padding: var(--space-3);
+  }
+
+  .rubric,
+  .scenes {
+    grid-template-columns: 1fr;
+  }
+}

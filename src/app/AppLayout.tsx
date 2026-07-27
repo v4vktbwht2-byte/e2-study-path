@@ -1,5 +1,5 @@
 import { Suspense } from "react";
-import { Outlet, useLocation } from "react-router-dom";
+import { Link, Outlet, useLocation, useNavigate } from "react-router-dom";
 import { AppShell, BottomNavigation, Card, TopBar } from "../shared/components";
 import styles from "./AppLayout.module.css";
 
@@ -39,6 +39,7 @@ function RouteLoadingState() {
 
 export function AppLayout() {
   const { pathname } = useLocation();
+  const navigate = useNavigate();
   const currentTab = getCurrentTab(pathname);
   const navigationItems = [
     { id: "today", label: "今日", href: "#/", isCurrent: currentTab === "today" },
@@ -70,12 +71,12 @@ export function AppLayout() {
 
   const topActions = (
     <nav className={styles.topActions} aria-label="補助メニュー">
-      <a className={styles.topLink} href="#/help">
+      <Link className={styles.topLink} to="/help">
         ヘルプ
-      </a>
-      <a className={styles.topLink} href="#/settings">
+      </Link>
+      <Link className={styles.topLink} to="/settings">
         設定
-      </a>
+      </Link>
     </nav>
   );
 
@@ -92,7 +93,13 @@ export function AppLayout() {
         />
       }
       bottomNavigation={
-        <BottomNavigation ariaLabel="メインメニュー" items={navigationItems} />
+        <BottomNavigation
+          ariaLabel="メインメニュー"
+          items={navigationItems}
+          onItemSelect={(item) => {
+            void navigate(item.href.replace(/^#/u, ""));
+          }}
+        />
       }
     >
       <Suspense fallback={<RouteLoadingState />}>

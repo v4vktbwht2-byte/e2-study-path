@@ -77,22 +77,24 @@ Then 横スクロールや隠れた主要ボタンなしで完了する。
 Given bundled content
 Then source metadataがoriginalで、公式問題・公式音源・公式ロゴが含まれない。
 
+Phase 06 verification: Pilotの技能教材25セットはすべて`source.type = original`で、共通Zod検証が外部音声URL、参照切れ、ID重複、raw HTMLを拒否する。短縮模試は公式問題・公式音声・公式スコアではないと画面に明示する。
+
 ## 2. Requirement traceability summary
 
-| Requirement area | Detailed spec | Primary phase | Primary tests |
-|---|---|---:|---|
-| FR-ONB | 02, 05 | 03 | E2E-001 |
-| FR-DIA | 02, 03 | 03 | unit diagnostic + E2E-001 |
-| FR-CUR/LES | 03, 11 | 03/05 | lesson component + `LessonRenderer.test.tsx` + AC-REL-003 |
-| FR-DLY | 09 + planning docs | 05 | planning/today unit + `phase05.spec.ts` |
-| FR-VOC | 10 | 04 | vocabulary components + E2E-002 |
-| FR-REV | 09 | 04 | scheduler unit + E2E-003 |
-| FR-REA/LIS/WRI/SPK | 05, 11, 12 | 06 | E2E-007/008 + components |
-| FR-PRO | 08 | 08 | aggregation unit |
-| FR-DAT | 08, 14 | 07 | E2E-005 |
-| FR-PWA | 13 | 07/09 | E2E-006 |
-| NFR-A11Y | 06, 14 | 08/09 | axe + manual |
-| NFR-PRIV | 14 | all | review checklist |
+| Requirement area   | Detailed spec      | Primary phase | Primary tests                                             |
+| ------------------ | ------------------ | ------------: | --------------------------------------------------------- |
+| FR-ONB             | 02, 05             |            03 | E2E-001                                                   |
+| FR-DIA             | 02, 03             |            03 | unit diagnostic + E2E-001                                 |
+| FR-CUR/LES         | 03, 11             |         03/05 | lesson component + `LessonRenderer.test.tsx` + AC-REL-003 |
+| FR-DLY             | 09 + planning docs |            05 | planning/today unit + `phase05.spec.ts`                   |
+| FR-VOC             | 10                 |            04 | vocabulary components + E2E-002                           |
+| FR-REV             | 09                 |            04 | scheduler unit + E2E-003                                  |
+| FR-REA/LIS/WRI/SPK | 05, 11, 12         |            06 | E2E-007/008 + components                                  |
+| FR-PRO             | 08                 |            08 | aggregation unit                                          |
+| FR-DAT             | 08, 14             |            07 | E2E-005                                                   |
+| FR-PWA             | 13                 |         07/09 | E2E-006                                                   |
+| NFR-A11Y           | 06, 14             |         08/09 | axe + manual                                              |
+| NFR-PRIV           | 14                 |           all | review checklist                                          |
 
 ## 3. Phase gates
 
@@ -129,7 +131,10 @@ Then source metadataがoriginalで、公式問題・公式音源・公式ロゴ�
 
 ### Phase 06
 
-- all skill module shells are functional with real sample content
+- Complete: 読解・聞き取り・作文・会話・短縮模試をオリジナル教材で完了し、履歴とDailyPlan進捗へ保存できる。
+- Complete: 音声非対応時のtext fallback、作文autosave、会話timer・録音、模試中断警告・弱点導線が動作する。
+- Complete: 読解6、聞き取り6、要約4、意見4、会話4、短縮模試1の計25セットがoriginal metadataと技能別schemaを通過し、公式教材・公式スコアと誤認させない。
+- Evidence: 55 test files・407 unit/component tests、全E2E desktop/320px 46/46（`e2e/phase06.spec.ts` 12/12）、`npm run check`成功。
 
 ### Phase 07
 
