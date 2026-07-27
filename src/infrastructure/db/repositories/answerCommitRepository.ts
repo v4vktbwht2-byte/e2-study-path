@@ -1,5 +1,6 @@
 import type { AnswerCommitRepository } from "../../../domain/repositories";
 import type { CommitAnswerInput, CommitAnswerResult } from "../../../domain/models";
+import { completeDailyPlanBlock } from "../../../domain/planning";
 import type { AppDb } from "../appDb";
 
 function appendUnique(values: readonly string[], value: string) {
@@ -8,7 +9,8 @@ function appendUnique(values: readonly string[], value: string) {
 
 export class PersistenceError extends Error {
   constructor(
-    readonly code: "SESSION_NOT_FOUND" | "DAILY_PLAN_NOT_FOUND",
+    readonly code:
+      "SESSION_NOT_FOUND" | "DAILY_PLAN_NOT_FOUND" | "DAILY_PLAN_ITEM_MISMATCH",
     message: string,
   ) {
     super(message);
@@ -61,15 +63,23 @@ export class DexieAnswerCommitRepository implements AnswerCommitRepository {
             );
           }
 
-          dailyPlan = input.completedPlanBlockId
-            ? {
-                ...currentPlan,
-                completedBlockIds: appendUnique(
-                  currentPlan.completedBlockIds,
-                  input.completedPlanBlockId,
-                ),
-              }
-            : currentPlan;
+          if (input.completedPlanBlockId !== undefined) {
+            const targetBlock = currentPlan.blocks.find(
+              (block) => block.blockId === input.completedPlanBlockId,
+            );
+            if (
+              targetBlock !== undefined &&
+              targetBlock.itemId !== input.attempt.itemKey
+            ) {
+              throw new PersistenceError(
+                "DAILY_PLAN_ITEM_MISMATCH",
+                "日次プランの項目と回答した項目が一致しません。",
+              );
+            }
+            dailyPlan = completeDailyPlanBlock(currentPlan, input.completedPlanBlockId);
+          } else {
+            dailyPlan = currentPlan;
+          }
           await this.db.dailyPlans.put(dailyPlan);
         }
 

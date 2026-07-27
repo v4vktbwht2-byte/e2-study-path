@@ -55,9 +55,7 @@ function lazyFoundationRoute(routeId: FoundationRouteId) {
       };
     case "vocabulary-session":
       return async () => {
-        const { VocabularySessionRoute } = await import(
-          "./routes/VocabularyRoutes"
-        );
+        const { VocabularySessionRoute } = await import("./routes/VocabularyRoutes");
         return { Component: VocabularySessionRoute };
       };
     case "word":

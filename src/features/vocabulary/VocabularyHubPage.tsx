@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Button, Card, EmptyState, ErrorState } from "../../shared/components";
 import { buildVocabularyCollections } from "./model";
 import styles from "./Vocabulary.module.css";
@@ -57,6 +57,7 @@ export function VocabularyHubPage({
   const [manualLevel, setManualLevel] = useState<"auto" | VocabularyQuestionLevel>(
     "auto",
   );
+  const headingRef = useRef<HTMLHeadingElement>(null);
 
   useEffect(() => {
     let active = true;
@@ -87,6 +88,20 @@ export function VocabularyHubPage({
     };
   }, [clock, content, reloadKey, store]);
 
+  useEffect(() => {
+    if (loadState.status !== "ready") {
+      return;
+    }
+    const heading = headingRef.current;
+    const scrollContainer = heading?.closest<HTMLElement>("main");
+    if (scrollContainer !== null && scrollContainer !== undefined) {
+      scrollContainer.scrollTop = 0;
+      scrollContainer.scrollLeft = 0;
+    }
+    window.scrollTo({ top: 0, left: 0, behavior: "auto" });
+    heading?.focus({ preventScroll: true });
+  }, [loadState.status]);
+
   if (loadState.status === "loading") {
     return (
       <section className={styles.page} aria-busy="true">
@@ -110,7 +125,9 @@ export function VocabularyHubPage({
   if (collections.all.length === 0) {
     return (
       <section className={styles.page}>
-        <h1>単語集中</h1>
+        <h1 ref={headingRef} tabIndex={-1}>
+          単語集中
+        </h1>
         <EmptyState
           title="学習できる単語がまだありません"
           description="教材を読み込んだ後に、もう一度開いてください。"
@@ -128,7 +145,9 @@ export function VocabularyHubPage({
       <header className={styles.header}>
         <div>
           <p className={styles.eyebrow}>単語集中</p>
-          <h1 id="vocabulary-hub-title">今日の単語メニュー</h1>
+          <h1 ref={headingRef} id="vocabulary-hub-title" tabIndex={-1}>
+            今日の単語メニュー
+          </h1>
         </div>
         {onOpenList !== undefined ? (
           <Button variant="secondary" onClick={onOpenList}>

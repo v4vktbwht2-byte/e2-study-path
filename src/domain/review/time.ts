@@ -16,6 +16,13 @@ type DateParts = {
   second: number;
 };
 
+export interface ResolvedStudyDay {
+  /** IANAタイムゾーンと学習日境界を考慮した `YYYY-MM-DD`。 */
+  studyDate: string;
+  /** 当該学習日が始まるUTC instant。 */
+  studyDayStartMs: number;
+}
+
 function assertValidDate(date: Date, label: string): void {
   if (!Number.isFinite(date.getTime())) {
     throw new ReviewDomainError(
@@ -141,6 +148,72 @@ function zonedDateTimeToUtc(parts: Omit<DateParts, "second">, timeZone: string):
   const result = new Date(candidate);
   assertValidDate(result, "復習予定時刻");
   return result;
+}
+
+function shiftCalendarDate(
+  parts: Pick<DateParts, "year" | "month" | "day">,
+  days: number,
+): Pick<DateParts, "year" | "month" | "day"> {
+  const shifted = new Date(Date.UTC(parts.year, parts.month - 1, parts.day + days));
+  return {
+    year: shifted.getUTCFullYear(),
+    month: shifted.getUTCMonth() + 1,
+    day: shifted.getUTCDate(),
+  };
+}
+
+function formatStudyDate(parts: Pick<DateParts, "year" | "month" | "day">): string {
+  return [
+    String(parts.year).padStart(4, "0"),
+    String(parts.month).padStart(2, "0"),
+    String(parts.day).padStart(2, "0"),
+  ].join("-");
+}
+
+/**
+ * 指定instantが属する学習日と、その開始instantを解決する。
+ * 端末のローカルタイムゾーンには依存せず、日跨ぎ・夏時間も暦日として扱う。
+ */
+export function resolveStudyDay(
+  now: Date,
+  boundary: StudyDayBoundary = DEFAULT_STUDY_DAY_BOUNDARY,
+): ResolvedStudyDay {
+  assertNow(now);
+  const validBoundary = validateBoundary(boundary);
+  const zonedNow = getZonedParts(now, validBoundary.timeZone);
+  const currentCalendarDate = {
+    year: zonedNow.year,
+    month: zonedNow.month,
+    day: zonedNow.day,
+  };
+  const currentCalendarStart = zonedDateTimeToUtc(
+    {
+      ...currentCalendarDate,
+      hour: validBoundary.hour,
+      minute: validBoundary.minute,
+    },
+    validBoundary.timeZone,
+  );
+  const studyDateParts =
+    now.getTime() < currentCalendarStart.getTime()
+      ? shiftCalendarDate(currentCalendarDate, -1)
+      : currentCalendarDate;
+  const studyDayStart =
+    studyDateParts === currentCalendarDate
+      ? currentCalendarStart
+      : zonedDateTimeToUtc(
+          {
+            ...studyDateParts,
+            hour: validBoundary.hour,
+            minute: validBoundary.minute,
+          },
+          validBoundary.timeZone,
+        );
+
+  return {
+    studyDate: formatStudyDate(studyDateParts),
+    studyDayStartMs: studyDayStart.getTime(),
+  };
 }
 
 /**

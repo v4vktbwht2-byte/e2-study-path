@@ -1,4 +1,7 @@
 import type { ReviewRating, ReviewState } from "./review/types";
+import type { DailyPlan as CanonicalDailyPlan } from "./planning/types";
+
+export type { DailyPlan, DailyPlanBlock, DailyPlanMode } from "./planning/types";
 
 export type Goal = "grade2" | "relearn" | "conversation" | "vocabulary";
 export type Theme = "system" | "light" | "dark";
@@ -96,6 +99,14 @@ export interface LessonProgress {
   currentSectionIndex: number;
   bestScore?: number;
   completedAt?: string;
+  /** 完了済みレッスンを日次復習している間だけ保持する再開位置。 */
+  reviewCheckpoint?: {
+    planDate: string;
+    blockId: string;
+    currentSectionIndex: number;
+    answeredExerciseIds: string[];
+    updatedAt: string;
+  };
   updatedAt: string;
 }
 
@@ -112,31 +123,6 @@ export interface StudySession {
   itemKeys: string[];
   completedItemKeys: string[];
   interrupted: boolean;
-}
-
-export type DailyPlanMode = "light" | "standard" | "thorough" | "all";
-
-export interface DailyPlanBlock {
-  id: string;
-  type: "overdue" | "due" | "weak" | "lesson" | "new" | "skill";
-  titleJa: string;
-  itemKeys: string[];
-  estimatedSeconds: number;
-  skill?: string;
-}
-
-export interface DailyPlan {
-  date: string;
-  generatedAt: string;
-  targetMinutes: number;
-  mode: DailyPlanMode;
-  blocks: DailyPlanBlock[];
-  completedBlockIds: string[];
-  sourceSnapshot: {
-    dueCount: number;
-    overdueCount: number;
-    newLimit: number;
-  };
 }
 
 export interface WritingSubmission {
@@ -175,5 +161,5 @@ export interface CommitAnswerResult {
   reviewState: ReviewState;
   mastery: MasteryProfile;
   session: StudySession;
-  dailyPlan?: DailyPlan;
+  dailyPlan?: CanonicalDailyPlan;
 }

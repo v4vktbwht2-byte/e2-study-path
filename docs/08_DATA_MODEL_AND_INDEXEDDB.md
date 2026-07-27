@@ -176,9 +176,18 @@ interface LessonProgress {
   currentSectionIndex: number;
   bestScore?: number;
   completedAt?: string;
+  reviewCheckpoint?: {
+    planDate: string;
+    blockId: string;
+    currentSectionIndex: number;
+    answeredExerciseIds: string[];
+    updatedAt: string;
+  };
   updatedAt: string;
 }
 ```
+
+`reviewCheckpoint`は、完了済みレッスンを日次プランから再復習している間だけ保持する。通常の完了状態を崩さず、セクション位置と回答済み問題を再読込後に復元し、復習block完了時に取り除く。
 
 ### StudySession
 
@@ -199,20 +208,53 @@ interface StudySession {
 ### DailyPlan
 
 ```ts
+type DailyPlanMode = 'light' | 'standard' | 'thorough' | 'all';
+
+type DailyPlanCategory =
+  | 'overdueReview'
+  | 'dueReview'
+  | 'weakItem'
+  | 'currentLesson'
+  | 'newVocabulary'
+  | 'skillPractice';
+
+interface DailyPlanBlock {
+  blockId: string;
+  itemId: string;
+  category: DailyPlanCategory;
+  estimatedSeconds: number;
+  status: 'pending' | 'completed';
+  skill?: 'vocabulary' | 'grammar' | 'reading' | 'listening' | 'writing' | 'speaking';
+}
+
 interface DailyPlan {
   date: string;
   generatedAt: string;
   targetMinutes: number;
-  mode: 'light' | 'standard' | 'thorough' | 'all';
-  blocks: DailyPlanBlock[];
-  completedBlockIds: string[];
+  mode: DailyPlanMode;
+  blocks: readonly DailyPlanBlock[];
+  completedBlockIds: readonly string[];
   sourceSnapshot: {
     dueCount: number;
     overdueCount: number;
     newLimit: number;
   };
+  capacity: {
+    requestedMinutes: number;
+    effectiveMinutes: number | null;
+    budgetSeconds: number | null;
+    estimatedReviewItemCapacity: number;
+  };
+  plannedSeconds: number;
+  remainingBudgetSeconds: number | null;
 }
 ```
+
+`date`は端末の単純なローカル日付ではなく、AppSettingsの`studyDayStartHour`と端末IANAタイムゾーンから解決した学習日を使う。`all`では時間予算を`null`として全候補を対象にする。
+
+再計算時は`status: 'completed'`のblockと`completedBlockIds`を保持し、完了済み復習・新規語も当日の上限へ算入する。未完了候補だけを現在の残り予算で再編成する。
+
+保存時はDB上の最新planとincoming planをtransaction内で統合し、完了状態を単調増加として扱う。これにより、別タブや古い画面からの再計算保存で完了済みblockを未完了へ戻さない。IndexedDB v2 migrationは、旧`id/type/itemKeys`形式を現行`blockId/category/itemId/status`形式へ変換する。
 
 ### WritingSubmission
 
@@ -272,6 +314,8 @@ this.version(1).stores({
 - DailyPlanブロック進捗更新
 
 途中で失敗したら全体をロールバックする。
+
+今日のプラン経由の単語回答とレッスン完了では、対象`itemId`とblockが一致することを確認してから、blockの`status`と`completedBlockIds`を同じトランザクションで更新する。すでに完了済みの場合は冪等に扱う。
 
 ## 5. コンテンツ更新
 

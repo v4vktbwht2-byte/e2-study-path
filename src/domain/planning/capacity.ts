@@ -1,3 +1,4 @@
+import { calculateNewItemLimit as calculateCanonicalNewItemLimit } from "../review/queue";
 import type { DailyPlanCapacity, DailyPlanMode } from "./types";
 
 export const DAILY_MINUTE_PRESETS = [5, 15, 30, 45] as const;
@@ -68,30 +69,15 @@ export function calculateNewItemLimit(
   dailyCapacity: number,
   configuredLimit: number,
 ): number {
-  const overdueCount = Math.max(
-    0,
-    Math.floor(requireFiniteNumber(overdueReviews, "期限超過数")),
-  );
-  const dueCount = Math.max(
-    0,
-    Math.floor(requireFiniteNumber(dueReviews, "復習期限数")),
-  );
-  if (Number.isNaN(dailyCapacity) || dailyCapacity < 0) {
-    throw new RangeError("1日の容量には0以上の数値を指定してください。");
-  }
-  const capacity = dailyCapacity;
-  const normalizedConfiguredLimit = Math.max(
-    0,
-    Math.floor(requireFiniteNumber(configuredLimit, "新規上限")),
-  );
+  const canonicalCapacity =
+    dailyCapacity === Number.POSITIVE_INFINITY
+      ? Number.MAX_SAFE_INTEGER
+      : dailyCapacity;
 
-  if (overdueCount > 40) {
-    return 0;
-  }
-
-  if (dueCount > capacity * 0.7) {
-    return Math.min(normalizedConfiguredLimit, 3);
-  }
-
-  return normalizedConfiguredLimit;
+  return calculateCanonicalNewItemLimit(
+    overdueReviews,
+    dueReviews,
+    canonicalCapacity,
+    configuredLimit,
+  );
 }

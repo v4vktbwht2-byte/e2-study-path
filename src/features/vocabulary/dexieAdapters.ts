@@ -1,4 +1,7 @@
-import { DexieAnswerCommitRepository } from "../../infrastructure/db/repositories";
+import {
+  DEFAULT_SETTINGS,
+  DexieAnswerCommitRepository,
+} from "../../infrastructure/db/repositories";
 import type { AppDb } from "../../infrastructure/db/appDb";
 import type { VocabularyContentPort, VocabularyStudyStore } from "./types";
 
@@ -22,13 +25,23 @@ export function createDexieVocabularyStudyStore(db: AppDb): VocabularyStudyStore
 
   return {
     async loadSnapshot() {
-      const [reviewStates, masteryProfiles, userStates, attempts] = await Promise.all([
-        db.reviewStates.toArray(),
-        db.mastery.toArray(),
-        db.vocabularyUserStates.toArray(),
-        db.attempts.toArray(),
-      ]);
-      return { reviewStates, masteryProfiles, userStates, attempts };
+      const [reviewStates, masteryProfiles, userStates, attempts, sessions, settings] =
+        await Promise.all([
+          db.reviewStates.toArray(),
+          db.mastery.toArray(),
+          db.vocabularyUserStates.toArray(),
+          db.attempts.toArray(),
+          db.sessions.toArray(),
+          db.settings.get("settings"),
+        ]);
+      return {
+        reviewStates,
+        masteryProfiles,
+        userStates,
+        attempts,
+        sessions,
+        settings: settings ?? DEFAULT_SETTINGS,
+      };
     },
 
     async saveWordState(input) {
@@ -45,7 +58,24 @@ export function createDexieVocabularyStudyStore(db: AppDb): VocabularyStudyStore
     },
 
     async startSession(session) {
-      await db.sessions.put(session);
+      await db.transaction("rw", db.sessions, async () => {
+        const unfinished = (await db.sessions.toArray()).filter(
+          (candidate) =>
+            candidate.id !== session.id &&
+            candidate.endedAt === undefined &&
+            (candidate.type === "vocabulary" || candidate.type === "review"),
+        );
+        if (unfinished.length > 0) {
+          await db.sessions.bulkPut(
+            unfinished.map((candidate) => ({
+              ...candidate,
+              endedAt: session.startedAt,
+              interrupted: true,
+            })),
+          );
+        }
+        await db.sessions.put(session);
+      });
     },
 
     commitAnswer(input) {

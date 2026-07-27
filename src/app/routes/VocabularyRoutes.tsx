@@ -12,6 +12,7 @@ import {
   type VocabularySessionMode,
 } from "../../features/vocabulary";
 import { getAppDb } from "../../infrastructure/db/appDb";
+import { getDeviceTimeZone } from "../featureAdapters";
 
 const SESSION_MODES = new Set<VocabularySessionMode>([
   "new",
@@ -29,6 +30,7 @@ function useVocabularyAdapters() {
     return {
       content: createDexieVocabularyContentPort(db),
       store: createDexieVocabularyStudyStore(db),
+      timeZone: getDeviceTimeZone(),
     };
   }, []);
 }
@@ -49,6 +51,13 @@ function parseLevel(value: string | null): VocabularyQuestionLevel | undefined {
   return Number.isInteger(parsed) && parsed >= 1 && parsed <= 7
     ? (parsed as VocabularyQuestionLevel)
     : undefined;
+}
+
+function parsePlanContext(searchParams: URLSearchParams) {
+  const planDate = searchParams.get("planDate")?.trim();
+  const blockId = searchParams.get("blockId")?.trim();
+  const itemKey = searchParams.get("itemKey")?.trim();
+  return planDate && blockId && itemKey ? { planDate, blockId, itemKey } : undefined;
 }
 
 function sessionPath(
@@ -106,6 +115,7 @@ export function VocabularySessionRoute() {
   const mode = parseMode(searchParams.get("mode"));
   const limit = parseLimit(searchParams.get("limit"), mode === "new" ? 5 : 10);
   const level = parseLevel(searchParams.get("level"));
+  const planContext = parsePlanContext(searchParams);
 
   return (
     <VocabularySessionPage
@@ -114,13 +124,19 @@ export function VocabularySessionRoute() {
       mode={mode}
       limit={limit}
       level={level}
+      {...(planContext === undefined
+        ? {}
+        : {
+            explicitItemKey: planContext.itemKey,
+            planContext,
+          })}
       onStart={(nextMode, options) =>
         navigate(
           sessionPath(nextMode, options?.limit ?? limit, options?.level ?? level),
         )
       }
       onOpenWord={(wordId) => navigate(`/vocabulary/${wordId}`)}
-      onBack={() => navigate("/vocabulary")}
+      onBack={() => navigate(planContext === undefined ? "/vocabulary" : "/")}
     />
   );
 }
@@ -146,6 +162,7 @@ export function ReviewRoute() {
   const adapters = useVocabularyAdapters();
   const limit = parseLimit(searchParams.get("limit"), 10);
   const level = parseLevel(searchParams.get("level"));
+  const planContext = parsePlanContext(searchParams);
 
   return (
     <ReviewPage
@@ -153,6 +170,12 @@ export function ReviewRoute() {
       {...adapters}
       limit={limit}
       level={level}
+      {...(planContext === undefined
+        ? {}
+        : {
+            explicitItemKey: planContext.itemKey,
+            planContext,
+          })}
       onStart={(_mode, options) => {
         const query = new URLSearchParams({ limit: String(limit) });
         const nextLevel = options?.level ?? level;
@@ -162,7 +185,7 @@ export function ReviewRoute() {
         void navigate(`/review?${query.toString()}`);
       }}
       onOpenWord={(wordId) => navigate(`/vocabulary/${wordId}`)}
-      onBack={() => navigate("/vocabulary")}
+      onBack={() => navigate(planContext === undefined ? "/vocabulary" : "/")}
     />
   );
 }

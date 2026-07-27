@@ -1,3 +1,4 @@
+import Dexie from "dexie";
 import { IDBKeyRange, indexedDB } from "fake-indexeddb";
 import type {
   Attempt,
@@ -7,7 +8,12 @@ import type {
 } from "../../domain/models";
 import type { ReviewState } from "../../domain/review/types";
 import { loadStarterPack } from "../content/starterPack";
-import { AppDb, DB_VERSION } from "./appDb";
+import {
+  AppDb,
+  DB_VERSION,
+  DB_VERSION_1_STORES,
+  migrateLegacyDailyPlanRecord,
+} from "./appDb";
 import {
   DexieAnswerCommitRepository,
   DexieContentRepository,
@@ -95,11 +101,11 @@ function createDailyPlan(): DailyPlan {
     mode: "light",
     blocks: [
       {
-        id: "review-block",
-        type: "due",
-        titleJa: "今日の復習",
-        itemKeys: ["vocab:vocab-s0-hello-001"],
+        blockId: "review-block",
+        itemId: "vocab:vocab-s0-hello-001",
+        category: "dueReview",
         estimatedSeconds: 20,
+        status: "pending",
       },
     ],
     completedBlockIds: [],
@@ -108,6 +114,14 @@ function createDailyPlan(): DailyPlan {
       overdueCount: 0,
       newLimit: 3,
     },
+    capacity: {
+      requestedMinutes: 5,
+      effectiveMinutes: 5,
+      budgetSeconds: 300,
+      estimatedReviewItemCapacity: 20,
+    },
+    plannedSeconds: 20,
+    remainingBudgetSeconds: 280,
   };
 }
 
@@ -121,7 +135,7 @@ afterEach(async () => {
 });
 
 describe("IndexedDB schemaとrepository", () => {
-  it("version 1の全テーブルを作成する", async () => {
+  it("最新版の全テーブルを作成する", async () => {
     await db.open();
 
     expect(db.verno).toBe(DB_VERSION);
@@ -146,6 +160,74 @@ describe("IndexedDB schemaとrepository", () => {
         "writingSubmissions",
       ].sort(),
     );
+  });
+
+  it("version 1の旧DailyPlanをblock状態付きの現行契約へ移行する", async () => {
+    const databaseName = `e2-study-path-migration-${databaseSequence}`;
+    db.close();
+    await db.delete();
+    const legacyDb = new Dexie(databaseName, {
+      indexedDB,
+      IDBKeyRange,
+    });
+    legacyDb.version(1).stores(DB_VERSION_1_STORES);
+    await legacyDb.open();
+    await legacyDb.table("dailyPlans").put({
+      date: "2026-07-27",
+      generatedAt: "2026-07-27T00:00:00.000Z",
+      targetMinutes: 15,
+      mode: "standard",
+      blocks: [
+        {
+          id: "legacy-review",
+          type: "due",
+          titleJa: "復習",
+          itemKeys: ["vocab:a", "vocab:b"],
+          estimatedSeconds: 20,
+        },
+      ],
+      completedBlockIds: ["legacy-review"],
+      sourceSnapshot: {
+        dueCount: 2,
+        overdueCount: 0,
+        newLimit: 3,
+      },
+    });
+    legacyDb.close();
+
+    const migratedDb = new AppDb(databaseName, {
+      indexedDB,
+      IDBKeyRange,
+    });
+    await migratedDb.open();
+    const migrated = await migratedDb.dailyPlans.get("2026-07-27");
+
+    expect(migratedDb.verno).toBe(2);
+    expect(migrated?.blocks).toEqual([
+      expect.objectContaining({
+        blockId: "legacy-review:1",
+        itemId: "vocab:a",
+        category: "dueReview",
+        status: "completed",
+      }),
+      expect.objectContaining({
+        blockId: "legacy-review:2",
+        itemId: "vocab:b",
+        category: "dueReview",
+        status: "completed",
+      }),
+    ]);
+    expect(migrated?.completedBlockIds).toEqual(["legacy-review:1", "legacy-review:2"]);
+    expect(migrated?.capacity.requestedMinutes).toBe(15);
+    migratedDb.close();
+    await migratedDb.delete();
+
+    db = createDatabase();
+  });
+
+  it("現行DailyPlanはmigration helperで同じ参照を保つ", () => {
+    const current = createDailyPlan();
+    expect(migrateLegacyDailyPlanRecord(current)).toBe(current);
   });
 
   it("同一contentVersionを重複seedしない", async () => {
@@ -218,6 +300,56 @@ describe("IndexedDB schemaとrepository", () => {
     expect(await db.mastery.count()).toBe(1);
     expect(result.session.completedItemKeys).toEqual(["vocab:vocab-s0-hello-001"]);
     expect(result.dailyPlan?.completedBlockIds).toEqual(["review-block"]);
+    expect(result.dailyPlan?.blocks[0]?.status).toBe("completed");
+  });
+
+  it("同じplan blockを再確定してもstatusと完了IDを重複させない", async () => {
+    const repository = new DexieAnswerCommitRepository(db);
+    await db.sessions.put(createSession());
+    await db.dailyPlans.put(createDailyPlan());
+    const base = {
+      reviewState: createReviewState(),
+      mastery: createMastery(),
+      sessionId: "session-1",
+      dailyPlanDate: "2026-07-27",
+      completedPlanBlockId: "review-block",
+    };
+
+    await repository.commit({ ...base, attempt: createAttempt() });
+    await repository.commit({
+      ...base,
+      attempt: { ...createAttempt(), id: "attempt-2" },
+    });
+
+    const plan = await db.dailyPlans.get("2026-07-27");
+    expect(plan?.completedBlockIds).toEqual(["review-block"]);
+    expect(plan?.blocks[0]?.status).toBe("completed");
+    expect(await db.attempts.count()).toBe(2);
+  });
+
+  it("plan block確定に失敗したら回答の5領域をすべてロールバックする", async () => {
+    const repository = new DexieAnswerCommitRepository(db);
+    const session = createSession();
+    const plan = createDailyPlan();
+    await db.sessions.put(session);
+    await db.dailyPlans.put(plan);
+
+    await expect(
+      repository.commit({
+        attempt: createAttempt(),
+        reviewState: createReviewState(),
+        mastery: createMastery(),
+        sessionId: session.id,
+        dailyPlanDate: plan.date,
+        completedPlanBlockId: "missing-block",
+      }),
+    ).rejects.toThrow("日次プランblockが見つかりません");
+
+    expect(await db.attempts.count()).toBe(0);
+    expect(await db.reviewStates.count()).toBe(0);
+    expect(await db.mastery.count()).toBe(0);
+    await expect(db.sessions.get(session.id)).resolves.toEqual(session);
+    await expect(db.dailyPlans.get(plan.date)).resolves.toEqual(plan);
   });
 
   it("transaction途中の失敗で部分データを残さない", async () => {

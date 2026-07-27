@@ -143,6 +143,31 @@ describe("単語Dexieアダプター", () => {
     ]);
   });
 
+  it("新session開始時に別の未終了Vocabulary/Review sessionを中断終了する", async () => {
+    const store = createDexieVocabularyStudyStore(db);
+    const previous: StudySession = {
+      ...session(),
+      id: "vocabulary-session:new:2026-07-26T00:00:00.000Z",
+      startedAt: "2026-07-26T00:00:00.000Z",
+      studyDate: "2026-07-26",
+    };
+    const next: StudySession = {
+      ...session(),
+      id: "vocabulary-session:due:2026-07-27T00:00:00.000Z",
+      type: "review",
+    };
+    await store.startSession(previous);
+    await store.startSession(next);
+
+    await expect(db.sessions.get(previous.id)).resolves.toEqual(
+      expect.objectContaining({
+        endedAt: next.startedAt,
+        interrupted: true,
+      }),
+    );
+    await expect(db.sessions.get(next.id)).resolves.toEqual(next);
+  });
+
   it("途中で失敗した回答は部分保存しない", async () => {
     const store = createDexieVocabularyStudyStore(db);
 
@@ -168,6 +193,13 @@ describe("単語Dexieアダプター", () => {
     const reopened = createDatabase(databaseName);
     const snapshot = await createDexieVocabularyStudyStore(reopened).loadSnapshot();
     expect(snapshot.attempts).toHaveLength(1);
+    expect(snapshot.sessions).toEqual([
+      expect.objectContaining({
+        id: session().id,
+        endedAt: "2026-07-27T00:05:00.000Z",
+      }),
+    ]);
+    expect(snapshot.settings.studyDayStartHour).toBe(4);
     expect(snapshot.reviewStates[0]).toEqual(
       expect.objectContaining({ itemKey: "vocab:word-hello" }),
     );

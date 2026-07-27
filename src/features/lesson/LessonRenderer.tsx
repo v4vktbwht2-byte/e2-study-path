@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import type { Attempt, LessonProgress } from "../../domain/models";
+import { resolveStudyDay } from "../../domain/planning";
 import { Button, ErrorState, InlineAlert, ProgressBar } from "../../shared/components";
 import {
   clampSectionIndex,
@@ -33,6 +34,7 @@ type LoadState =
 const SYSTEM_LESSON_CLOCK = {
   now: () => new Date(),
 };
+const DEFAULT_STUDY_DAY_RESOLVER = (now: Date) => resolveStudyDay(now);
 
 function toError(error: unknown, fallback: string): Error {
   return error instanceof Error ? error : new Error(fallback);
@@ -49,12 +51,13 @@ function terminalStatus(
 function createLessonSessionIdentity(
   lessonId: string,
   startedAt: Date,
+  studyDate: string,
 ): LessonSessionIdentity {
   const startedAtIso = startedAt.toISOString();
   return {
     id: `lesson-session:${lessonId}:${startedAtIso}`,
     startedAt: startedAtIso,
-    studyDate: startedAtIso.slice(0, 10),
+    studyDate,
   };
 }
 
@@ -82,6 +85,8 @@ export function LessonRenderer({
   content,
   progressStore,
   clock = SYSTEM_LESSON_CLOCK,
+  studyDayResolver = DEFAULT_STUDY_DAY_RESOLVER,
+  planContext,
   onExerciseResult,
   onProgressSaved,
   onComplete,
@@ -96,6 +101,7 @@ export function LessonRenderer({
   const [saving, setSaving] = useState(false);
   const [saveError, setSaveError] = useState<string>();
   const [completionMessage, setCompletionMessage] = useState<string>();
+  const [planReviewCompleted, setPlanReviewCompleted] = useState(false);
   const [answeredExerciseIds, setAnsweredExerciseIds] = useState<Set<string>>(
     () => new Set(),
   );
@@ -112,29 +118,50 @@ export function LessonRenderer({
     setLoadState({ status: "loading" });
     setSaveError(undefined);
     setCompletionMessage(undefined);
+    setPlanReviewCompleted(false);
     setAnsweredExerciseIds(new Set());
     setAnswerRequiredMessage(undefined);
 
-    void Promise.all([content.getLesson(lessonId), progressStore.get(lessonId)])
-      .then(async ([lesson, progress]) => {
+    void Promise.all([
+      content.getLesson(lessonId),
+      progressStore.get(lessonId),
+      Promise.resolve(studyDayResolver(sessionStartedAt)),
+    ])
+      .then(async ([lesson, progress, studyDay]) => {
         if (lesson === undefined) {
           throw new Error("指定されたレッスンが見つかりません。");
         }
         const exercises = await content.getExercises(collectLessonExerciseIds(lesson));
         const sections = normalizeLessonSections(lesson, exercises);
         if (active) {
+          const reviewCheckpoint =
+            planContext !== undefined &&
+            progress?.reviewCheckpoint?.planDate === planContext.planDate &&
+            progress.reviewCheckpoint.blockId === planContext.blockId
+              ? progress.reviewCheckpoint
+              : undefined;
           const resumeIndex =
             progress?.status === "inProgress"
               ? clampSectionIndex(progress.currentSectionIndex, sections.length)
-              : 0;
+              : reviewCheckpoint === undefined
+                ? 0
+                : clampSectionIndex(
+                    reviewCheckpoint.currentSectionIndex,
+                    sections.length,
+                  );
           setSectionIndex(resumeIndex);
+          setAnsweredExerciseIds(new Set(reviewCheckpoint?.answeredExerciseIds ?? []));
           setLoadState({
             status: "ready",
             data: {
               lesson,
               sections,
               progress,
-              session: createLessonSessionIdentity(lesson.id, sessionStartedAt),
+              session: createLessonSessionIdentity(
+                lesson.id,
+                sessionStartedAt,
+                studyDay.studyDate,
+              ),
             },
           });
         }
@@ -151,7 +178,15 @@ export function LessonRenderer({
     return () => {
       active = false;
     };
-  }, [clock, content, lessonId, progressStore, reloadKey]);
+  }, [
+    clock,
+    content,
+    lessonId,
+    planContext,
+    progressStore,
+    reloadKey,
+    studyDayResolver,
+  ]);
 
   useEffect(() => {
     if (loadState.status === "ready") {
@@ -226,6 +261,7 @@ export function LessonRenderer({
           lesson: data.lesson,
           progress: nextProgress,
           session: data.session,
+          ...(planContext === undefined ? {} : { planContext }),
         });
         setLoadState({
           status: "ready",
@@ -240,7 +276,45 @@ export function LessonRenderer({
         setSaving(false);
       }
     },
-    [clock, onProgressSaved, progressStore],
+    [clock, onProgressSaved, planContext, progressStore],
+  );
+
+  const persistReviewCheckpoint = useCallback(
+    async (
+      data: LoadedLesson,
+      targetSectionIndex: number,
+      answeredIds: ReadonlySet<string>,
+    ): Promise<LessonProgress | undefined> => {
+      if (planContext === undefined || terminalStatus(data.progress) === undefined) {
+        return data.progress;
+      }
+      setSaving(true);
+      setSaveError(undefined);
+      try {
+        const saved = await progressStore.saveReviewCheckpoint({
+          lessonId: data.lesson.id,
+          progress: data.progress!,
+          planContext,
+          currentSectionIndex: clampSectionIndex(
+            targetSectionIndex,
+            data.sections.length,
+          ),
+          answeredExerciseIds: [...answeredIds],
+          updatedAt: clock.now().toISOString(),
+        });
+        setLoadState({
+          status: "ready",
+          data: { ...data, progress: saved },
+        });
+        return saved;
+      } catch (error: unknown) {
+        setSaveError(toError(error, "復習の再開位置を保存できませんでした。").message);
+        return undefined;
+      } finally {
+        setSaving(false);
+      }
+    },
+    [clock, planContext, progressStore],
   );
 
   const persistExerciseResult = useCallback(
@@ -277,16 +351,32 @@ export function LessonRenderer({
         attempt,
         session: data.session,
       });
-      setAnsweredExerciseIds((current) => {
-        const next = new Set(current);
-        next.add(result.exerciseId);
-        return next;
-      });
+      const nextAnsweredExerciseIds = new Set(answeredExerciseIds);
+      nextAnsweredExerciseIds.add(result.exerciseId);
+      if (planContext !== undefined && terminalStatus(data.progress) !== undefined) {
+        const saved = await persistReviewCheckpoint(
+          data,
+          sectionIndex,
+          nextAnsweredExerciseIds,
+        );
+        if (saved === undefined) {
+          throw new Error("復習の回答位置を保存できませんでした。");
+        }
+      }
+      setAnsweredExerciseIds(nextAnsweredExerciseIds);
       setAnswerRequiredMessage(undefined);
       await onExerciseResult?.(result);
       pendingAttemptIdsRef.current.delete(result.exerciseId);
     },
-    [clock, onExerciseResult, progressStore],
+    [
+      answeredExerciseIds,
+      clock,
+      onExerciseResult,
+      persistReviewCheckpoint,
+      planContext,
+      progressStore,
+      sectionIndex,
+    ],
   );
 
   if (loadState.status === "loading") {
@@ -323,7 +413,11 @@ export function LessonRenderer({
     );
   }
   const isLastSection = sectionIndex === data.sections.length - 1;
-  const isTerminal = terminalStatus(data.progress) !== undefined;
+  const isPlanReview =
+    planContext !== undefined && terminalStatus(data.progress) !== undefined;
+  const isTerminal =
+    terminalStatus(data.progress) !== undefined &&
+    (!isPlanReview || planReviewCompleted);
   const currentSectionNeedsAnswers =
     (currentSection.kind === "exercise" || currentSection.kind === "recall") &&
     currentSection.exercises.length > 0;
@@ -356,6 +450,19 @@ export function LessonRenderer({
       setAnswerRequiredMessage(undefined);
       return;
     }
+    if (isPlanReview) {
+      const saved = await persistReviewCheckpoint(
+        data,
+        targetIndex,
+        answeredExerciseIds,
+      );
+      if (saved !== undefined) {
+        setSectionIndex(clampSectionIndex(targetIndex, data.sections.length));
+        setCompletionMessage(undefined);
+        setAnswerRequiredMessage(undefined);
+      }
+      return;
+    }
     const saved = await persistProgress(data, targetIndex);
     if (saved !== undefined) {
       setSectionIndex(clampSectionIndex(targetIndex, data.sections.length));
@@ -371,6 +478,9 @@ export function LessonRenderer({
     const saved = await persistTerminal(data, "completed", sectionIndex);
     if (saved === undefined) {
       return;
+    }
+    if (isPlanReview) {
+      setPlanReviewCompleted(true);
     }
     try {
       await onComplete?.(data.lesson, saved);
@@ -410,6 +520,17 @@ export function LessonRenderer({
   const interruptLesson = async () => {
     if (isTerminal) {
       onExit?.();
+      return;
+    }
+    if (isPlanReview) {
+      const saved = await persistReviewCheckpoint(
+        data,
+        sectionIndex,
+        answeredExerciseIds,
+      );
+      if (saved !== undefined) {
+        onExit?.();
+      }
       return;
     }
     const saved = await persistProgress(data, sectionIndex);
@@ -483,7 +604,13 @@ export function LessonRenderer({
         </Button>
         {isTerminal ? (
           onExit !== undefined ? (
-            <Button onClick={onExit}>コースへ戻る</Button>
+            <Button
+              onClick={() => {
+                void interruptLesson();
+              }}
+            >
+              {planContext === undefined ? "コースへ戻る" : "今日の学習へ戻る"}
+            </Button>
           ) : (
             <span className={styles.savedStatus} role="status">
               進捗を保存しました
@@ -497,7 +624,7 @@ export function LessonRenderer({
               void completeLesson();
             }}
           >
-            レッスンを完了
+            {isPlanReview ? "復習を完了" : "レッスンを完了"}
           </Button>
         ) : (
           <Button
@@ -512,7 +639,7 @@ export function LessonRenderer({
         )}
       </nav>
 
-      {!isTerminal ? (
+      {!isTerminal && !isPlanReview ? (
         <div className={styles.skipArea}>
           <p>すでに知っている内容なら、学習済みとして記録できます。</p>
           <Button

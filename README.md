@@ -22,18 +22,19 @@
 
 ## 現在の実装状況
 
-Phase 00〜04が完了し、現在はPhase 05「今日のプラン・滞留救済・レッスン統合」を実装中です。
+Phase 00〜05が完了し、現在はPhase 06「読解・聞き取り・作文・会話・短縮模試」を実装中です。
 
-Phase 04では、Stage 0〜6各20語・合計140語のオリジナル語彙、単語ハブ・一覧・詳細、Level 1〜7、新規語の同一セッション再想起、Quick Sort、Again/Hard/Good/Easy、5軸習熟度、期限・苦手優先復習、混同語比較を実装しました。学習結果はIndexedDBへ原子的に保存されます。
+Phase 05では、5/15/30/45分とcustom、light/standard/thorough/all、期限超過から技能練習までの優先編成、80件超の滞留救済を「今日の学習」へ統合しました。完了済みblockを維持する再計算、IANAタイムゾーンと開始時刻による学習日境界、単語セッション途中再開、完了レッスンの翌学習日復習にも対応しています。学習結果とDailyPlan進捗はIndexedDBへ原子的に保存され、別タブの古い再計算でも完了を巻き戻しません。復習レッスンはセクション位置と回答済み問題から再開できます。
 
-最新のPhase 04検証は次のとおりです。
+最新のPhase 05検証は次のとおりです。
 
-- domain/featureテスト: 117件成功
-- Playwright E2E: desktop/320pxで8/8成功
+- unit/componentテスト: 322/322件成功
+- Playwright E2E: 全フローdesktop/320pxで34/34成功（Phase 05固有8/8）
 - Pilot教材検証: 140語・31レッスン・155演習
-- production build: 成功（メイン初期chunk 608.48 kBの警告はPhase 07/09で再評価）
+- `npm run check`: 成功
+- production build: 成功（メイン初期chunk 616.87 kBの警告はPhase 07/09で再評価）
 
-Web Speechの声質・発音は実機未確認です。単語セッション途中reloadと学習日境界の設定接続はPhase 05、画面・問題切替時のフォーカス管理はPhase 08で仕上げます。
+Web Speechの声質・発音、iPhone Safari／ホーム画面PWA、スクリーンリーダーは実機未確認です。画面・問題切替時のフォーカス管理はPhase 08で仕上げます。`npm install`が報告したhigh severity advisory 2件の`npm audit --json`は、依存メタデータの外部送信を伴う実行承認が得られず未実施で、Phase 09で承認条件を確認して再試行します。
 
 ## ローカル起動
 

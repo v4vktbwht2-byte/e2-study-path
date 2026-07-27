@@ -1,4 +1,5 @@
 import type { Attempt, LessonProgress } from "../../domain/models";
+import type { ResolvedStudyDay } from "../../domain/planning";
 import type { Exercise, Lesson } from "../../infrastructure/content/schemas";
 import type { LessonContentReader, LessonProgressStore } from "../course/types";
 
@@ -34,9 +35,28 @@ export interface LessonSessionIdentity {
   studyDate: string;
 }
 
+export interface LessonPlanContext {
+  planDate: string;
+  blockId: string;
+  itemKey: string;
+}
+
+export type LessonStudyDayResolver = (
+  now: Date,
+) => ResolvedStudyDay | Promise<ResolvedStudyDay>;
+
 export interface LessonAttemptCommitInput {
   attempt: Attempt;
   session: LessonSessionIdentity;
+}
+
+export interface LessonReviewCheckpointInput {
+  lessonId: string;
+  progress: LessonProgress;
+  planContext: LessonPlanContext;
+  currentSectionIndex: number;
+  answeredExerciseIds: readonly string[];
+  updatedAt: string;
 }
 
 export type TerminalLessonProgress = LessonProgress & {
@@ -47,6 +67,7 @@ export interface LessonTerminalCommitInput {
   lesson: Lesson;
   progress: TerminalLessonProgress;
   session: LessonSessionIdentity;
+  planContext?: LessonPlanContext;
 }
 
 /**
@@ -55,6 +76,7 @@ export interface LessonTerminalCommitInput {
  */
 export interface LessonLearningStore extends LessonProgressStore {
   recordAttempt(input: LessonAttemptCommitInput): Promise<void>;
+  saveReviewCheckpoint(input: LessonReviewCheckpointInput): Promise<LessonProgress>;
   commitTerminal(input: LessonTerminalCommitInput): Promise<void>;
 }
 
@@ -67,6 +89,8 @@ export interface LessonRendererProps {
   content: LessonContentReader;
   progressStore: LessonLearningStore;
   clock?: LessonClock;
+  studyDayResolver?: LessonStudyDayResolver;
+  planContext?: LessonPlanContext;
   onExerciseResult?: (result: LessonExerciseResult) => void | Promise<void>;
   onProgressSaved?: (progress: LessonProgress) => void;
   /**

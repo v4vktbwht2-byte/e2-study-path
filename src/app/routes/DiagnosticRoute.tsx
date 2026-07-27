@@ -5,10 +5,7 @@ import type {
   DiagnosticQuestionLevel,
   DiagnosticStage,
 } from "../../domain/diagnostic";
-import {
-  DIAGNOSTIC_AREAS,
-  DIAGNOSTIC_STAGES,
-} from "../../domain/diagnostic";
+import { DIAGNOSTIC_AREAS, DIAGNOSTIC_STAGES } from "../../domain/diagnostic";
 import {
   DiagnosticPage,
   type DiagnosticLessonSummary,
@@ -43,8 +40,7 @@ function isDiagnosticStage(value: number): value is DiagnosticStage {
 
 function isDiagnosticArea(value: string | undefined): value is DiagnosticArea {
   return (
-    value !== undefined &&
-    DIAGNOSTIC_AREAS.some((candidate) => candidate === value)
+    value !== undefined && DIAGNOSTIC_AREAS.some((candidate) => candidate === value)
   );
 }
 
@@ -65,14 +61,8 @@ function toDiagnosticQuestion(
     : [];
   const answerIndex =
     typeof exercise.answer === "number" ? exercise.answer : Number.NaN;
-  const area = diagnosticTagValue(
-    exercise.tags,
-    "diagnostic:area:",
-  );
-  const level = diagnosticTagValue(
-    exercise.tags,
-    "diagnostic:level:",
-  );
+  const area = diagnosticTagValue(exercise.tags, "diagnostic:area:");
+  const level = diagnosticTagValue(exercise.tags, "diagnostic:level:");
 
   if (
     !exercise.tags.includes("diagnostic") ||
@@ -87,9 +77,7 @@ function toDiagnosticQuestion(
   }
 
   const passage =
-    typeof exercise.payload.passage === "string"
-      ? exercise.payload.passage.trim()
-      : "";
+    typeof exercise.payload.passage === "string" ? exercise.payload.passage.trim() : "";
   const speechText =
     typeof exercise.payload.speechText === "string"
       ? exercise.payload.speechText
@@ -101,15 +89,11 @@ function toDiagnosticQuestion(
     area,
     level,
     sequence,
-    prompt:
-      passage.length > 0 ? `${passage}\n\n${exercise.prompt}` : exercise.prompt,
+    prompt: passage.length > 0 ? `${passage}\n\n${exercise.prompt}` : exercise.prompt,
     ...(exercise.instructionsJa === undefined
       ? {}
       : { instructionsJa: exercise.instructionsJa }),
-    kind:
-      exercise.type === "listenAndChoose"
-        ? "listeningChoice"
-        : "singleChoice",
+    kind: exercise.type === "listenAndChoose" ? "listeningChoice" : "singleChoice",
     choices: choices.map((choice) => ({ value: choice, label: choice })),
     acceptedAnswers: [choices[answerIndex]],
     ...(speechText === undefined ? {} : { audioTranscript: speechText }),
@@ -142,8 +126,7 @@ export function DiagnosticRoute() {
           )
           .map(toDiagnosticQuestion)
           .filter(
-            (question): question is DiagnosticQuestionContent =>
-              question !== undefined,
+            (question): question is DiagnosticQuestionContent => question !== undefined,
           );
         setState({
           status: "ready",

@@ -1,5 +1,6 @@
 import { createMasteryProfile, updateMasteryProfile } from "../../domain/mastery";
 import type { Attempt, CommitAnswerInput, MasteryProfile } from "../../domain/models";
+import { resolveStudyDay } from "../../domain/planning";
 import {
   classifyResponseSpeed,
   createNewReviewState,
@@ -11,6 +12,7 @@ import {
   type ReviewConfidence,
   type ReviewRating,
   type ReviewState,
+  type StudyDayBoundary,
 } from "../../domain/review";
 import {
   createVocabularyMasteryAttempt,
@@ -567,13 +569,14 @@ export function suggestVocabularyRating(input: {
   confidence: ReviewConfidence;
   hintCount: number;
   responseTimeMs: number;
+  speedAdjustmentEnabled?: boolean;
 }): ReviewRating {
   return suggestReviewRating({
     correct: input.correct,
     confidence: input.confidence,
     hintCount: input.hintCount,
     responseTiming: responseTimingForQuestion(input.question, input.responseTimeMs),
-    speedAdjustmentEnabled: true,
+    speedAdjustmentEnabled: input.speedAdjustmentEnabled,
   });
 }
 
@@ -591,6 +594,8 @@ export interface PrepareVocabularyCommitInput {
   attemptId: string;
   studyDate: string;
   now: Date;
+  speedAdjustmentEnabled?: boolean;
+  studyDayBoundary?: StudyDayBoundary;
   correctAfterAgain?: boolean;
   confusedWithItemKey?: string;
 }
@@ -608,7 +613,8 @@ export function prepareVocabularyCommit(
     responseTiming: responseTimingForQuestion(input.question, input.responseTimeMs),
     confidence: input.confidence,
     hintCount: input.hintCount,
-    speedAdjustmentEnabled: true,
+    speedAdjustmentEnabled: input.speedAdjustmentEnabled,
+    studyDayBoundary: input.studyDayBoundary,
   });
   const mastery =
     input.record.mastery ?? createMasteryProfile(input.record.itemKey, input.now);
@@ -619,7 +625,7 @@ export function prepareVocabularyCommit(
       hintCount: input.hintCount,
       confidence: input.confidence,
       responseTiming: responseTimingForQuestion(input.question, input.responseTimeMs),
-      speedAdjustmentEnabled: true,
+      speedAdjustmentEnabled: input.speedAdjustmentEnabled,
       correctAfterAgain: input.correctAfterAgain,
     }),
     now: input.now,
@@ -708,6 +714,7 @@ export function summarizeVocabularySession(
   observations: readonly VocabularyAnswerObservation[],
   finalReviewStates: readonly ReviewState[],
   now: Date,
+  studyDayBoundary?: StudyDayBoundary,
 ): VocabularySessionSummary {
   const observationsByItem = new Map<string, VocabularyAnswerObservation[]>();
   for (const observation of observations) {
@@ -730,9 +737,15 @@ export function summarizeVocabularySession(
       uncertainCount += 1;
     }
   }
-  const today = now.toISOString().slice(0, 10);
+  const today =
+    studyDayBoundary === undefined
+      ? resolveStudyDay(now).studyDate
+      : resolveStudyDay(now, studyDayBoundary).studyDate;
   const nextDueTodayCount = finalReviewStates.filter(
-    (state) => state.dueAt.slice(0, 10) === today,
+    (state) =>
+      (studyDayBoundary === undefined
+        ? resolveStudyDay(new Date(state.dueAt)).studyDate
+        : resolveStudyDay(new Date(state.dueAt), studyDayBoundary).studyDate) === today,
   ).length;
 
   return {

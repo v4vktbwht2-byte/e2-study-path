@@ -38,6 +38,8 @@ Given 80件以上の期限超過
 When 今日画面を開く
 Then 軽め・標準・しっかり・すべてが表示され、軽めでは優先項目だけが選ばれる。
 
+Phase 05 verification: `e2e/phase05.spec.ts`で84件の期限超過からlight 15件・新規語0件をdesktop/320pxの両方で確認する。`src/domain/planning/dailyPlan.test.ts`と`src/features/today/model.test.ts`で4コース、完了済みblockを維持する再計算、学習日変更も検証する。
+
 ### AC-REL-007 Mastery dimensions
 
 Given 英→日四択に正解
@@ -81,8 +83,8 @@ Then source metadataがoriginalで、公式問題・公式音源・公式ロゴ�
 |---|---|---:|---|
 | FR-ONB | 02, 05 | 03 | E2E-001 |
 | FR-DIA | 02, 03 | 03 | unit diagnostic + E2E-001 |
-| FR-CUR/LES | 03, 11 | 03/05 | lesson component + AC-REL-003 |
-| FR-DLY | 09 + planning docs | 05 | daily plan unit + E2E-004 |
+| FR-CUR/LES | 03, 11 | 03/05 | lesson component + `LessonRenderer.test.tsx` + AC-REL-003 |
+| FR-DLY | 09 + planning docs | 05 | planning/today unit + `phase05.spec.ts` |
 | FR-VOC | 10 | 04 | vocabulary components + E2E-002 |
 | FR-REV | 09 | 04 | scheduler unit + E2E-003 |
 | FR-REA/LIS/WRI/SPK | 05, 11, 12 | 06 | E2E-007/008 + components |
@@ -120,8 +122,10 @@ Then source metadataがoriginalで、公式問題・公式音源・公式ロゴ�
 
 ### Phase 05
 
-- daily plan and lesson completion work
-- backlog handling works
+- Complete: 今日のプラン、単語回答、レッスン完了がDailyPlan進捗を含む原子的保存で動作する。
+- Complete: 80件超の滞留で4コースを提示し、lightは15件・新規語0件へ抑える。
+- Complete: 完了済みblockを維持する再計算、単語途中再開、IANA学習日境界、翌学習日のレッスン復習が動作する。
+- Evidence: 322 unit tests、全E2E desktop/320px 34/34（`e2e/phase05.spec.ts` 8/8）、`npm run check`成功。
 
 ### Phase 06
 

@@ -4,7 +4,7 @@
 
 ## 現在のPhase
 
-- Phase: 05 — Daily Plan, Backlog Rescue, and Lesson Integration
+- Phase: 06 — Reading, Listening, Writing, Speaking, and Mock Practice
 - Status: 計画確定・実装開始
 - Last updated: 2026-07-27
 
@@ -278,7 +278,7 @@ npm run build
 **Known limitations / follow-up**
 
 - 実音声ファイルは含めず、PilotではWeb Speechと明示fallbackを使う。声質・発音・端末差は実機未確認。
-- 単語セッション途中reloadの再開と、`studyDayStartHour`・IANAタイムゾーンを使う学習日境界の画面接続はPhase 05で今日のプランと合わせて実装する。
+- 単語セッション途中reloadの再開と、`studyDayStartHour`・IANAタイムゾーンを使う学習日境界の画面接続はPhase 05で実装済み。
 - 問題・feedback・画面切替時のフォーカス管理とスクリーンリーダー手動確認はPhase 08で仕上げる。
 - production buildは成功するが、メイン初期chunkが608.48 kBで警告対象。Phase 07/09のPWA分割・配信構成で再評価する。
 
@@ -326,8 +326,75 @@ npm run check
 
 **Results**
 
-- 計画確定。既存のcapacity、優先順位、backlog抑制、skill rotationの純粋domainを画面・永続化へ接続する段階。
+- 5/15/30/45分とcustom、light/standard/thorough/allを純粋domainの`buildDailyPlan`へ接続し、期限超過、当日期限、苦手、現在レッスン、新規語、技能練習の順で編成できるようにした。
+- 80件超の滞留ではlightを15件、新規語を0件へ抑え、標準・しっかり・すべてを含む4コースから無理のない量を選べるようにした。
+- 今日画面へ学習日、残り時間、内訳、優先理由、開始・続きから、単語ショートカット、完了summary、空・loading・error状態を実装した。
+- DailyPlan blockの完了をAttempt・ReviewState・Mastery・StudySessionまたはLessonProgressと同一transactionで保存し、再読込後も完了状態を維持する。時間変更時は完了blockを固定し、未完了部分だけを再計算する。
+- DB上の最新完了状態と再計算planをtransaction内で単調増加に統合し、別タブや古い画面からの保存でも完了を巻き戻さない。旧DailyPlan契約はIndexedDB v2 migrationで現行block契約へ変換する。
+- `studyDayStartHour`と端末IANAタイムゾーンから学習日境界を解決し、DSTを含む時刻境界をDaily Plan・レッスン・単語へ注入した。学習日が変わると前日未完了を罰せず新しいplanを作る。
+- 単語セッションは確定済み回答とLevel 2再想起queueから途中再開でき、重複した未完了sessionを閉じる。今日のプラン経由では、due語は回答確定、新規語は同一セッションの再想起完了時にblockを完了する。
+- レッスン完了時に次学習日のreview itemを登録した。期限到来後の復習blockでは元の完了進捗を壊さず全セクションと問題を再実施し、セクション位置・回答済み問題を中断再開できる。URLのplan項目と実レッスンの一致も検証し、復習結果とDailyPlan blockを原子的に保存する。
+- レッスン候補は各Exerciseの`estimatedSeconds`を優先して所要時間を計算し、説明sectionは`estimatedMinutes`へフォールバックする。
+- 全unit 322/322件、全E2E desktop/320px 34/34（Phase 05固有8/8）が成功し、`npm run check`も成功した。production buildは成功したが、メイン初期chunk 616.87 kBの警告が残る。
 
 **Known limitations / follow-up**
 
 - Phase 06で実装する技能別教材が未接続の場合、skill rotationは現在利用可能な候補だけで編成する。
+- Web Speechの声質・発音、iPhone Safari／ホーム画面PWA、スクリーンリーダーは実機未確認。
+- メイン初期chunk 616.87 kBはPhase 07/09で分割と配信構成を再評価する。
+- `npm audit --json`は依存メタデータの外部送信を伴う実行承認が得られず未実施。Phase 09で承認条件を確認して再試行する。
+
+## Phase 06 — Reading, Listening, Writing, Speaking, and Mock Practice
+
+**Goal**
+
+読解・聞き取り・英作文・スピーキングを実際に完了して履歴保存できる技能別モジュールとして実装し、上位Stageでは英検2級の現行形式を参考にしたオリジナル短縮模試へ接続する。
+
+**Files and areas expected to change**
+
+- `src/features/reading/**`、`src/features/listening/**`
+- `src/features/writing/**`、`src/features/speaking/**`、`src/features/mock/**`
+- `src/domain/practice/**`、`src/infrastructure/audio/**`、`src/infrastructure/db/**`
+- `src/content/**`、`contracts/**`、`src/app/routes/**`
+- 技能別unit/component/E2E tests
+
+**Implementation steps**
+
+1. 既存のExercise・Attempt・StudySession・ReviewState・Mastery・DailyPlan契約を再利用し、技能別の採点可能問題と自己評価課題を純粋domainとRepository境界へ分離する。
+2. 読解ハブ、セット一覧、段落番号付きreader、文字サイズ、回答時間、根拠文選択、結果画面を実装し、正答根拠・誤答理由・段落要点・重要語句を表示する。重要語句は単語お気に入りへ追加できるようにする。
+3. オリジナル読解を6セット以上追加し、Stage、技能、出典、正答、解説、参照整合性をruntime/CIで検証する。
+4. 聞き取りへ本番風と復習モードを実装する。本番風は1回再生を制御し、復習では繰り返し、速度、一文再生、script、dictationを提供する。
+5. `AudioService`をasset audio・Web Speech・unsupportedへ抽象化し、オフライン・音声なし・Web Speech非対応でも英文表示と自己練習で完了できるようにする。オリジナルscriptと問題を6セット以上追加する。
+6. 要約・意見作文のprompt一覧、editor、Unicode対応word count、draft autosave、再読込、履歴、内容・構成・語彙・文法の自己評価rubricを実装する。要約45〜55語、意見80〜100語を目安として表示し、自動正誤判定はしない。
+7. オリジナル作文教材を要約4題・意見4題以上追加し、WritingSubmissionの下書き・提出・自己評価を永続化する。
+8. スピーキングへ20秒黙読、音読、No.1、20秒準備、3場面説明、No.3/4の流れを実装する。権限説明後にだけMediaRecorderを要求し、録音・再生・削除と、拒否・非対応時のtext response／self-practiceを提供する。
+9. 自作3場面テキストカードまたはSVGを含むオリジナル会話教材を4セット以上追加する。録音Blobは既定backup対象外の方針を維持する。
+10. オリジナル短縮模試を1セット以上追加し、セクションtimer、中断警告、結果、弱点練習へのリンクを実装する。結果は公式スコアではなく学習用の目安と明示する。
+11. 各技能の完了をAttempt・StudySession・Mastery・DailyPlanへ原子的に保存し、今日の学習のskill rotationと履歴へ接続する。
+12. 読解6、聞き取り6、要約4、意見4、会話4、短縮模試1の教材検証、word count unit、各技能の完了・再読込・権限拒否・音声非対応component/E2Eを追加し、Phase品質ゲートを通す。
+
+**Verification commands**
+
+```powershell
+npm run validate:content
+npm run test -- wordCount
+npm run test:e2e -- --grep "reading|listening|writing|speaking|mock"
+npm run check
+```
+
+**Decisions made**
+
+- 公式過去問・公式音声・公式ロゴ・公式イラストは使用せず、教材と3場面表現をすべて本プロジェクトのオリジナルとしてsource metadataへ記録する。
+- Web Speechを本番相当音声と断定せず、音声機能が利用できない環境でも学習フローを完了可能にする。
+- 自由作文・自由発話はAIや規則だけで正誤判定せず、目安、rubric、履歴、自己評価で学習を支援する。
+- 録音権限は画面表示直後に要求せず、利用者が説明を読んで録音開始を選んだ時点で要求する。
+- 短縮模試の結果は公式スコア・合否予測として表示しない。
+
+**Results**
+
+- 計画確定。技能別domain・教材契約を確認し、読解・聞き取り・作文・会話・短縮模試を並行実装する段階。
+
+**Known limitations / follow-up**
+
+- 実音声の収録はPilot Releaseの必須条件にせず、asset audioがない教材ではWeb Speechまたは明示されたtext fallbackを使う。
+- MediaRecorder、Web Speech、iPhone Safariの挙動と音声品質は、対応する実機・ブラウザーでの最終確認が必要。

@@ -3,12 +3,14 @@ import userEvent from "@testing-library/user-event";
 import { afterEach, describe, expect, it, vi } from "vitest";
 import { createMasteryProfile } from "../../domain/mastery";
 import type {
+  Attempt,
   CommitAnswerInput,
   StudySession,
   VocabularyUserState,
 } from "../../domain/models";
 import { createNewReviewState } from "../../domain/review";
 import type { VocabularyItem } from "../../infrastructure/content/schemas";
+import { DEFAULT_SETTINGS } from "../../infrastructure/db/repositories";
 import { ReviewPage } from "../review";
 import { VocabularyHubPage } from "./VocabularyHubPage";
 import { VocabularyListPage } from "./VocabularyListPage";
@@ -75,6 +77,8 @@ function emptySnapshot(): VocabularyStudySnapshot {
     masteryProfiles: [],
     userStates: [],
     attempts: [],
+    sessions: [],
+    settings: { ...DEFAULT_SETTINGS, studyDayStartHour: 0 },
   };
 }
 
@@ -95,7 +99,9 @@ function dueSnapshot(target = ITEMS[0]): VocabularyStudySnapshot {
 }
 
 function createStore(initial = emptySnapshot()) {
-  let currentSession: StudySession | undefined;
+  let currentSession = initial.sessions.find(
+    (session) => session.endedAt === undefined,
+  );
   const loadSnapshot = vi.fn(() => Promise.resolve(initial));
   const saveWordState = vi.fn<VocabularyStudyStore["saveWordState"]>(() =>
     Promise.resolve(),
@@ -147,6 +153,46 @@ function createStore(initial = emptySnapshot()) {
     commitAnswer,
     finishSession,
     getCurrentSession: () => currentSession,
+  };
+}
+
+function unfinishedSession(
+  mode: "new" | "due" | "quickSort",
+  itemKeys: readonly string[],
+): StudySession {
+  return {
+    id: `vocabulary-session:${mode}:${NOW.toISOString()}`,
+    type: mode === "due" ? "review" : "vocabulary",
+    startedAt: NOW.toISOString(),
+    studyDate: "2026-07-27",
+    itemKeys: [...itemKeys],
+    completedItemKeys: [],
+    interrupted: false,
+  };
+}
+
+function savedAttempt(
+  session: StudySession,
+  target: VocabularyItem,
+  rating: "again" | "good" = "good",
+): Attempt {
+  const correct = rating !== "again";
+  return {
+    id: `${session.id}:attempt:1`,
+    itemKey: vocabularyItemKey(target),
+    exerciseId: `vocabulary-question:${target.id}:level-1`,
+    sessionId: session.id,
+    createdAt: NOW.toISOString(),
+    studyDate: session.studyDate,
+    mode: "recognitionChoice",
+    response: 0,
+    correct,
+    score: correct ? 1 : 0,
+    responseTimeMs: 2_000,
+    hintCount: 0,
+    confidence: "medium",
+    suggestedRating: rating,
+    finalRating: rating,
   };
 }
 
@@ -317,6 +363,137 @@ describe("単語ページ", () => {
     expect(committed?.attempt.confidence).toBe("high");
     expect(committed?.mastery.spelling).toBe(0);
     expect(await screen.findByText("閲覧カード・まだ採点しません")).toBeVisible();
+  });
+
+  it("明示itemだけを出題し、設定した学習日境界とplan完了情報を使う", async () => {
+    const target = ITEMS[1]!;
+    const snapshot = {
+      ...emptySnapshot(),
+      settings: {
+        ...DEFAULT_SETTINGS,
+        studyDayStartHour: 10,
+      },
+    };
+    const { store, startSession, commitAnswer } = createStore(snapshot);
+    render(
+      <VocabularySessionPage
+        mode="new"
+        content={content()}
+        store={store}
+        clock={clock}
+        limit={5}
+        explicitItemKey={vocabularyItemKey(target)}
+        planContext={{
+          planDate: "2026-07-26",
+          blockId: "new-word-block",
+          itemKey: vocabularyItemKey(target),
+        }}
+        timeZone="Asia/Tokyo"
+        onBack={() => {}}
+      />,
+    );
+
+    await screen.findByRole("heading", { name: "book", level: 2 });
+    expect(startSession).toHaveBeenCalledWith(
+      expect.objectContaining({
+        studyDate: "2026-07-26",
+        itemKeys: [vocabularyItemKey(target)],
+      }),
+    );
+    expect(screen.queryByRole("heading", { name: "hello", level: 2 })).toBeNull();
+
+    const user = userEvent.setup();
+    await user.click(screen.getByRole("button", { name: "答えを隠して想起問題へ" }));
+    await user.click(screen.getByLabelText("本"));
+    await user.click(screen.getByRole("button", { name: "答えを確認" }));
+    await user.click(screen.getByRole("button", { name: /^Good(?:、推奨)?$/ }));
+    await waitFor(() => expect(commitAnswer).toHaveBeenCalledTimes(1));
+    expect(commitAnswer.mock.calls[0]?.[0].dailyPlanDate).toBeUndefined();
+
+    await user.click(
+      await screen.findByRole("button", {
+        name: "思い出してから答えを表示",
+      }),
+    );
+    await user.click(screen.getByRole("button", { name: "思い出せた" }));
+    await user.click(screen.getByRole("button", { name: /^Good(?:、推奨)?$/ }));
+    await screen.findByRole("heading", { name: "セッションを終えました" });
+    expect(commitAnswer.mock.calls[1]?.[0]).toMatchObject({
+      dailyPlanDate: "2026-07-26",
+      completedPlanBlockId: "new-word-block",
+    });
+    expect(
+      screen.getByRole("button", { name: "今日の学習へ戻る" }),
+    ).toBeInTheDocument();
+  });
+
+  it("未終了の新規sessionを再利用し、回答済み地点から順序とLevel 2確認を復元する", async () => {
+    const session = unfinishedSession(
+      "new",
+      ITEMS.map((target) => vocabularyItemKey(target)),
+    );
+    const first = ITEMS[0]!;
+    const snapshot = {
+      ...dueSnapshot(first),
+      sessions: [session],
+      attempts: [savedAttempt(session, first)],
+    };
+    const { store, startSession, commitAnswer } = createStore(snapshot);
+    render(
+      <VocabularySessionPage
+        mode="new"
+        content={content()}
+        store={store}
+        clock={clock}
+        limit={5}
+      />,
+    );
+
+    expect(
+      await screen.findByRole("heading", { name: "book", level: 2 }),
+    ).toBeVisible();
+    expect(startSession).not.toHaveBeenCalled();
+    const user = userEvent.setup();
+    for (const target of ITEMS.slice(1)) {
+      await screen.findByText("閲覧カード・まだ採点しません");
+      await user.click(screen.getByRole("button", { name: "答えを隠して想起問題へ" }));
+      await user.click(screen.getByLabelText(target.meanings[0]!.ja));
+      await user.click(screen.getByRole("button", { name: "答えを確認" }));
+      await user.click(screen.getByRole("button", { name: /^Good(?:、推奨)?$/ }));
+    }
+
+    expect(await screen.findByText(/想起問題 Level 2・再確認/)).toBeVisible();
+    expect(screen.getByRole("heading", { name: "hello", level: 2 })).toBeVisible();
+    expect(commitAnswer.mock.calls[0]?.[0].attempt.id).toBe(`${session.id}:attempt:2`);
+  });
+
+  it("Again確定後の未終了sessionを再利用し、再確認とattempt連番を復元する", async () => {
+    const first = ITEMS[0]!;
+    const session = unfinishedSession("due", [vocabularyItemKey(first)]);
+    const snapshot = {
+      ...dueSnapshot(first),
+      sessions: [session],
+      attempts: [savedAttempt(session, first, "again")],
+    };
+    const { store, startSession, commitAnswer } = createStore(snapshot);
+    render(
+      <VocabularySessionPage
+        mode="due"
+        content={content()}
+        store={store}
+        clock={clock}
+        limit={1}
+      />,
+    );
+
+    expect(await screen.findByText(/想起問題 Level 1・再確認/)).toBeVisible();
+    expect(startSession).not.toHaveBeenCalled();
+    const user = userEvent.setup();
+    await user.click(screen.getByLabelText("こんにちは"));
+    await user.click(screen.getByRole("button", { name: "答えを確認" }));
+    await user.click(screen.getByRole("button", { name: /^Good(?:、推奨)?$/ }));
+    await waitFor(() => expect(commitAnswer).toHaveBeenCalledTimes(1));
+    expect(commitAnswer.mock.calls[0]?.[0].attempt.id).toBe(`${session.id}:attempt:2`);
   });
 
   it("新規5語のGood後は3問以上あけたLevel 2確認を行い翌日dueにする", async () => {

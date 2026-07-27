@@ -1,11 +1,7 @@
 import { useEffect, useMemo, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import type { UserProfile } from "../../domain/models";
-import {
-  CourseMap,
-  StageDetail,
-  type CurriculumStage,
-} from "../../features/course";
+import { CourseMap, StageDetail, type CurriculumStage } from "../../features/course";
 import { Button, Card, ErrorState } from "../../shared/components";
 import { createPhase03FeatureAdapters } from "../featureAdapters";
 
@@ -61,10 +57,7 @@ function CourseRouteError({ message }: { message: string }) {
   return (
     <section>
       <h1>コース</h1>
-      <ErrorState
-        title="学習地点を読み込めませんでした"
-        description={message}
-      />
+      <ErrorState title="学習地点を読み込めませんでした" description={message} />
     </section>
   );
 }

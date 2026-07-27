@@ -8,7 +8,12 @@ export {
   calculateNewItemLimit,
   normalizeDailyMinutes,
 } from "./capacity";
-export { buildDailyPlan } from "./dailyPlan";
+export {
+  buildDailyPlan,
+  completeDailyPlanBlock,
+  mergeDailyPlanCompletions,
+} from "./dailyPlan";
+export { resolveStudyDay, type ResolvedStudyDay } from "../review/time";
 export {
   DAILY_PLAN_MODES,
   LEARNING_SKILLS,

@@ -2,6 +2,7 @@ import { createMasteryProfile } from "../../domain/mastery";
 import type { Attempt } from "../../domain/models";
 import { createNewReviewState } from "../../domain/review";
 import type { VocabularyItem } from "../../infrastructure/content/schemas";
+import { DEFAULT_SETTINGS } from "../../infrastructure/db/repositories";
 import {
   buildVocabularyCollections,
   buildVocabularyQuestion,
@@ -12,6 +13,8 @@ import {
   reinsertNewConfirmationWithMinimumSpacing,
   selectVocabularyConfusionComparisons,
   selectVocabularyQuestionLevel,
+  suggestVocabularyRating,
+  summarizeVocabularySession,
   vocabularyItemKey,
   VOCABULARY_LEVELS,
 } from "./model";
@@ -63,6 +66,8 @@ function snapshot(): VocabularyStudySnapshot {
     masteryProfiles: [],
     userStates: [],
     attempts: [],
+    sessions: [],
+    settings: { ...DEFAULT_SETTINGS, studyDayStartHour: 0 },
   };
 }
 
@@ -414,6 +419,101 @@ describe("単語featureモデル", () => {
     expect(input.mastery.recognition).toBeGreaterThan(0);
     expect(input.mastery.spelling).toBe(33);
     expect(input.reviewState.status).toBe("learning");
+  });
+
+  it("速度補正offでは速い正解をEasy提案にせずMastery加点もしない", () => {
+    const target = records()[0]!;
+    const question = buildVocabularyQuestion(target, records(), 1);
+    expect(
+      suggestVocabularyRating({
+        question,
+        correct: true,
+        confidence: "high",
+        hintCount: 0,
+        responseTimeMs: 100,
+        speedAdjustmentEnabled: true,
+      }),
+    ).toBe("easy");
+    expect(
+      suggestVocabularyRating({
+        question,
+        correct: true,
+        confidence: "high",
+        hintCount: 0,
+        responseTimeMs: 100,
+        speedAdjustmentEnabled: false,
+      }),
+    ).toBe("good");
+
+    const base = {
+      record: target,
+      question,
+      response: question.answer,
+      correct: true,
+      confidence: "high" as const,
+      hintCount: 0,
+      responseTimeMs: 100,
+      suggestedRating: "good" as const,
+      finalRating: "good" as const,
+      sessionId: "session-speed",
+      studyDate: "2026-07-27",
+      now: NOW,
+    };
+    const enabled = prepareVocabularyCommit({
+      ...base,
+      attemptId: "attempt-speed-on",
+      speedAdjustmentEnabled: true,
+    });
+    const disabled = prepareVocabularyCommit({
+      ...base,
+      attemptId: "attempt-speed-off",
+      speedAdjustmentEnabled: false,
+    });
+    expect(enabled.mastery.recognition).toBeGreaterThan(disabled.mastery.recognition);
+  });
+
+  it("1日以上先のdueAtをIANA timezoneの学習日開始時刻へそろえる", () => {
+    const target = records()[0]!;
+    const question = buildVocabularyQuestion(target, records(), 1);
+    const commit = prepareVocabularyCommit({
+      record: target,
+      question,
+      response: question.answer,
+      correct: true,
+      confidence: "high",
+      hintCount: 0,
+      responseTimeMs: 1_000,
+      suggestedRating: "easy",
+      finalRating: "easy",
+      sessionId: "session-boundary",
+      attemptId: "attempt-boundary",
+      studyDate: "2026-07-27",
+      now: NOW,
+      studyDayBoundary: { timeZone: "Asia/Tokyo", hour: 4 },
+    });
+
+    expect(commit.reviewState.dueAt).toBe("2026-08-09T19:00:00.000Z");
+  });
+
+  it("summaryの本日中・翌日以降をUTC日付ではなく学習日境界で分類する", () => {
+    const sameStudyDay = {
+      ...createNewReviewState("vocab:same-day", NOW),
+      dueAt: "2026-07-27T00:10:00.000Z",
+    };
+    const nextStudyDay = {
+      ...createNewReviewState("vocab:next-day", NOW),
+      dueAt: "2026-07-27T19:00:00.000Z",
+    };
+
+    expect(
+      summarizeVocabularySession([], [sameStudyDay, nextStudyDay], NOW, {
+        timeZone: "Asia/Tokyo",
+        hour: 4,
+      }),
+    ).toMatchObject({
+      nextDueTodayCount: 1,
+      nextDueLaterCount: 1,
+    });
   });
 
   it("Againを最低3問後へ再挿入し、足りない分は別項目で補う", () => {

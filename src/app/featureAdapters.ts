@@ -1,10 +1,21 @@
 import type { StudySession } from "../domain/models";
+import {
+  completeDailyPlanBlock,
+  resolveStudyDay,
+  type ResolvedStudyDay,
+} from "../domain/planning";
 import type { ProfileRepository } from "../domain/repositories";
-import { createNewReviewState, scheduleReview } from "../domain/review";
+import {
+  createNewReviewState,
+  scheduleReview,
+  type StudyDayBoundary,
+} from "../domain/review";
 import type {
   LessonAttemptCommitInput,
   LessonLearningStore,
+  LessonReviewCheckpointInput,
   LessonSessionIdentity,
+  LessonStudyDayResolver,
   LessonTerminalCommitInput,
 } from "../features/lesson";
 import type { Exercise, Lesson } from "../infrastructure/content/schemas";
@@ -12,6 +23,7 @@ import { getAppDb, type AppDb } from "../infrastructure/db/appDb";
 import {
   DexieLessonProgressRepository,
   DexieProfileRepository,
+  DEFAULT_SETTINGS,
 } from "../infrastructure/db/repositories";
 
 export interface CurriculumContentAdapter {
@@ -30,6 +42,28 @@ export interface Phase03FeatureAdapters {
   curriculumContent: CurriculumContentAdapter;
   lessonContent: LessonContentAdapter;
   lessonProgressStore: LessonProgressAdapter;
+  studyDayResolver: LessonStudyDayResolver;
+}
+
+export function getDeviceTimeZone(): string {
+  try {
+    return Intl.DateTimeFormat().resolvedOptions().timeZone || "UTC";
+  } catch {
+    return "UTC";
+  }
+}
+
+export function createAppStudyDayResolver(
+  db: AppDb = getAppDb(),
+  timeZone = getDeviceTimeZone(),
+): (now: Date) => Promise<ResolvedStudyDay> {
+  return async (now) => {
+    const settings = (await db.settings.get("settings")) ?? DEFAULT_SETTINGS;
+    return resolveStudyDay(now, {
+      timeZone,
+      hour: settings.studyDayStartHour,
+    });
+  };
 }
 
 function appendUnique(
@@ -71,11 +105,38 @@ function buildLessonSession(
   };
 }
 
+async function interruptPreviousLessonSessions(
+  db: AppDb,
+  identity: LessonSessionIdentity,
+): Promise<void> {
+  const identitySuffix = `:${identity.startedAt}`;
+  const prefix = identity.id.endsWith(identitySuffix)
+    ? `${identity.id.slice(0, -identitySuffix.length)}:`
+    : identity.id;
+  const unfinished = (await db.sessions.toArray()).filter(
+    (session) =>
+      session.id !== identity.id &&
+      session.type === "lesson" &&
+      session.endedAt === undefined &&
+      session.id.startsWith(prefix),
+  );
+  if (unfinished.length > 0) {
+    await db.sessions.bulkPut(
+      unfinished.map((session) => ({
+        ...session,
+        endedAt: identity.startedAt,
+        interrupted: true,
+      })),
+    );
+  }
+}
+
 async function recordLessonAttempt(
   db: AppDb,
   input: LessonAttemptCommitInput,
 ): Promise<void> {
   await db.transaction("rw", [db.attempts, db.sessions], async () => {
+    await interruptPreviousLessonSessions(db, input.session);
     const currentSession = await db.sessions.get(input.session.id);
     const completedItemKeys =
       input.attempt.correct === false ? [] : [input.attempt.itemKey];
@@ -92,17 +153,56 @@ async function recordLessonAttempt(
   });
 }
 
+async function saveLessonReviewCheckpoint(
+  db: AppDb,
+  input: LessonReviewCheckpointInput,
+) {
+  return db.transaction("rw", db.lessonProgress, async () => {
+    if (input.planContext.itemKey !== `lesson:${input.lessonId}`) {
+      throw new Error("日次プランのレッスンと、開いているレッスンが一致しません。");
+    }
+    const current = (await db.lessonProgress.get(input.lessonId)) ?? input.progress;
+    if (current.status !== "completed" && current.status !== "skipped") {
+      throw new Error("完了済みレッスンだけが復習位置を保存できます。");
+    }
+    const next = {
+      ...current,
+      updatedAt: input.updatedAt,
+      reviewCheckpoint: {
+        planDate: input.planContext.planDate,
+        blockId: input.planContext.blockId,
+        currentSectionIndex: input.currentSectionIndex,
+        answeredExerciseIds: [...new Set(input.answeredExerciseIds)],
+        updatedAt: input.updatedAt,
+      },
+    };
+    await db.lessonProgress.put(next);
+    return next;
+  });
+}
+
 async function commitLessonTerminal(
   db: AppDb,
   input: LessonTerminalCommitInput,
+  studyDayBoundary: StudyDayBoundary,
 ): Promise<void> {
-  const itemKeys = lessonReviewItemKeys(input.lesson);
+  const itemKeys =
+    input.planContext === undefined
+      ? lessonReviewItemKeys(input.lesson)
+      : appendUnique(lessonReviewItemKeys(input.lesson), [input.planContext.itemKey]);
   const now = new Date(input.progress.updatedAt);
 
   await db.transaction(
     "rw",
-    [db.lessonProgress, db.reviewStates, db.sessions],
+    [db.lessonProgress, db.reviewStates, db.sessions, db.dailyPlans],
     async () => {
+      if (
+        input.planContext !== undefined &&
+        input.planContext.itemKey !== `lesson:${input.lesson.id}`
+      ) {
+        throw new Error("日次プランのレッスンと、開いているレッスンが一致しません。");
+      }
+      await interruptPreviousLessonSessions(db, input.session);
       await db.lessonProgress.put(input.progress);
 
       const currentSession = await db.sessions.get(input.session.id);
@@ -127,7 +227,11 @@ async function commitLessonTerminal(
         }
 
         // スキップで作られたnew状態も、後から完了したらGoodとして学習開始する。
-        if (existing === undefined || existing.status === "new") {
+        if (
+          existing === undefined ||
+          existing.status === "new" ||
+          input.planContext !== undefined
+        ) {
           const initial = existing ?? createNewReviewState(itemKey, now);
           await db.reviewStates.put(
             scheduleReview({
@@ -135,9 +239,31 @@ async function commitLessonTerminal(
               rating: "good",
               now,
               speedAdjustmentEnabled: false,
+              studyDayBoundary,
             }),
           );
         }
+      }
+
+      if (input.planContext !== undefined) {
+        const currentPlan = await db.dailyPlans.get(input.planContext.planDate);
+        if (currentPlan === undefined) {
+          throw new Error(
+            `日次プラン ${input.planContext.planDate} が見つかりません。`,
+          );
+        }
+        const targetBlock = currentPlan.blocks.find(
+          (block) => block.blockId === input.planContext?.blockId,
+        );
+        if (
+          targetBlock !== undefined &&
+          targetBlock.itemId !== input.planContext.itemKey
+        ) {
+          throw new Error("日次プランの項目とレッスン開始情報が一致しません。");
+        }
+        await db.dailyPlans.put(
+          completeDailyPlanBlock(currentPlan, input.planContext.blockId),
+        );
       }
     },
   );
@@ -151,9 +277,12 @@ export function createPhase03FeatureAdapters(
   db: AppDb = getAppDb(),
 ): Phase03FeatureAdapters {
   const progressRepository = new DexieLessonProgressRepository(db);
+  const timeZone = getDeviceTimeZone();
+  const studyDayResolver = createAppStudyDayResolver(db, timeZone);
 
   return {
     profileRepository: new DexieProfileRepository(db),
+    studyDayResolver,
     curriculumContent: {
       async listLessons() {
         const lessons = await db.lessons.toArray();
@@ -191,8 +320,15 @@ export function createPhase03FeatureAdapters(
       recordAttempt(input) {
         return recordLessonAttempt(db, input);
       },
-      commitTerminal(input) {
-        return commitLessonTerminal(db, input);
+      saveReviewCheckpoint(input) {
+        return saveLessonReviewCheckpoint(db, input);
+      },
+      async commitTerminal(input) {
+        const settings = (await db.settings.get("settings")) ?? DEFAULT_SETTINGS;
+        return commitLessonTerminal(db, input, {
+          timeZone,
+          hour: settings.studyDayStartHour,
+        });
       },
     },
   };

@@ -172,6 +172,88 @@ function cloneCompletedBlocks(
   return blocks.map((block) => ({ ...block, status: "completed" }));
 }
 
+/**
+ * block完了を表示状態とID一覧へ同時に反映する。
+ * すでに両方へ反映済みの場合は同じplanを返すため、再試行しても重複しない。
+ */
+export function completeDailyPlanBlock(plan: DailyPlan, blockId: string): DailyPlan {
+  const targetBlock = plan.blocks.find((block) => block.blockId === blockId);
+  if (targetBlock === undefined) {
+    throw new Error(`日次プランblockが見つかりません: ${blockId}`);
+  }
+
+  const isRecorded = plan.completedBlockIds.includes(blockId);
+  if (targetBlock.status === "completed" && isRecorded) {
+    return plan;
+  }
+
+  return {
+    ...plan,
+    blocks: plan.blocks.map((block) =>
+      block.blockId === blockId ? { ...block, status: "completed" } : block,
+    ),
+    completedBlockIds: isRecorded
+      ? plan.completedBlockIds
+      : [...plan.completedBlockIds, blockId],
+  };
+}
+
+/**
+ * 別タブや戻り遷移で古いplanを再保存しても、すでに確定した完了を失わないようにする。
+ * 時間・mode・未完了候補はincomingを採用し、完了状態だけを単調増加で統合する。
+ */
+export function mergeDailyPlanCompletions(
+  latest: DailyPlan,
+  incoming: DailyPlan,
+): DailyPlan {
+  if (latest.date !== incoming.date) {
+    throw new Error("異なる学習日のプランは統合できません。");
+  }
+
+  const latestCompletedIds = new Set([
+    ...latest.completedBlockIds,
+    ...latest.blocks
+      .filter((block) => block.status === "completed")
+      .map((block) => block.blockId),
+  ]);
+  const incomingCompletedIds = new Set([
+    ...incoming.completedBlockIds,
+    ...incoming.blocks
+      .filter((block) => block.status === "completed")
+      .map((block) => block.blockId),
+  ]);
+  const completedIds = new Set([...latestCompletedIds, ...incomingCompletedIds]);
+  const incomingById = new Map(incoming.blocks.map((block) => [block.blockId, block]));
+  const completedBlocks: CompletedDailyPlanBlock[] = [];
+  const recordedIds = new Set<string>();
+
+  for (const block of [...latest.blocks, ...incoming.blocks]) {
+    if (!completedIds.has(block.blockId) || recordedIds.has(block.blockId)) {
+      continue;
+    }
+    const preferred = incomingById.get(block.blockId) ?? block;
+    completedBlocks.push({ ...preferred, status: "completed" });
+    recordedIds.add(block.blockId);
+  }
+
+  const pendingBlocks = incoming.blocks.filter(
+    (block) => !completedIds.has(block.blockId),
+  );
+  const blocks = [...completedBlocks, ...pendingBlocks];
+  const plannedSeconds = sumEstimatedSeconds(blocks);
+
+  return {
+    ...incoming,
+    blocks,
+    completedBlockIds: completedBlocks.map((block) => block.blockId),
+    plannedSeconds,
+    remainingBudgetSeconds:
+      incoming.capacity.budgetSeconds === null
+        ? null
+        : Math.max(0, incoming.capacity.budgetSeconds - plannedSeconds),
+  };
+}
+
 export function buildDailyPlan(input: BuildDailyPlanInput): DailyPlan {
   assertTimestamp(input.nowMs, "現在時刻");
   assertTimestamp(input.studyDayStartMs, "学習日の開始時刻");
@@ -216,8 +298,12 @@ export function buildDailyPlan(input: BuildDailyPlanInput): DailyPlan {
     capacity.budgetSeconds === null
       ? null
       : Math.max(0, capacity.budgetSeconds - completedSeconds);
-  let selectedReviewCount = 0;
-  let selectedNewCount = 0;
+  let selectedReviewCount = completedBlocks.filter(
+    ({ category }) => category === "overdueReview" || category === "dueReview",
+  ).length;
+  let selectedNewCount = completedBlocks.filter(
+    ({ category }) => category === "newVocabulary",
+  ).length;
   const pendingBlocks: DailyPlanBlock[] = [];
 
   for (const classified of classifiedCandidates) {

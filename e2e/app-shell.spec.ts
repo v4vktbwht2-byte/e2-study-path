@@ -4,9 +4,7 @@ test.describe("app shell", () => {
   test("全主要タブと説明付き画面を移動できる", async ({ page }) => {
     await page.goto("/#/vocabulary");
 
-    await expect(
-      page.getByRole("heading", { level: 1, name: "単語" }),
-    ).toBeVisible();
+    await expect(page.getByRole("heading", { level: 1, name: "単語" })).toBeVisible();
 
     const navigation = page.getByRole("navigation", { name: "メインメニュー" });
     await expect(navigation.getByRole("link")).toHaveCount(5);

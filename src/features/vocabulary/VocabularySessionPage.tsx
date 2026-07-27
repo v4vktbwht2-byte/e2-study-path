@@ -1,6 +1,12 @@
 import { useEffect, useMemo, useRef, useState } from "react";
-import type { StudySession } from "../../domain/models";
-import type { ReviewConfidence, ReviewRating, ReviewState } from "../../domain/review";
+import type { Attempt, StudySession } from "../../domain/models";
+import { resolveStudyDay } from "../../domain/planning";
+import type {
+  ReviewConfidence,
+  ReviewRating,
+  ReviewState,
+  StudyDayBoundary,
+} from "../../domain/review";
 import {
   rankQuickSortNewQueue,
   type QuickSortAnswer,
@@ -74,7 +80,8 @@ interface SessionData {
   records: readonly VocabularyStudyRecord[];
   questionPool: readonly VocabularyStudyRecord[];
   session: StudySession;
-  initialReviewStates: readonly ReviewState[];
+  speedAdjustmentEnabled: boolean;
+  studyDayBoundary: StudyDayBoundary;
 }
 
 interface DraftAnswer {
@@ -108,16 +115,148 @@ function createSession(
   mode: VocabularySessionPageProps["mode"],
   records: readonly VocabularyStudyRecord[],
   now: Date,
+  studyDate: string,
 ): StudySession {
   const startedAt = now.toISOString();
   return {
     id: `vocabulary-session:${mode}:${startedAt}`,
     type: mode === "due" || mode === "weak" ? "review" : "vocabulary",
     startedAt,
-    studyDate: startedAt.slice(0, 10),
+    studyDate,
     itemKeys: records.map((record) => record.itemKey),
     completedItemKeys: [],
     interrupted: false,
+  };
+}
+
+function attemptSequence(attempt: Attempt): number {
+  const marker = ":attempt:";
+  const markerIndex = attempt.id.lastIndexOf(marker);
+  if (markerIndex < 0) return 0;
+  const value = Number(attempt.id.slice(markerIndex + marker.length));
+  return Number.isInteger(value) && value > 0 ? value : 0;
+}
+
+function ratingForAttempt(attempt: Attempt): ReviewRating {
+  return (
+    attempt.finalRating ??
+    attempt.suggestedRating ??
+    (attempt.correct === true ? "good" : "again")
+  );
+}
+
+function levelForAttempt(
+  attempt: Attempt,
+  fallback: VocabularyQueueEntry["level"],
+): VocabularyQueueEntry["level"] {
+  const match = attempt.exerciseId?.match(/:level-([1-7])$/u);
+  const parsed = Number(match?.[1]);
+  return Number.isInteger(parsed) && parsed >= 1 && parsed <= 7
+    ? (parsed as VocabularyQueueEntry["level"])
+    : fallback;
+}
+
+function needsNewConfirmation(
+  mode: VocabularySessionPageProps["mode"],
+  entry: VocabularyQueueEntry,
+  rating: ReviewRating,
+): boolean {
+  return (
+    mode === "new" &&
+    ((!entry.repeated && rating !== "easy") || (entry.repeated && rating === "again"))
+  );
+}
+
+function findResumableSession(
+  sessions: readonly StudySession[],
+  mode: VocabularySessionPageProps["mode"],
+  studyDate: string,
+  explicitItemKey?: string,
+): StudySession | undefined {
+  return [...sessions]
+    .filter(
+      (session) =>
+        session.endedAt === undefined &&
+        session.studyDate === studyDate &&
+        session.id.startsWith(`vocabulary-session:${mode}:`) &&
+        (explicitItemKey === undefined ||
+          (session.itemKeys.length === 1 && session.itemKeys[0] === explicitItemKey)),
+    )
+    .sort((left, right) => right.startedAt.localeCompare(left.startedAt))[0];
+}
+
+interface RestoredSessionState {
+  queue: VocabularyQueueEntry[];
+  completedEntries: VocabularyQueueEntry[];
+  observations: VocabularyAnswerObservation[];
+  attemptSequence: number;
+}
+
+function restoreAnsweredSession(
+  mode: VocabularySessionPageProps["mode"],
+  entries: readonly VocabularyQueueEntry[],
+  attempts: readonly Attempt[],
+  questionPool: readonly VocabularyStudyRecord[],
+): RestoredSessionState {
+  let restoredQueue = [...entries];
+  const restoredCompleted: VocabularyQueueEntry[] = [];
+  const restoredObservations: VocabularyAnswerObservation[] = [];
+  const orderedAttempts = [...attempts].sort(
+    (left, right) =>
+      attemptSequence(left) - attemptSequence(right) ||
+      left.createdAt.localeCompare(right.createdAt) ||
+      left.id.localeCompare(right.id),
+  );
+
+  for (const attempt of orderedAttempts) {
+    const entryIndex = restoredQueue.findIndex(
+      (entry) => entry.itemKey === attempt.itemKey,
+    );
+    if (entryIndex < 0) continue;
+
+    const entry = restoredQueue[entryIndex];
+    if (entry === undefined) continue;
+    const answeredEntry: VocabularyQueueEntry = {
+      ...entry,
+      level: levelForAttempt(attempt, entry.level),
+    };
+    const question = buildVocabularyQuestion(
+      answeredEntry.record,
+      questionPool,
+      answeredEntry.level,
+    );
+    const rating = ratingForAttempt(attempt);
+    const remaining = restoredQueue.filter((_, index) => index !== entryIndex);
+    restoredQueue = needsNewConfirmation(mode, answeredEntry, rating)
+      ? reinsertNewConfirmationWithMinimumSpacing(
+          remaining,
+          answeredEntry,
+          restoredCompleted,
+        )
+      : rating === "again"
+        ? reinsertAgainWithMinimumSpacing(remaining, answeredEntry, restoredCompleted)
+        : remaining;
+    restoredCompleted.push(answeredEntry);
+    restoredObservations.push({
+      question,
+      response: attempt.response,
+      correct: attempt.correct === true,
+      confidence: attempt.confidence ?? "medium",
+      hintCount: attempt.hintCount,
+      responseTimeMs: attempt.responseTimeMs,
+      suggestedRating: attempt.suggestedRating ?? rating,
+      finalRating: rating,
+    });
+  }
+
+  return {
+    queue: restoredQueue,
+    completedEntries: restoredCompleted,
+    observations: restoredObservations,
+    attemptSequence: orderedAttempts.reduce(
+      (maximum, attempt) => Math.max(maximum, attemptSequence(attempt)),
+      0,
+    ),
   };
 }
 
@@ -151,6 +290,9 @@ export function VocabularySessionPage({
   clock = SYSTEM_CLOCK,
   limit = 5,
   level,
+  explicitItemKey,
+  planContext,
+  timeZone = "UTC",
   onStart,
   onBack,
 }: VocabularySessionPageProps) {
@@ -177,6 +319,7 @@ export function VocabularySessionPage({
   const [saving, setSaving] = useState(false);
   const questionStartedAtRef = useRef(0);
   const attemptSequenceRef = useRef(0);
+  const backLabel = planContext === undefined ? "単語ハブへ戻る" : "今日の学習へ戻る";
 
   useEffect(() => {
     let active = true;
@@ -194,8 +337,29 @@ export function VocabularySessionPage({
 
     void Promise.all([content.listVocabulary(), store.loadSnapshot()])
       .then(async ([items, snapshot]) => {
+        const studyDayBoundary = {
+          timeZone,
+          hour: snapshot.settings.studyDayStartHour,
+        };
+        const studyDay = resolveStudyDay(startedAt, studyDayBoundary);
         const collections = buildVocabularyCollections(items, snapshot, startedAt);
-        const records = selectRecordsForMode(collections, mode, limit);
+        const resumableSession = findResumableSession(
+          snapshot.sessions,
+          mode,
+          studyDay.studyDate,
+          explicitItemKey,
+        );
+        const records =
+          resumableSession !== undefined
+            ? resumableSession.itemKeys.flatMap((itemKey) => {
+                const record = collections.all.find(
+                  (candidate) => candidate.itemKey === itemKey,
+                );
+                return record === undefined ? [] : [record];
+              })
+            : explicitItemKey !== undefined
+              ? collections.all.filter((record) => record.itemKey === explicitItemKey)
+              : selectRecordsForMode(collections, mode, limit);
         if (!active) {
           return;
         }
@@ -203,35 +367,95 @@ export function VocabularySessionPage({
           setLoadState({ status: "empty" });
           return;
         }
-        const session = createSession(mode, records, startedAt);
-        await store.startSession(session);
+        const session =
+          resumableSession ??
+          createSession(mode, records, startedAt, studyDay.studyDate);
+        if (resumableSession === undefined) {
+          await store.startSession(session);
+        }
         if (!active) {
           return;
         }
         const entries = records.map((record): VocabularyQueueEntry => ({
           itemKey: record.itemKey,
           record,
-          level: selectVocabularyQuestionLevel(record, mode, startedAt, level),
+          level:
+            resumableSession !== undefined && mode === "new"
+              ? (level ?? 1)
+              : selectVocabularyQuestionLevel(record, mode, startedAt, level),
           repeated: false,
         }));
-        setQueue(entries);
-        setReviewStates([...snapshot.reviewStates]);
-        setPhase(
-          mode === "new"
-            ? "browse"
-            : mode === "quickSort"
-              ? "quickSortClassification"
-              : "question",
+        const sessionAttempts = snapshot.attempts.filter(
+          (attempt) => attempt.sessionId === session.id,
         );
+        const restored = restoreAnsweredSession(
+          mode,
+          entries,
+          sessionAttempts,
+          collections.all,
+        );
+        const finalQueue =
+          mode === "quickSort" && resumableSession !== undefined
+            ? entries.filter((entry) => {
+                const itemAttempts = sessionAttempts
+                  .filter((attempt) => attempt.itemKey === entry.itemKey)
+                  .sort(
+                    (left, right) => attemptSequence(right) - attemptSequence(left),
+                  );
+                const latestAttempt = itemAttempts[0];
+                return (
+                  latestAttempt === undefined ||
+                  ratingForAttempt(latestAttempt) === "again"
+                );
+              })
+            : restored.queue;
+        const nextData: SessionData = {
+          records,
+          questionPool: collections.all,
+          session,
+          speedAdjustmentEnabled: snapshot.settings.speedAdjustmentEnabled,
+          studyDayBoundary,
+        };
+        attemptSequenceRef.current = restored.attemptSequence;
+        setQueue(finalQueue);
+        setCompletedEntries(restored.completedEntries);
+        setObservations(restored.observations);
+        setReviewStates([...snapshot.reviewStates]);
+        setBrowsedItemKeys(new Set(sessionAttempts.map((attempt) => attempt.itemKey)));
+        if (finalQueue.length === 0) {
+          const endedAt = clock.now();
+          await store.finishSession(session.id, endedAt.toISOString());
+          if (!active) return;
+          setSummary(
+            summarizeVocabularySession(
+              restored.observations,
+              snapshot.reviewStates.filter((state) =>
+                session.itemKeys.includes(state.itemKey),
+              ),
+              endedAt,
+              studyDayBoundary,
+            ),
+          );
+          setPhase("summary");
+        } else {
+          const firstEntry = finalQueue[0];
+          setPhase(
+            mode === "quickSort"
+              ? "quickSortClassification"
+              : mode === "new" &&
+                  firstEntry !== undefined &&
+                  !firstEntry.repeated &&
+                  !sessionAttempts.some(
+                    (attempt) => attempt.itemKey === firstEntry.itemKey,
+                  )
+                ? "browse"
+                : "question",
+          );
+        }
         questionStartedAtRef.current = clock.now().getTime();
         setLoadState({
           status: "ready",
-          data: {
-            records,
-            questionPool: collections.all,
-            session,
-            initialReviewStates: snapshot.reviewStates,
-          },
+          data: nextData,
         });
       })
       .catch((error: unknown) => {
@@ -248,7 +472,7 @@ export function VocabularySessionPage({
     return () => {
       active = false;
     };
-  }, [clock, content, level, limit, mode, reloadKey, store]);
+  }, [clock, content, explicitItemKey, level, limit, mode, reloadKey, store, timeZone]);
 
   const currentEntry = queue[0];
   const currentQuestion = useMemo(() => {
@@ -386,6 +610,8 @@ export function VocabularySessionPage({
       confidence,
       hintCount,
       responseTimeMs,
+      speedAdjustmentEnabled:
+        loadState.status === "ready" ? loadState.data.speedAdjustmentEnabled : true,
     });
     setDraftAnswer({
       response,
@@ -410,6 +636,7 @@ export function VocabularySessionPage({
             pending.data.session.itemKeys.includes(state.itemKey),
           ),
           endedAt,
+          pending.data.studyDayBoundary,
         ),
       );
       setPendingFinish(undefined);
@@ -456,29 +683,43 @@ export function VocabularySessionPage({
         value.question.itemKey === currentEntry.itemKey &&
         value.finalRating === "again",
     );
+    const shouldConfirmNew = needsNewConfirmation(mode, currentEntry, finalRating);
+    const completesPlanItem =
+      !shouldConfirmNew &&
+      finalRating !== "again" &&
+      planContext?.itemKey === currentEntry.itemKey;
 
     try {
-      const result = await store.commitAnswer(
-        prepareVocabularyCommit({
-          record: currentEntry.record,
-          question: currentQuestion,
-          response: draftAnswer.response,
-          correct: draftAnswer.correct,
-          confidence,
-          hintCount,
-          responseTimeMs: draftAnswer.responseTimeMs,
-          suggestedRating: draftAnswer.suggestedRating,
-          finalRating,
-          sessionId: loadState.data.session.id,
-          attemptId,
-          studyDate: loadState.data.session.studyDate,
-          now,
-          correctAfterAgain: hadEarlierAgain && draftAnswer.correct,
-          confusedWithItemKey: confusionComparisons.find(
-            (comparison) => comparison.isRecordedConfusion,
-          )?.itemKey,
-        }),
-      );
+      const preparedCommit = prepareVocabularyCommit({
+        record: currentEntry.record,
+        question: currentQuestion,
+        response: draftAnswer.response,
+        correct: draftAnswer.correct,
+        confidence,
+        hintCount,
+        responseTimeMs: draftAnswer.responseTimeMs,
+        suggestedRating: draftAnswer.suggestedRating,
+        finalRating,
+        sessionId: loadState.data.session.id,
+        attemptId,
+        studyDate: loadState.data.session.studyDate,
+        now,
+        speedAdjustmentEnabled: loadState.data.speedAdjustmentEnabled,
+        studyDayBoundary: loadState.data.studyDayBoundary,
+        correctAfterAgain: hadEarlierAgain && draftAnswer.correct,
+        confusedWithItemKey: confusionComparisons.find(
+          (comparison) => comparison.isRecordedConfusion,
+        )?.itemKey,
+      });
+      const result = await store.commitAnswer({
+        ...preparedCommit,
+        ...(completesPlanItem && planContext !== undefined
+          ? {
+              dailyPlanDate: planContext.planDate,
+              completedPlanBlockId: planContext.blockId,
+            }
+          : {}),
+      });
       attemptSequenceRef.current = nextAttemptSequence;
       const updatedRecord: VocabularyStudyRecord = {
         ...currentEntry.record,
@@ -500,11 +741,7 @@ export function VocabularySessionPage({
             ? { ...entry, record: updatedRecord }
             : entry,
         );
-      const needsNewConfirmation =
-        mode === "new" &&
-        ((!currentEntry.repeated && finalRating !== "easy") ||
-          (currentEntry.repeated && finalRating === "again"));
-      const nextQueue = needsNewConfirmation
+      const nextQueue = shouldConfirmNew
         ? reinsertNewConfirmationWithMinimumSpacing(
             remaining,
             updatedEntry,
@@ -593,7 +830,7 @@ export function VocabularySessionPage({
           description="別の単語メニューを選んでください。"
           actions={
             onBack !== undefined ? (
-              <Button onClick={onBack}>単語ハブへ戻る</Button>
+              <Button onClick={onBack}>{backLabel}</Button>
             ) : undefined
           }
         />
@@ -675,7 +912,7 @@ export function VocabularySessionPage({
           <Button onClick={() => onStart?.(mode)}>追加で5分続ける</Button>
           {onBack !== undefined ? (
             <Button variant="secondary" onClick={onBack}>
-              単語ハブへ戻る
+              {backLabel}
             </Button>
           ) : null}
         </div>
@@ -691,7 +928,7 @@ export function VocabularySessionPage({
           description="単語ハブへ戻って、もう一度お試しください。"
           actions={
             onBack !== undefined ? (
-              <Button onClick={onBack}>単語ハブへ戻る</Button>
+              <Button onClick={onBack}>{backLabel}</Button>
             ) : undefined
           }
         />

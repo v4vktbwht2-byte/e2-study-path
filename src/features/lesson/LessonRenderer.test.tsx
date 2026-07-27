@@ -131,13 +131,36 @@ function progressStore(initial?: LessonProgress) {
       return Promise.resolve();
     },
   );
+  const saveReviewCheckpoint = vi.fn(
+    (
+      input: Parameters<LessonLearningStore["saveReviewCheckpoint"]>[0],
+    ): Promise<LessonProgress> =>
+      Promise.resolve({
+        ...input.progress,
+        updatedAt: input.updatedAt,
+        reviewCheckpoint: {
+          planDate: input.planContext.planDate,
+          blockId: input.planContext.blockId,
+          currentSectionIndex: input.currentSectionIndex,
+          answeredExerciseIds: [...input.answeredExerciseIds],
+          updatedAt: input.updatedAt,
+        },
+      }),
+  );
   const store: LessonLearningStore = {
     get: () => Promise.resolve(initial),
     save,
     recordAttempt,
+    saveReviewCheckpoint,
     commitTerminal,
   };
-  return { store, save, recordAttempt, commitTerminal };
+  return {
+    store,
+    save,
+    recordAttempt,
+    saveReviewCheckpoint,
+    commitTerminal,
+  };
 }
 
 describe("レッスンレンダラー", () => {
@@ -174,7 +197,6 @@ describe("レッスンレンダラー", () => {
     await screen.findByRole("heading", {
       name: "今日できるようになること",
     });
-
     await userEvent.setup().click(screen.getByRole("button", { name: "次へ" }));
     expect(
       await screen.findByRole("heading", { name: "確認", level: 2 }),
@@ -398,6 +420,153 @@ describe("レッスンレンダラー", () => {
     });
   });
 
+  it("完了済みlessonをplan復習として再出題し、途中進捗を戻さず終端だけ確定する", async () => {
+    const completed: LessonProgress = {
+      ...progress("completed", 2),
+      completedAt: "2026-07-26T00:00:00.000Z",
+    };
+    const { store, save, recordAttempt, saveReviewCheckpoint, commitTerminal } =
+      progressStore(completed);
+    const planContext = {
+      planDate: "2026-07-26",
+      blockId: "lesson-review-block",
+      itemKey: "lesson:lesson-a",
+    };
+    render(
+      <LessonRenderer
+        lessonId="lesson-a"
+        content={content()}
+        progressStore={store}
+        clock={clock}
+        studyDayResolver={() => ({
+          studyDate: "2026-07-26",
+          studyDayStartMs: Date.parse("2026-07-26T19:00:00.000Z"),
+        })}
+        planContext={planContext}
+      />,
+    );
+
+    await screen.findByRole("heading", {
+      name: "今日できるようになること",
+    });
+    expect(
+      screen.queryByRole("button", {
+        name: "このレッスンを学習済みにする",
+      }),
+    ).not.toBeInTheDocument();
+    const user = userEvent.setup();
+    await user.click(screen.getByRole("button", { name: "次へ" }));
+    await screen.findByRole("heading", { name: "確認", level: 2 });
+    expect(save).not.toHaveBeenCalled();
+    expect(saveReviewCheckpoint).toHaveBeenCalledWith(
+      expect.objectContaining({ currentSectionIndex: 1 }),
+    );
+
+    await user.click(screen.getByLabelText("こんにちは"));
+    await user.click(screen.getByRole("button", { name: "答えを確認" }));
+    await screen.findByText("確認できました");
+    expect(recordAttempt.mock.calls[0]?.[0].attempt.studyDate).toBe("2026-07-26");
+    await user.click(screen.getByRole("button", { name: "次へ" }));
+    await screen.findByRole("heading", { name: "まとめ", level: 2 });
+    expect(save).not.toHaveBeenCalled();
+
+    await user.click(screen.getByRole("button", { name: "復習を完了" }));
+    await waitFor(() =>
+      expect(commitTerminal).toHaveBeenCalledWith({
+        lesson: lesson(),
+        progress: {
+          lessonId: "lesson-a",
+          status: "completed",
+          currentSectionIndex: 2,
+          updatedAt: NOW.toISOString(),
+          completedAt: "2026-07-26T00:00:00.000Z",
+        },
+        session: {
+          id: "lesson-session:lesson-a:2026-07-27T00:00:00.000Z",
+          startedAt: "2026-07-27T00:00:00.000Z",
+          studyDate: "2026-07-26",
+        },
+        planContext,
+      }),
+    );
+  });
+
+  it("plan復習の中断は元のcompleted進捗を保ちplan終端を確定しない", async () => {
+    const onExit = vi.fn();
+    const { store, save, saveReviewCheckpoint, commitTerminal } = progressStore({
+      ...progress("completed", 2),
+      completedAt: "2026-07-26T00:00:00.000Z",
+    });
+    render(
+      <LessonRenderer
+        lessonId="lesson-a"
+        content={content()}
+        progressStore={store}
+        clock={clock}
+        planContext={{
+          planDate: "2026-07-27",
+          blockId: "lesson-review-block",
+          itemKey: "lesson:lesson-a",
+        }}
+        onExit={onExit}
+      />,
+    );
+
+    await screen.findByRole("heading", {
+      name: "今日できるようになること",
+    });
+    await userEvent.setup().click(screen.getByRole("button", { name: "中断して戻る" }));
+    expect(save).not.toHaveBeenCalled();
+    expect(commitTerminal).not.toHaveBeenCalled();
+    await waitFor(() => {
+      expect(saveReviewCheckpoint).toHaveBeenCalledWith(
+        expect.objectContaining({ currentSectionIndex: 0 }),
+      );
+      expect(onExit).toHaveBeenCalledTimes(1);
+    });
+  });
+
+  it("plan復習のセクション位置と回答済み問題を再読込後に復元する", async () => {
+    const planContext = {
+      planDate: "2026-07-27",
+      blockId: "lesson-review-block",
+      itemKey: "lesson:lesson-a",
+    };
+    const { store, saveReviewCheckpoint } = progressStore({
+      ...progress("completed", 2),
+      completedAt: "2026-07-26T00:00:00.000Z",
+      reviewCheckpoint: {
+        planDate: planContext.planDate,
+        blockId: planContext.blockId,
+        currentSectionIndex: 1,
+        answeredExerciseIds: ["exercise-a"],
+        updatedAt: "2026-07-27T00:00:00.000Z",
+      },
+    });
+    render(
+      <LessonRenderer
+        lessonId="lesson-a"
+        content={content()}
+        progressStore={store}
+        clock={clock}
+        planContext={planContext}
+      />,
+    );
+
+    await screen.findByRole("heading", { name: "確認", level: 2 });
+    await userEvent.setup().click(screen.getByRole("button", { name: "次へ" }));
+
+    expect(
+      await screen.findByRole("heading", { name: "まとめ", level: 2 }),
+    ).toBeInTheDocument();
+    expect(saveReviewCheckpoint).toHaveBeenCalledWith(
+      expect.objectContaining({
+        currentSectionIndex: 2,
+        answeredExerciseIds: ["exercise-a"],
+      }),
+    );
+  });
+
   it("最終セクションで完了時刻を保存して復習登録を委譲する", async () => {
     const onComplete = vi.fn();
     const onExit = vi.fn();
@@ -453,6 +622,7 @@ describe("レッスンレンダラー", () => {
       get: () => Promise.resolve(undefined),
       save: () => Promise.reject(new Error("端末へ保存できません")),
       recordAttempt: () => Promise.resolve(),
+      saveReviewCheckpoint: (input) => Promise.resolve(input.progress),
       commitTerminal: () => Promise.resolve(),
     };
     render(

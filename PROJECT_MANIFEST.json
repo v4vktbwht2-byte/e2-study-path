@@ -1,10 +1,10 @@
 {
   "package": "E2 Study Path Codex Handoff Full Set",
   "packageVersion": "1.0.0",
-  "generatedAt": "2026-07-27T00:18:23+00:00",
+  "generatedAt": "2026-07-27T01:24:03+00:00",
   "manifestPolicy": "The manifest tracks repository source files and excludes PROJECT_MANIFEST.json, Git metadata, dependencies, and generated artifacts.",
-  "fileCountExcludingManifest": 274,
-  "totalSizeBytesExcludingManifest": 1253571,
+  "fileCountExcludingManifest": 286,
+  "totalSizeBytesExcludingManifest": 1430045,
   "files": [
     {
       "path": ".gitignore",
@@ -23,8 +23,8 @@
     },
     {
       "path": "CHANGELOG.md",
-      "sizeBytes": 1310,
-      "sha256": "db4c0d53ccac54e8772a7d21800c40f2081c838b3f3dcac12f3ebe29f03df136"
+      "sizeBytes": 2626,
+      "sha256": "067894e72bcd6a4deea2e28784636d2c6d296b57dd9f33eeaaf5a2858e96cae8"
     },
     {
       "path": "checklists/CODE_REVIEW.md",
@@ -193,8 +193,8 @@
     },
     {
       "path": "docs/08_DATA_MODEL_AND_INDEXEDDB.md",
-      "sizeBytes": 6589,
-      "sha256": "8cd017e5e864122ac95b08d9c2f64335661cf036f2ab5fdcf0a8e75514c33054"
+      "sizeBytes": 8775,
+      "sha256": "59435d77a11d4d583346318ddf7e941dbccad1effc359fe54080ceb97089b873"
     },
     {
       "path": "docs/09_REVIEW_ALGORITHM.md",
@@ -238,8 +238,8 @@
     },
     {
       "path": "docs/17_ACCEPTANCE_CRITERIA_TRACEABILITY.md",
-      "sizeBytes": 3965,
-      "sha256": "9ac8be81af3a50c0099a3e9fac1dc930dcede16d16c7f9478c0c2171aa0cf72d"
+      "sizeBytes": 4750,
+      "sha256": "492a98c425c1f25d91787a061562cb65f0a18187d153ec3ddbd5cc7221f81009"
     },
     {
       "path": "docs/18_RISK_REGISTER.md",
@@ -253,8 +253,8 @@
     },
     {
       "path": "docs/20_IMPLEMENTATION_STATUS.md",
-      "sizeBytes": 5609,
-      "sha256": "f58a40f086d2db282611f8e7475c6536999c0b45a66d1fc6ef55640e03b1612b"
+      "sizeBytes": 6060,
+      "sha256": "f5b3eaafda47bf242196468060aaaa31c71c985e3a9457112bd780ba102fe6be"
     },
     {
       "path": "docs/21_SOURCE_NOTES.md",
@@ -263,13 +263,13 @@
     },
     {
       "path": "docs/backlog.md",
-      "sizeBytes": 2528,
-      "sha256": "9b380fb485ed5e1fc474bde0c6c76c96b15f72c194db4bb622489aaeb0c0f781"
+      "sizeBytes": 3173,
+      "sha256": "2b89397255117f1268656b14e501223b9701a88b8c61fd50625f4e48b9f8e68c"
     },
     {
       "path": "e2e/app-shell.spec.ts",
-      "sizeBytes": 4441,
-      "sha256": "4d9e8c836c039ee32f08db59fe62031759b49300be2373b595dbd5fa2513ad97"
+      "sizeBytes": 4428,
+      "sha256": "ab2149eac3151ed97d1bbe0708abdb3a8ac0f94774a79c1b104af2ea18ebd7ab"
     },
     {
       "path": "e2e/phase03.spec.ts",
@@ -278,8 +278,13 @@
     },
     {
       "path": "e2e/phase04.spec.ts",
-      "sizeBytes": 22590,
-      "sha256": "df25e6ddf87a52e97193a632ac24e6f2ab4f6e3c299ca6fc8c16e3fb7ebb5e47"
+      "sizeBytes": 24363,
+      "sha256": "4e9107680308015b06823a1ed55e5ed5f4e4b4cfd8b7ebe5f6c3073dc7f0b91f"
+    },
+    {
+      "path": "e2e/phase05.spec.ts",
+      "sizeBytes": 15488,
+      "sha256": "b417d4af1fd1dd863db1b87660e941c9ee871bf0555b7f925e0b8f86f2e977be"
     },
     {
       "path": "eslint.config.js",
@@ -343,8 +348,8 @@
     },
     {
       "path": "PLANS.md",
-      "sizeBytes": 21464,
-      "sha256": "23155dff5e076191aae3486ba70b8899af6f32258536222eb0858cc6f6088c60"
+      "sizeBytes": 28748,
+      "sha256": "99ff0b39fcca2f82cd0f55882402d5b0f5aa80285232deef7ce03b8ed73f2f4c"
     },
     {
       "path": "playwright.config.ts",
@@ -428,8 +433,8 @@
     },
     {
       "path": "README.md",
-      "sizeBytes": 4241,
-      "sha256": "4f22f57145398ad7fb0d5b0ae6a0fd1dd00e541d217263d319eb8e9a43154bdb"
+      "sizeBytes": 4810,
+      "sha256": "f91c64ae945f57bdeae2256dcc70b22671e6febde0f329945092e5f893c07d64"
     },
     {
       "path": "scripts/generate_manifest.py",
@@ -483,13 +488,13 @@
     },
     {
       "path": "src/app/featureAdapters.test.ts",
-      "sizeBytes": 5732,
-      "sha256": "e915d00a699bdc22d55071ddaa8d3c7287f370197bfeac18acdc2c45f0d7aa25"
+      "sizeBytes": 12263,
+      "sha256": "4d5ec918b4ade1696e88aacc725ed7d8cb526c039ed183d7013023b0facdebfa"
     },
     {
       "path": "src/app/featureAdapters.ts",
-      "sizeBytes": 5947,
-      "sha256": "6c814fdf9ae8e87dea5666d84dc01a2708b2b03302690fb17a28093de57c14d9"
+      "sizeBytes": 10365,
+      "sha256": "9d97e87e70975b557b05a26b6538c860f64feb432508180fcfc1beee0501fe52"
     },
     {
       "path": "src/app/FocusHeading.tsx",
@@ -528,8 +533,8 @@
     },
     {
       "path": "src/app/router.tsx",
-      "sizeBytes": 3465,
-      "sha256": "2eb33fb452e7c00f3894a2805dff6949dd0b4cda3ebb45dd102a0da3d496adac"
+      "sizeBytes": 3445,
+      "sha256": "03937f19ffe32808c46d3e3389ef3651527a3cb3531acd795dce2ecda32a6949"
     },
     {
       "path": "src/app/RouterLoadingPage.module.css",
@@ -543,33 +548,33 @@
     },
     {
       "path": "src/app/routes/CourseRoutes.tsx",
-      "sizeBytes": 4147,
-      "sha256": "6300e242dba2b6507018120b624612cdf780d6488c908774ac60d1499587f478"
+      "sizeBytes": 4118,
+      "sha256": "13a92f29710c515d0e910f40e1d3566d70e6d74c7815e23b3d03d2c596b56f11"
     },
     {
       "path": "src/app/routes/DiagnosticRoute.tsx",
-      "sizeBytes": 5995,
-      "sha256": "8740b398d7e95e4425b897b179412719c63fec87f66b17d1ff3ed3469250b466"
+      "sizeBytes": 5906,
+      "sha256": "423e6ecf11f4122fae8aab98949889d8306baff0d91e12f0ed72da508c78252b"
     },
     {
       "path": "src/app/routes/LessonRoute.tsx",
-      "sizeBytes": 929,
-      "sha256": "8769ec44be3f67371fbb464f6c2ed471842c8b2a2e321938326498835dee17bf"
+      "sizeBytes": 1612,
+      "sha256": "8431ffe37c690817d1aaec6bd7522d1424a099190bfedb6be3dfc435b8fb3577"
     },
     {
       "path": "src/app/routes/TodayEntryRoute.module.css",
-      "sizeBytes": 929,
-      "sha256": "eafe037a0c56da16ae5bc71f5fbbd810a8a81c1e3c343e0bf100427514af917c"
+      "sizeBytes": 27,
+      "sha256": "740e51a9247810de6f7c86bb47229eb95d9f12dbb42986280b5a0ab96f37bdb5"
     },
     {
       "path": "src/app/routes/TodayEntryRoute.tsx",
-      "sizeBytes": 3623,
-      "sha256": "95174694d6fbcd6308d4164e9ff583ea25149bbcddb921c5b88f627c804e23d1"
+      "sizeBytes": 1872,
+      "sha256": "63439b63705e865f27f568c64ddd44eeca83777e3234d856a871b690f640f8c0"
     },
     {
       "path": "src/app/routes/VocabularyRoutes.tsx",
-      "sizeBytes": 4536,
-      "sha256": "ee7593dd9e68afdae44bf438e4dccda224793c54d68c90e6ba0eae26e4103b92"
+      "sizeBytes": 5422,
+      "sha256": "54df8e0e1fd2dd011002bf6995420d955082e8cbca3c3ad500274280332d0b7b"
     },
     {
       "path": "src/app/startup/initializeApplication.ts",
@@ -698,28 +703,33 @@
     },
     {
       "path": "src/domain/models.ts",
-      "sizeBytes": 4100,
-      "sha256": "68e1466b7695106175798bedfad9212af34a4ec84cbececf1635b001b10370d1"
+      "sizeBytes": 3976,
+      "sha256": "1e783f91ec3f79411038aa1bcb1cad52c5d81923f1114f3e0b907cfabdbc586b"
     },
     {
       "path": "src/domain/planning/capacity.ts",
-      "sizeBytes": 2747,
-      "sha256": "ce90d1c6b681e544c2413281fb7fa26a79179dc22bf98f487735f17852d4e8b1"
+      "sizeBytes": 2376,
+      "sha256": "fff9999bbb5a8b7d6b996dc4caef83e4063fb5dfa66e54b6f92a4f95cd0bf8c1"
     },
     {
       "path": "src/domain/planning/dailyPlan.test.ts",
-      "sizeBytes": 9097,
-      "sha256": "ced2ec21226d79c4cba03f0ca550081419cd0d853e32890747a49d067ee011ea"
+      "sizeBytes": 12838,
+      "sha256": "5568606227d6411ac7e9d3aa633da37ad4ef88523a9bf28a5d759bf1692f2688"
     },
     {
       "path": "src/domain/planning/dailyPlan.ts",
-      "sizeBytes": 8624,
-      "sha256": "7377ed7788747d6fc6a4da911426dbd60e72e488d695ba58ced9a8df0bc7e530"
+      "sizeBytes": 11683,
+      "sha256": "4cf28ba58c87db7322ea530f0276af2b178395ba47225e859c3bceb520a6b912"
     },
     {
       "path": "src/domain/planning/index.ts",
-      "sizeBytes": 767,
-      "sha256": "74bb47d32ee91518b9a9562fdd6aef650453629ebbd0568ad7f0c2a4bc780cf7"
+      "sizeBytes": 898,
+      "sha256": "01cff14d1fa783f107a22586d0f2d9d8423439dde512ebe14029ad13624d656d"
+    },
+    {
+      "path": "src/domain/planning/studyDay.test.ts",
+      "sizeBytes": 1714,
+      "sha256": "8c2f1ead410d2acc5ba9e3005cef9258a2a11d052de46ec4b64620a1186cbd3e"
     },
     {
       "path": "src/domain/planning/types.ts",
@@ -813,8 +823,8 @@
     },
     {
       "path": "src/domain/review/time.ts",
-      "sizeBytes": 5084,
-      "sha256": "a01524f71863bc60adcaa9e195aa9aa69c3ab036fde520d842b41e19295c59f8"
+      "sizeBytes": 7235,
+      "sha256": "c3a61db147611f291605f6b69b157f709b9ee3baa83630443d7fced7a86dca6b"
     },
     {
       "path": "src/domain/review/types.ts",
@@ -1023,13 +1033,13 @@
     },
     {
       "path": "src/features/lesson/LessonRenderer.test.tsx",
-      "sizeBytes": 15511,
-      "sha256": "7902ec0981e557feafb7dae831844358ed9646b212e179bb13ffc4f49fbc1079"
+      "sizeBytes": 21142,
+      "sha256": "15a156dc7020b451628a302ab019df8460f84af2ac13c34c0b518191c1f473e4"
     },
     {
       "path": "src/features/lesson/LessonRenderer.tsx",
-      "sizeBytes": 16182,
-      "sha256": "cf5a8c65cc64adde0173701dea03993b3eade01381502cbf80c578c6921f44d0"
+      "sizeBytes": 20134,
+      "sha256": "94dcb3d1461aa53f58ae8cd35fb040c0b04d6e3d6d90ee8e70f20820e6896371"
     },
     {
       "path": "src/features/lesson/LessonSectionView.tsx",
@@ -1038,8 +1048,8 @@
     },
     {
       "path": "src/features/lesson/types.ts",
-      "sizeBytes": 2611,
-      "sha256": "e369d8328d5d2e98b6f93734c5e52d3600a91b55605b533780715b8a247c8f04"
+      "sizeBytes": 3302,
+      "sha256": "6ba76beccf869610300df627ead6205b3226196db73e18225001d757c561cd42"
     },
     {
       "path": "src/features/onboarding/index.ts",
@@ -1077,14 +1087,64 @@
       "sha256": "21d0d865f0d016a56c7295962085d281699e2b6817793b4f4d382c19dfe3e5f3"
     },
     {
+      "path": "src/features/today/dexieTodayPort.test.ts",
+      "sizeBytes": 8045,
+      "sha256": "6ccc0944578df9653a3af36c281192662b7d6555539466b6edaf5719e2aa40fd"
+    },
+    {
+      "path": "src/features/today/dexieTodayPort.ts",
+      "sizeBytes": 2430,
+      "sha256": "2b34eb6d84d1dcdb65aec5488759dab201f343f08e4be63abd08f74f3cf1daf6"
+    },
+    {
+      "path": "src/features/today/index.ts",
+      "sizeBytes": 692,
+      "sha256": "e5f1e2fb4eaa48f0bb6f01341b4416f41092608d6efcb9afbf917dbd8fd0facd"
+    },
+    {
+      "path": "src/features/today/model.test.ts",
+      "sizeBytes": 12295,
+      "sha256": "a3765e966409a62a522dfd7cd2f349b045bceb399945ba0702598b2b28d51e00"
+    },
+    {
+      "path": "src/features/today/model.ts",
+      "sizeBytes": 20029,
+      "sha256": "f7d3d7179e896b678b4090fb96d0f607163b2b8abcf40f270155304279b6047d"
+    },
+    {
+      "path": "src/features/today/service.ts",
+      "sizeBytes": 3222,
+      "sha256": "7a0509af428268e4db13a12214e68f4491a918ef69a77ed652ce334b62171dad"
+    },
+    {
+      "path": "src/features/today/TodayPage.module.css",
+      "sizeBytes": 4984,
+      "sha256": "210aaf2c784cf39b53f2b80d32416e9186c0953931af1213ed606214b74fbdd9"
+    },
+    {
+      "path": "src/features/today/TodayPage.test.tsx",
+      "sizeBytes": 10490,
+      "sha256": "1c961ea27941ca41e6b442da49ad18341533fe8ce0bf2d7af8d64f018207b770"
+    },
+    {
+      "path": "src/features/today/TodayPage.tsx",
+      "sizeBytes": 20670,
+      "sha256": "34728948039d3ef23565a4e0ab2b0f264081ad95c7c0dc8c5a57315adb368d2b"
+    },
+    {
+      "path": "src/features/today/types.ts",
+      "sizeBytes": 2747,
+      "sha256": "0ce4e658f1ba9474c62aad201fc897df2c72377e7f33fc1c20ceff92ef9da740"
+    },
+    {
       "path": "src/features/vocabulary/dexieAdapters.test.ts",
-      "sizeBytes": 5694,
-      "sha256": "a893ce6aab3c57173c58d3ba358bf10b89c8cbace4f40fe795f41d9396bd7c49"
+      "sizeBytes": 6742,
+      "sha256": "47d87b6e24cec627ee84fefca85485a619b50dd7240879cd7af53d9b792d5007"
     },
     {
       "path": "src/features/vocabulary/dexieAdapters.ts",
-      "sizeBytes": 2122,
-      "sha256": "aff7d5fbfa5c9727cd0b9bec283841047345d9364d7f84e11801fe92520346d6"
+      "sizeBytes": 2963,
+      "sha256": "a6b1432e17409374cc5754194d44e9d4a17731ca08b1a0f252d8baa549fe58a6"
     },
     {
       "path": "src/features/vocabulary/index.ts",
@@ -1093,13 +1153,13 @@
     },
     {
       "path": "src/features/vocabulary/model.test.ts",
-      "sizeBytes": 13126,
-      "sha256": "83e807e846b7b6d5cedc6fb757dc5d2723180979c03dec717c60dc6474b924af"
+      "sizeBytes": 16074,
+      "sha256": "df06070592086f0dc45a7d76a0c43ad97c9ca1cad770e9027337173333b6bf2c"
     },
     {
       "path": "src/features/vocabulary/model.ts",
-      "sizeBytes": 22873,
-      "sha256": "b8463c3c99b6d8f1b66c8298fa2a97e6a3d0d94a7c9e732c3cccb76d3afe7883"
+      "sizeBytes": 23473,
+      "sha256": "9ebf30341d118e4df31897bec13028ac1dba53965f85b0a0ac71d262ba55da95"
     },
     {
       "path": "src/features/vocabulary/PronunciationButton.test.tsx",
@@ -1113,8 +1173,8 @@
     },
     {
       "path": "src/features/vocabulary/types.ts",
-      "sizeBytes": 4440,
-      "sha256": "5536376136ffd16404ac275d82f8abd571bfdb7fa82096bd2054378ed5bec139"
+      "sizeBytes": 4707,
+      "sha256": "8d7299721bae55a7d9671f9ed89a13e19afd420a5925d750c3c98ae11710b807"
     },
     {
       "path": "src/features/vocabulary/Vocabulary.module.css",
@@ -1123,8 +1183,8 @@
     },
     {
       "path": "src/features/vocabulary/VocabularyHubPage.tsx",
-      "sizeBytes": 7226,
-      "sha256": "2814e8c32a258f7db1b97568792eac88f97bca7af9ecafaa997df0aad23f0985"
+      "sizeBytes": 7864,
+      "sha256": "27a8fda3d636f5afadd1f04555487236128dfea29345091eb7697173dd1bd898"
     },
     {
       "path": "src/features/vocabulary/VocabularyListPage.tsx",
@@ -1133,13 +1193,13 @@
     },
     {
       "path": "src/features/vocabulary/VocabularyPages.test.tsx",
-      "sizeBytes": 23478,
-      "sha256": "3cf40f60bc5cefa505be3d171797c7f9fadde28a1bfc3be466693b4e1040081a"
+      "sizeBytes": 29693,
+      "sha256": "e3f26078567b82adb95c01d4c66225cbe6ce751e00a5fb25ad3a6b3d3fb8f79c"
     },
     {
       "path": "src/features/vocabulary/VocabularySessionPage.tsx",
-      "sizeBytes": 34939,
-      "sha256": "2b1d50e46c2909aab84ce9d9fae6d528e1a380c4c5b6ac37a06c123efa80ae04"
+      "sizeBytes": 43074,
+      "sha256": "1375cd217c4aa66157cb22b8a3e9adac63743cc36a20fde8f573f28d5f65f7f9"
     },
     {
       "path": "src/features/vocabulary/webSpeech.ts",
@@ -1173,18 +1233,18 @@
     },
     {
       "path": "src/infrastructure/db/appDb.test.ts",
-      "sizeBytes": 7149,
-      "sha256": "a9009deb3803d95dcb3d095684a1fcaa7b45aef42a8c67782970f4f52be60bec"
+      "sizeBytes": 11280,
+      "sha256": "c85d71a7c76e0b023a9c447b294e642f9ce8018d60fa32b3a88a999157f95c0c"
     },
     {
       "path": "src/infrastructure/db/appDb.ts",
-      "sizeBytes": 2691,
-      "sha256": "5c23e3863e406386166a690b5d606ce91bd72273dba2f65f1795b5794248b182"
+      "sizeBytes": 7316,
+      "sha256": "b931885aec2caa2a25322df0d63eafb409d78c22d06c4633a8a233b4801c2b46"
     },
     {
       "path": "src/infrastructure/db/repositories/answerCommitRepository.ts",
-      "sizeBytes": 2585,
-      "sha256": "2fc30608df8295bdfb00443db929747351fa4c72f260cf1903eccc156713a67e"
+      "sizeBytes": 3083,
+      "sha256": "0257003f0bf63b182a5d23ad998582cfa4e16f8dc922527772e8a912114e900f"
     },
     {
       "path": "src/infrastructure/db/repositories/contentRepository.ts",
@@ -1338,8 +1398,8 @@
     },
     {
       "path": "src/test/setup.ts",
-      "sizeBytes": 165,
-      "sha256": "f6dacd0c48caa5c15c870a23f157a9801eea0c792f9c6e4d9a29374fa10b3e39"
+      "sizeBytes": 303,
+      "sha256": "cf371cb4c9b06b91b50ff8faa5a3abedcbf7025281b76ae243d34660839abb89"
     },
     {
       "path": "src/vite-env.d.ts",

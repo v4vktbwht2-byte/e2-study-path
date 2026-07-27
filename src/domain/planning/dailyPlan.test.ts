@@ -5,7 +5,11 @@ import {
   calculateNewItemLimit,
   normalizeDailyMinutes,
 } from "./capacity";
-import { buildDailyPlan } from "./dailyPlan";
+import {
+  buildDailyPlan,
+  completeDailyPlanBlock,
+  mergeDailyPlanCompletions,
+} from "./dailyPlan";
 import type {
   BuildDailyPlanInput,
   CompletedDailyPlanBlock,
@@ -196,43 +200,151 @@ describe("日次プラン編成", () => {
   });
 
   it("再計算時に完了済みblockを保ち、残り時間だけで未完了分を選ぶ", () => {
-    const completed: CompletedDailyPlanBlock = {
-      blockId: "done",
-      itemId: "done",
-      category: "dueReview",
-      estimatedSeconds: 120,
-      status: "completed",
-    };
     const candidates: DailyPlanCandidate[] = [
       review("done", NOW_MS - 4_000, 120),
       review("pending-a", NOW_MS - 3_000, 100),
       review("pending-b", NOW_MS - 2_000, 100),
       review("pending-c", NOW_MS - 1_000, 100),
     ];
+    const completedPlan = completeDailyPlanBlock(
+      buildDailyPlan(createInput({ mode: "all", candidates })),
+      "done",
+    );
+    const completedBlocks = completedPlan.blocks.filter(
+      (block): block is CompletedDailyPlanBlock => block.status === "completed",
+    );
 
     const fiveMinutePlan = buildDailyPlan(
       createInput({
         targetMinutes: 5,
         candidates,
-        completedBlocks: [completed],
+        completedBlocks,
       }),
     );
     const oneMinutePlan = buildDailyPlan(
       createInput({
         targetMinutes: 1,
         candidates,
-        completedBlocks: [completed],
+        completedBlocks,
       }),
     );
 
-    expect(fiveMinutePlan.blocks[0]).toEqual(completed);
+    expect(fiveMinutePlan.blocks[0]).toEqual(completedBlocks[0]);
     expect(fiveMinutePlan.blocks.map((block) => block.itemId)).toEqual([
       "done",
       "pending-a",
     ]);
     expect(fiveMinutePlan.completedBlockIds).toEqual(["done"]);
-    expect(oneMinutePlan.blocks).toEqual([completed]);
+    expect(oneMinutePlan.blocks).toEqual(completedBlocks);
     expect(oneMinutePlan.remainingBudgetSeconds).toBe(0);
+  });
+
+  it("block完了をstatusとID一覧へ冪等に反映する", () => {
+    const plan = buildDailyPlan(
+      createInput({
+        mode: "all",
+        candidates: [review("done", NOW_MS - 1_000)],
+      }),
+    );
+
+    const completedOnce = completeDailyPlanBlock(plan, "done");
+    const completedTwice = completeDailyPlanBlock(completedOnce, "done");
+
+    expect(completedOnce.blocks[0]?.status).toBe("completed");
+    expect(completedOnce.completedBlockIds).toEqual(["done"]);
+    expect(completedTwice).toBe(completedOnce);
+    expect(() => completeDailyPlanBlock(plan, "missing")).toThrow(
+      "日次プランblockが見つかりません",
+    );
+  });
+
+  it("古い再計算planへ別処理で確定した完了状態を単調増加で統合する", () => {
+    const candidates = [
+      review("first", NOW_MS - 2_000, 60),
+      review("second", NOW_MS - 1_000, 60),
+    ];
+    const base = buildDailyPlan(createInput({ mode: "all", candidates }));
+    const latest = completeDailyPlanBlock(base, "first");
+    const staleRecalculation = buildDailyPlan(
+      createInput({
+        targetMinutes: 5,
+        candidates,
+        completedBlocks: [],
+      }),
+    );
+    const locallyCompleted = completeDailyPlanBlock(staleRecalculation, "second");
+
+    const merged = mergeDailyPlanCompletions(latest, locallyCompleted);
+
+    expect(merged.completedBlockIds).toEqual(["first", "second"]);
+    expect(merged.blocks.map((block) => [block.blockId, block.status])).toEqual([
+      ["first", "completed"],
+      ["second", "completed"],
+    ]);
+    expect(merged.plannedSeconds).toBe(120);
+    expect(merged.remainingBudgetSeconds).toBe(180);
+    expect(() =>
+      mergeDailyPlanCompletions({ ...latest, date: "2026-07-26" }, locallyCompleted),
+    ).toThrow("異なる学習日");
+  });
+
+  it("再計算時の復習・新規上限へ完了済みblockを含める", () => {
+    const overdue = Array.from({ length: 84 }, (_, index) =>
+      review(
+        `review-${String(index).padStart(2, "0")}`,
+        STUDY_DAY_START_MS - (84 - index) * 1_000,
+      ),
+    );
+    const completedReviewPlan = completeDailyPlanBlock(
+      buildDailyPlan(createInput({ mode: "all", candidates: overdue })),
+      "review-00",
+    );
+    const completedReviewBlocks = completedReviewPlan.blocks.filter(
+      (block): block is CompletedDailyPlanBlock => block.status === "completed",
+    );
+    const recalculatedLight = buildDailyPlan(
+      createInput({
+        mode: "light",
+        candidates: overdue,
+        completedBlocks: completedReviewBlocks,
+      }),
+    );
+
+    expect(recalculatedLight.blocks).toHaveLength(15);
+    expect(
+      recalculatedLight.blocks.filter((block) => block.status === "pending"),
+    ).toHaveLength(14);
+
+    const completedNew: CompletedDailyPlanBlock = {
+      blockId: "new-0",
+      itemId: "new-0",
+      category: "newVocabulary",
+      estimatedSeconds: 10,
+      status: "completed",
+    };
+    const newCandidates: DailyPlanCandidate[] = Array.from(
+      { length: 4 },
+      (_, index) => ({
+        id: `new-${index}`,
+        kind: "newVocabulary",
+        estimatedSeconds: 10,
+      }),
+    );
+    const recalculatedNew = buildDailyPlan(
+      createInput({
+        mode: "all",
+        configuredNewItemLimit: 3,
+        candidates: newCandidates,
+        completedBlocks: [completedNew],
+      }),
+    );
+
+    expect(
+      recalculatedNew.blocks.filter((block) => block.category === "newVocabulary"),
+    ).toHaveLength(3);
+    expect(
+      recalculatedNew.blocks.filter((block) => block.status === "pending"),
+    ).toHaveLength(2);
   });
 
   it("復習負荷が容量の70%を超える日は新規を3件までにする", () => {

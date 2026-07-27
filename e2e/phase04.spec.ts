@@ -55,6 +55,46 @@ async function readObjectStore(page: Page, storeName: string): Promise<StoredRec
   }, storeName);
 }
 
+async function resolveBrowserStudyDates(
+  page: Page,
+  isoDates: readonly string[],
+  studyDayStartHour: number,
+): Promise<string[]> {
+  return page.evaluate(
+    ({ values, boundaryHour }) => {
+      const timeZone = Intl.DateTimeFormat().resolvedOptions().timeZone || "UTC";
+      const formatter = new Intl.DateTimeFormat("en-CA", {
+        timeZone,
+        year: "numeric",
+        month: "2-digit",
+        day: "2-digit",
+        hour: "2-digit",
+        hourCycle: "h23",
+      });
+      return values.map((value) => {
+        const parts = formatter.formatToParts(new Date(value));
+        const part = (type: Intl.DateTimeFormatPartTypes) =>
+          Number(parts.find((candidate) => candidate.type === type)?.value);
+        let year = part("year");
+        let month = part("month");
+        let day = part("day");
+        if (part("hour") < boundaryHour) {
+          const previous = new Date(Date.UTC(year, month - 1, day - 1));
+          year = previous.getUTCFullYear();
+          month = previous.getUTCMonth() + 1;
+          day = previous.getUTCDate();
+        }
+        return [
+          String(year).padStart(4, "0"),
+          String(month).padStart(2, "0"),
+          String(day).padStart(2, "0"),
+        ].join("-");
+      });
+    },
+    { values: [...isoDates], boundaryHour: studyDayStartHour },
+  );
+}
+
 async function disableWebSpeech(page: Page) {
   await page.addInitScript(() => {
     Object.defineProperty(window, "speechSynthesis", {
@@ -241,12 +281,14 @@ test.describe("Phase 04 vocabulary / review / Again の主要フロー", () => {
 
     await expect
       .poll(async () => {
-        const [attempts, reviewStates, masteryProfiles, sessions] = await Promise.all([
-          readObjectStore(page, "attempts"),
-          readObjectStore(page, "reviewStates"),
-          readObjectStore(page, "mastery"),
-          readObjectStore(page, "sessions"),
-        ]);
+        const [attempts, reviewStates, masteryProfiles, sessions, settings] =
+          await Promise.all([
+            readObjectStore(page, "attempts"),
+            readObjectStore(page, "reviewStates"),
+            readObjectStore(page, "mastery"),
+            readObjectStore(page, "sessions"),
+            readObjectStore(page, "settings"),
+          ]);
         const vocabularyAttempts = attempts.filter(
           (record) =>
             typeof record.itemKey === "string" && record.itemKey.startsWith("vocab:"),
@@ -271,6 +313,17 @@ test.describe("Phase 04 vocabulary / review / Again の主要フロー", () => {
             typeof record.endedAt === "string" &&
             Array.isArray(record.completedItemKeys),
         );
+        const studyDayStartHour =
+          typeof settings[0]?.studyDayStartHour === "number"
+            ? settings[0].studyDayStartHour
+            : 4;
+        const dueStudyDates = await resolveBrowserStudyDates(
+          page,
+          savedReviewStates.flatMap((record) =>
+            typeof record.dueAt === "string" ? [record.dueAt] : [],
+          ),
+          studyDayStartHour,
+        );
 
         return {
           attemptCount: vocabularyAttempts.length,
@@ -294,11 +347,8 @@ test.describe("Phase 04 vocabulary / review / Again の主要フロー", () => {
           ),
           allDueTomorrowOrLater:
             typeof studyDate === "string" &&
-            savedReviewStates.every(
-              (record) =>
-                typeof record.dueAt === "string" &&
-                record.dueAt.slice(0, 10) > studyDate,
-            ),
+            dueStudyDates.length === savedReviewStates.length &&
+            dueStudyDates.every((dueStudyDate) => dueStudyDate > studyDate),
           masteryCount: savedMastery.length,
           recognitionAndRecallUpdated: savedMastery.every(
             (record) =>

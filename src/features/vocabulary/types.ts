@@ -1,5 +1,6 @@
 import type {
   Attempt,
+  AppSettings,
   CommitAnswerInput,
   CommitAnswerResult,
   MasteryDimension,
@@ -46,6 +47,8 @@ export interface VocabularyStudySnapshot {
   masteryProfiles: readonly MasteryProfile[];
   userStates: readonly VocabularyUserState[];
   attempts: readonly Attempt[];
+  sessions: readonly StudySession[];
+  settings: AppSettings;
 }
 
 export interface VocabularyStudyRecord {
@@ -124,6 +127,15 @@ export interface VocabularySessionPageProps extends VocabularyPageCallbacks {
   clock?: VocabularyClock;
   limit?: number;
   level?: VocabularyQuestionLevel;
+  explicitItemKey?: string;
+  planContext?: VocabularyPlanContext;
+  timeZone?: string;
+}
+
+export interface VocabularyPlanContext {
+  planDate: string;
+  blockId: string;
+  itemKey: string;
 }
 
 export interface VocabularyAnswerObservation {
