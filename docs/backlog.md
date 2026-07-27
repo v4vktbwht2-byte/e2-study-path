@@ -17,6 +17,7 @@
 
 ## 完了
 
+- 2026-07-28: `master` CIが日本時間0〜4時だけ失敗する進捗E2Eの日付境界不整合を修正。seedを暦日ではなく午前4時開始の学習日へそろえ、日本時間0:30固定のdesktop／320px回帰を2回連続Pass。全E2E 70/70、`npm run check`の551/551、教材検証、本番buildもPass。
 - 2026-07-27: `master`のcoverage CIで顕在化した診断画面のfocus effect競合を修正。見出しの存在だけでなくfocus完了まで待機する回帰テストへ変更し、対象テスト3回連続9/9、全75 test files・551/551、coverage lines 80.18%、lint、typecheckをPass。
 - 2026-07-27: registry接続の`npm ci`と最新auditを実行。全依存10／本番2 HighはRSC未使用とbuild-only間接依存として適用可能性を評価。最終コード状態で551/551 unit/component、coverage lines 80.18%、root／subpath artifact 71ファイル、E2E desktop／320px 70/70をPass。
 - 2026-07-27: Cloudflare Pages + Access方針をD-025で置き換え、Public GitHub + GitHub Pagesへ変更。README冒頭とlicense節へ、プログラム・文書・教材が生成AI（OpenAI Codex）を利用して作成・編集され、専門家による全件校閲済みではないことを明記した。

@@ -1,10 +1,10 @@
 {
   "package": "E2 Study Path Codex Handoff Full Set",
   "packageVersion": "1.0.0",
-  "generatedAt": "2026-07-27T14:54:10+00:00",
+  "generatedAt": "2026-07-27T21:39:30+00:00",
   "manifestPolicy": "The manifest tracks repository source files and excludes PROJECT_MANIFEST.json, Git metadata, dependencies, and generated artifacts.",
   "fileCountExcludingManifest": 456,
-  "totalSizeBytesExcludingManifest": 2693107,
+  "totalSizeBytesExcludingManifest": 2693978,
   "files": [
     {
       "path": ".github/workflows/ci.yml",
@@ -33,8 +33,8 @@
     },
     {
       "path": "CHANGELOG.md",
-      "sizeBytes": 9010,
-      "sha256": "68effccae45eb2801628225ca0404bdfa0122bb10e94689acab7025d82fd3803"
+      "sizeBytes": 9171,
+      "sha256": "b23a567ffd93f8fb5181685b60db8b5a2ac2f0da1032c582ddbe5d81b3ff8224"
     },
     {
       "path": "checklists/CODE_REVIEW.md",
@@ -278,8 +278,8 @@
     },
     {
       "path": "docs/backlog.md",
-      "sizeBytes": 6579,
-      "sha256": "596a6ba3875fea4f162584951cb1ba90df76d0f5442135575c2bf71515e93cf3"
+      "sizeBytes": 6905,
+      "sha256": "bf939ea17988c0a1780ecc152359c95ceff27c3ebdd7ed590d3145baa2ba22b9"
     },
     {
       "path": "e2e/app-shell.spec.ts",
@@ -313,8 +313,8 @@
     },
     {
       "path": "e2e/phase08.spec.ts",
-      "sizeBytes": 20071,
-      "sha256": "e2f7c7d4bc1bbc62578b58ad45231d97ff650e19f6214e599177a180a067611a"
+      "sizeBytes": 20455,
+      "sha256": "7ef7444df240f8610da914f482813b9e7bbe7aa3d147a38f78108f682fd039a1"
     },
     {
       "path": "e2e/phase09.spec.ts",

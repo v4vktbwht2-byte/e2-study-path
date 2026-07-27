@@ -2,6 +2,8 @@ import AxeBuilder from "@axe-core/playwright";
 import { expect, test, type Locator, type Page } from "@playwright/test";
 import { readAppDatabaseRecord, seedAppDatabase } from "./support/indexedDb";
 
+const DEFAULT_STUDY_DAY_START_HOUR = 4;
+
 const ACCESSIBILITY_ROUTES = [
   "/#/",
   "/#/course",
@@ -147,31 +149,35 @@ async function readStoredPreferences(page: Page) {
 }
 
 async function seedProgressData(page: Page) {
-  return page.evaluate(async () => {
+  return page.evaluate(async (studyDayStartHour) => {
     const database = await new Promise<IDBDatabase>((resolve, reject) => {
       const request = indexedDB.open("e2-study-path");
       request.onsuccess = () => resolve(request.result);
       request.onerror = () =>
         reject(request.error ?? new Error("IndexedDBを開けませんでした。"));
     });
+    const shiftDate = (calendarDate: string, days: number) => {
+      const date = new Date(`${calendarDate}T00:00:00.000Z`);
+      date.setUTCDate(date.getUTCDate() + days);
+      return date.toISOString().slice(0, 10);
+    };
     const formatter = new Intl.DateTimeFormat("en-US", {
       year: "numeric",
       month: "2-digit",
       day: "2-digit",
+      hour: "2-digit",
+      hourCycle: "h23",
     });
     const dateParts = formatter.formatToParts(new Date());
     const datePart = (type: Intl.DateTimeFormatPartTypes) =>
       dateParts.find((part) => part.type === type)?.value ?? "";
-    const currentStudyDate = [
-      datePart("year"),
-      datePart("month"),
-      datePart("day"),
-    ].join("-");
-    const shiftDate = (studyDate: string, days: number) => {
-      const date = new Date(`${studyDate}T00:00:00.000Z`);
-      date.setUTCDate(date.getUTCDate() + days);
-      return date.toISOString().slice(0, 10);
-    };
+    const calendarDate = [datePart("year"), datePart("month"), datePart("day")].join(
+      "-",
+    );
+    const currentStudyDate =
+      Number(datePart("hour")) < studyDayStartHour
+        ? shiftDate(calendarDate, -1)
+        : calendarDate;
     const previousStudyDate = shiftDate(currentStudyDate, -10);
     const currentStart = `${currentStudyDate}T10:00:00.000Z`;
     const currentEnd = `${currentStudyDate}T10:15:00.000Z`;
@@ -317,10 +323,12 @@ async function seedProgressData(page: Page) {
     });
     database.close();
     return { currentStudyDate, previousStudyDate };
-  });
+  }, DEFAULT_STUDY_DAY_START_HOUR);
 }
 
 test.describe("Phase 08 記録・設定・アクセシビリティ", () => {
+  test.use({ timezoneId: "Asia/Tokyo" });
+
   test("主要画面に重大なaxe違反と重複mainランドマークがない", async ({ page }) => {
     for (const path of ACCESSIBILITY_ROUTES) {
       await page.goto(path);
@@ -465,6 +473,7 @@ test.describe("Phase 08 記録・設定・アクセシビリティ", () => {
   test("実データを7日・30日で集計し、6技能・弱点・ステージを説明する", async ({
     page,
   }) => {
+    await page.clock.setFixedTime(new Date("2026-07-28T00:30:00+09:00"));
     await page.goto("/#/progress");
     await waitForPageHeading(page);
     await seedProgressData(page);
