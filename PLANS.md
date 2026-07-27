@@ -691,3 +691,42 @@ python scripts/verify_handoff.py
 
 - Cloudflare Pages projectのGitHub接続、production／preview Access policy、配備URLはCloudflareアカウントでの設定が必要。
 - private GitHub上のCI結果、Access拒否／許可、offline、waiting Service Worker更新は実環境で確認する。
+
+## Post-Phase 10 — Public GitHub Pages handoff
+
+**Goal**
+
+Cloudflareの設定を必要とせず、スマホから公開URLを開いてPWAとしてinstallできるGitHub Pages構成へ変更する。第三者がrepositoryと教材を閲覧する前提で、AI作成・非公式・未校閲範囲とlicense未決定をREADMEへ明示する。
+
+**Decisions made**
+
+- D-024をD-025で置き換え、`v4vktbwht2-byte/e2-study-path`をPublic repositoryへ変更する。
+- GitHub Pagesのproject URL `/e2-study-path/`へ、既定branchのCI成功commitだけを自動deployする。
+- README冒頭とlicense節に、実装・文書・教材が生成AI（OpenAI Codex）を利用して作成・編集されたこと、専門家による全件校閲済みではないことを表示する。
+- licenseが追加されるまでは、Public表示を複製・改変・再配布の許諾と扱わない。
+
+**Verification**
+
+```powershell
+npm audit
+npm audit --omit=dev
+npm run check
+npm run test:coverage
+$env:VITE_BASE_PATH = "/e2-study-path/"
+npm run build
+npm run verify:dist
+Remove-Item Env:VITE_BASE_PATH
+npm run test:e2e
+python scripts/verify_handoff.py
+```
+
+**Known limitations**
+
+- 公開URLでのiPhone／Android install、standalone、offline再起動、waiting Service Worker差替えは実端末確認を残す。
+- software license、正式名称、人間の英語校閲者による全件レビューは所有者判断・Phase 11作業として残す。
+
+**Local results**
+
+- registry接続の`npm ci`、`npm run check`、75 files・551/551 unit/component、coverage lines 80.18%をPass。
+- root／`/e2-study-path/` buildと71ファイルのartifact検証、desktop／320px E2E 70/70をPass。
+- 最新auditの全依存10／本番2 Highを確認。React Routerは本PWAが使わないunstable RSC API限定、`brace-expansion`は公開runtimeへ含まれないbuild-only間接依存と評価し、stable修正版の追跡を残した。

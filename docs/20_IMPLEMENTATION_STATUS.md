@@ -37,22 +37,22 @@ Codexは各フェーズ完了時に更新する。
 | Backup/restore   | Complete | backup/adapter tests + Phase 07 E2E  | 厳密JSON、preview、merge/replace、安全backup、録音opt-in、分離削除          |
 | PWA/offline      | Complete | PWA tests + Phase 07 E2E             | install/iOS案内、offline、用途別cache、更新前write flush、base path         |
 | Accessibility    | Complete | axe + component + Phase 08 E2E       | landmark、h1、route focus、live region、Dialog、44px、320px・200%相当       |
-| CI/deploy        | Complete | workflow + root/subpath artifact     | CIとfailure artifactを実装。private GitHubへpush済み。Cloudflare Pages／Access接続は確認待ち |
+| CI/deploy        | Complete | workflow + root/subpath artifact     | CI成功commit限定のGitHub Pages workflowを実装。Public化・実URL確認は進行中 |
 
 ## Quality gates
 
 | Command                  | Last result                                                                                   | Date       |
 | ------------------------ | --------------------------------------------------------------------------------------------- | ---------- |
-| npm ci                   | Pass (workspace直下をclean後、lockfileから533 packages)                                       | 2026-07-27 |
+| npm ci                   | Pass (registry接続、lockfileから533 packages)                                                  | 2026-07-27 |
 | npm run lint             | Pass                                                                                          | 2026-07-27 |
 | npm run typecheck        | Pass                                                                                          | 2026-07-27 |
-| npm run test             | Baseline Pass (547/547)。最終競合修正で追加した6件は環境制限により未再実行                    | 2026-07-27 |
-| npm run test:coverage    | Baseline Pass (79.98% statements / 71.77% branches / 77.12% functions / 80.33% lines)         | 2026-07-27 |
+| npm run test             | Pass (75 files、551/551)                                                                       | 2026-07-27 |
+| npm run test:coverage    | Pass (79.73% statements / 71.80% branches / 76.29% functions / 80.18% lines)                  | 2026-07-27 |
 | npm run validate:content | Pass (Pilot 140 vocabulary / 31 lessons / 155 exercises / 25 practice sets + contract sample) | 2026-07-27 |
-| npm run build            | Baseline Pass (root/subpath、entry 209.96 kB、PWA precache 69件)                              | 2026-07-27 |
-| npm run verify:dist      | Baseline Pass (root/subpath、manifest/SW/asset/source map、70 files)                          | 2026-07-27 |
-| npm run test:e2e         | Baseline Pass (all desktop/320px 70/70、retry 0)。最終競合修正後は未再実行                    | 2026-07-27 |
-| npm run check            | Baseline Pass。最終競合修正後はlint／typecheck／format／静的経路監査がPass                    | 2026-07-27 |
+| npm run build            | Pass (root/subpath、entry 210.06 kB、PWA precache 70件)                                       | 2026-07-27 |
+| npm run verify:dist      | Pass (root/subpath、manifest/SW/asset/source map、71 files)                                   | 2026-07-27 |
+| npm run test:e2e         | Pass (all desktop/320px 70/70、retry 0)                                                        | 2026-07-27 |
+| npm run check            | Pass                                                                                           | 2026-07-27 |
 
 ## Known issues
 
@@ -60,12 +60,12 @@ Codexは各フェーズ完了時に更新する。
 - Web Speechの声質・発音・端末差は実機未確認。
 - MediaRecorderの録音・権限拒否とWeb Speechの音声品質・端末差は対応端末での実機確認が必要。非対応時のtext fallbackは自動テスト済み。
 - 実際のwaiting Service Worker差替え、`beforeinstallprompt`、Storage永続化、iOS standaloneは配信環境・対応実機で最終確認が必要。
-- `vite-plugin-pwa`内部の`inlineDynamicImports`非推奨警告が残るが、Service Worker生成と69件のprecache注入は成功している。
-- GitHub remoteはprivate repository `v4vktbwht2-byte/e2-study-path`として設定済み。初回CIは実行中で、結果確認を残す。
-- 配備先はCloudflare Pages + Accessに確定した。Pages project接続、production／previewのAccess policy、配備URLは未確認。
-- ソフトウェアライセンスはリポジトリ所有者の最終判断待ち。Accessで限定公開する場合を含め、利用者へ提供する前に確定する。
-- offline dependency auditは本番・全依存とも0件。build時依存`glob@11.1.0`は既知CVEの修正版だが非推奨警告が残り、最新registry auditは外部送信承認が得られず未実施。公開前に承認済み環境で`npm audit`と`npm audit --omit=dev`を再実行する。
-- 最終コードレビュー後に全user-data write gateとbackup snapshot barrier、回帰テスト6件を追加した。変更後のlint／typecheck／format／静的経路監査はPassしたが、Vitestはsandbox `spawn EPERM`、権限付き再実行は利用上限で拒否された。公開前に通常環境で`npm run check`、`npm run test:coverage`、`npm run test:e2e`を再実行する。
+- `vite-plugin-pwa`内部の`inlineDynamicImports`非推奨警告が残るが、Service Worker生成と70件のprecache注入は成功している。
+- GitHub remote `v4vktbwht2-byte/e2-study-path`をD-025でPublicへ切り替え、GitHub Pagesから公開する。repository visibility、Actions、Pages URLの実確認は進行中。
+- ソフトウェアライセンスはリポジトリ所有者の最終判断待ち。Public repositoryの閲覧やPWA利用を、複製・改変・再配布の許諾と扱わない旨をREADMEへ明記した。
+- README冒頭とlicense節へ、実装・文書・教材が生成AI（OpenAI Codex）を利用して作成・編集され、専門家による全件校閲済みではないことを明記した。
+- 最新registry auditは全依存10件／本番依存2件のHighを報告。本番側の`react-router@7.18.1`はunstable RSC API使用時だけに影響する`GHSA-qwww-vcr4-c8h2`で、本PWAはRSC／SSR／server actionを使用しない。開発側は`vite-plugin-pwa`→`workbox-build`配下の`brace-expansion@2.1.2`で、公開runtimeへ含まれず外部入力を処理しないbuild経路。stableな互換修正版を追跡する。
+- 最終コード状態で`npm run check`、coverage、root／subpath artifact、全E2Eを再実行し、551/551 unit/component、E2E 70/70をPassした。
 
 ## Phase notes
 
