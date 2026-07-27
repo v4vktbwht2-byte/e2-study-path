@@ -20,6 +20,21 @@
 - Vitest、Testing Library、Playwrightによる検証
 - モバイルファースト、キーボード操作、アクセシビリティ配慮
 
+## 現在の実装状況
+
+Phase 00〜04が完了し、現在はPhase 05「今日のプラン・滞留救済・レッスン統合」を実装中です。
+
+Phase 04では、Stage 0〜6各20語・合計140語のオリジナル語彙、単語ハブ・一覧・詳細、Level 1〜7、新規語の同一セッション再想起、Quick Sort、Again/Hard/Good/Easy、5軸習熟度、期限・苦手優先復習、混同語比較を実装しました。学習結果はIndexedDBへ原子的に保存されます。
+
+最新のPhase 04検証は次のとおりです。
+
+- domain/featureテスト: 117件成功
+- Playwright E2E: desktop/320pxで8/8成功
+- Pilot教材検証: 140語・31レッスン・155演習
+- production build: 成功（メイン初期chunk 608.48 kBの警告はPhase 07/09で再評価）
+
+Web Speechの声質・発音は実機未確認です。単語セッション途中reloadと学習日境界の設定接続はPhase 05、画面・問題切替時のフォーカス管理はPhase 08で仕上げます。
+
 ## ローカル起動
 
 必要環境は Node.js 24.13.1（`.nvmrc`に記録）とnpm 11以降です。

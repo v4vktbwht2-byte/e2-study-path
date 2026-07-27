@@ -95,6 +95,7 @@ describe("Pilot教材パック", () => {
     const result = validateContentPack(pilotContentPack);
 
     expect(result.issues).toEqual([]);
+    expect(result.validVocabulary.length).toBeGreaterThanOrEqual(140);
     expect(result.validLessons).toHaveLength(31);
     expect(result.validExercises).toHaveLength(155);
   });
@@ -271,7 +272,11 @@ describe("Pilot教材パック", () => {
   it("すべての教材がオリジナルsource metadataを持つ", () => {
     expect(pilotContentPack.source.type).toBe("original");
 
-    for (const item of [...pilotLessons, ...pilotExercises]) {
+    for (const item of [
+      ...pilotContentPack.vocabulary,
+      ...pilotLessons,
+      ...pilotExercises,
+    ]) {
       expect(item.source).toMatchObject({
         type: "original",
         author: "E2 Study Path project",
@@ -282,7 +287,9 @@ describe("Pilot教材パック", () => {
   it("IDが教材種別ごとに一意である", () => {
     const lessonIds = pilotLessons.map((lesson) => lesson.id);
     const exerciseIds = pilotExercises.map((exercise) => exercise.id);
+    const vocabularyIds = pilotContentPack.vocabulary.map((item) => item.id);
 
+    expect(new Set(vocabularyIds).size).toBe(vocabularyIds.length);
     expect(new Set(lessonIds).size).toBe(lessonIds.length);
     expect(new Set(exerciseIds).size).toBe(exerciseIds.length);
   });

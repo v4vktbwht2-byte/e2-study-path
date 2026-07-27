@@ -48,6 +48,28 @@ function lazyFoundationRoute(routeId: FoundationRouteId) {
         const { LessonRoute } = await import("./routes/LessonRoute");
         return { Component: LessonRoute };
       };
+    case "vocabulary":
+      return async () => {
+        const { VocabularyRoute } = await import("./routes/VocabularyRoutes");
+        return { Component: VocabularyRoute };
+      };
+    case "vocabulary-session":
+      return async () => {
+        const { VocabularySessionRoute } = await import(
+          "./routes/VocabularyRoutes"
+        );
+        return { Component: VocabularySessionRoute };
+      };
+    case "word":
+      return async () => {
+        const { WordDetailRoute } = await import("./routes/VocabularyRoutes");
+        return { Component: WordDetailRoute };
+      };
+    case "review":
+      return async () => {
+        const { ReviewRoute } = await import("./routes/VocabularyRoutes");
+        return { Component: ReviewRoute };
+      };
     default:
       return lazyPreparationRoute(routeId);
   }

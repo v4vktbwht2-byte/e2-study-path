@@ -11,7 +11,7 @@ describe("教材パック検証", () => {
     const pack = loadStarterPack();
 
     expect(pack.id).toBe("pilot-core-ja-original");
-    expect(pack.vocabulary).toHaveLength(0);
+    expect(pack.vocabulary.length).toBeGreaterThanOrEqual(140);
     expect(pack.lessons).toHaveLength(31);
     expect(pack.exercises).toHaveLength(155);
   });

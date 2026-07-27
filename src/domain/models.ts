@@ -68,6 +68,8 @@ export interface Attempt {
   confidence?: "none" | "low" | "medium" | "high";
   suggestedRating?: ReviewRating;
   finalRating?: ReviewRating;
+  /** 誤答時に選んだ、同じ混同グループ内の単語。 */
+  confusedWithItemKey?: string;
 }
 
 export interface MasteryProfile {

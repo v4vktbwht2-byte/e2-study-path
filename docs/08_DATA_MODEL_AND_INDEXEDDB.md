@@ -121,6 +121,7 @@ interface Attempt {
   confidence?: 'none' | 'low' | 'medium' | 'high';
   suggestedRating?: ReviewRating;
   finalRating?: ReviewRating;
+  confusedWithItemKey?: string;
 }
 ```
 

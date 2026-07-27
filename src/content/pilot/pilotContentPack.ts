@@ -7,6 +7,7 @@ import { ORIGINAL_CONTENT_SOURCE } from "./factories";
 import { stage0Exercises, stage0Lessons } from "./stage0";
 import { stage1Exercises, stage1Lessons } from "./stage1";
 import { upperStageExercises, upperStageLessons } from "./upperStages";
+import { pilotVocabulary } from "./vocabulary";
 
 export const pilotLessons: readonly Lesson[] = [
   ...stage0Lessons,
@@ -27,14 +28,14 @@ export const pilotDiagnosticExercises: readonly Exercise[] = pilotExercises.filt
 export const pilotContentPack = {
   id: "pilot-core-ja-original",
   schemaVersion: "1.0.0",
-  contentVersion: "0.3.1",
+  contentVersion: "0.4.0",
   locale: "ja-JP",
   title: "E2 Study Path Pilot オリジナル教材",
   description:
     "ステージ0〜6の導入レッスンと初期診断に使用する、日本語話者向けのオリジナル教材パックです。",
   generatedAt: "2026-07-27T00:00:00Z",
   source: ORIGINAL_CONTENT_SOURCE,
-  vocabulary: [],
+  vocabulary: [...pilotVocabulary],
   lessons: [...pilotLessons],
   exercises: [...pilotExercises],
   practiceSets: [],

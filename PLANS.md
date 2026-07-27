@@ -4,8 +4,8 @@
 
 ## 現在のPhase
 
-- Phase: 04 — Vocabulary Mode and Adaptive Review
-- Status: 実装中
+- Phase: 05 — Daily Plan, Backlog Rescue, and Lesson Integration
+- Status: 計画確定・実装開始
 - Last updated: 2026-07-27
 
 ## Phase 00〜10 高水準計画
@@ -266,8 +266,68 @@ npm run build
 
 **Results**
 
-- 実装中。
+- Stage 0〜6へ各20語、合計140語のオリジナル語彙を追加し、31レッスン・155演習と同じPilot Content Packへ統合した。
+- 新規、期限復習、苦手、高速仕分け、聞き取り、スペル、文脈の入口、一覧・検索・絞り込み、お気に入り、メモ、停止・再開・リセット、単語詳細を実装した。
+- 新規語の閲覧、短い理解確認、同一セッション内のLevel 2再想起、翌日以降のdue保存を接続した。Quick Sortは全件分類後に`unknown → unsure → known`順で実確認し、自己申告だけでは習得扱いにしない。
+- Level 1〜7、正誤・速度・ヒント・自信度による推奨評価、Again/Hard/Good/Easy上書き、Again再挿入、5軸Mastery更新、終了summaryを実装した。
+- Dueをcanonical `rankReviewQueue`へ接続し、お気に入りを`userPinned`として反映した。Weakは`extractWeakWords`の一括score順とお気に入り軽加点を使う。
+- 混同語の誤選択をAttemptへ保存し、Weak抽出、誤答後比較、次回Level 1/3四択の候補優先へ接続した。
+- Attempt・ReviewState・Mastery・Sessionを同一transactionで保存し、回答履歴・お気に入り・メモの再読込後永続化と失敗時の再試行を検証した。
+- Phase 04 domain/featureテスト117件、全unit 32ファイル・282/282件、desktop/320pxのPhase 04 E2E 8/8が成功。教材検証はPilot 140語・31レッスン・155演習とcontract sampleで成功し、`npm run check`とproduction buildも成功した。
 
 **Known limitations / follow-up**
 
-- 実音声ファイルは含めず、PilotではWeb Speechと明示fallbackを使う。
+- 実音声ファイルは含めず、PilotではWeb Speechと明示fallbackを使う。声質・発音・端末差は実機未確認。
+- 単語セッション途中reloadの再開と、`studyDayStartHour`・IANAタイムゾーンを使う学習日境界の画面接続はPhase 05で今日のプランと合わせて実装する。
+- 問題・feedback・画面切替時のフォーカス管理とスクリーンリーダー手動確認はPhase 08で仕上げる。
+- production buildは成功するが、メイン初期chunkが608.48 kBで警告対象。Phase 07/09のPWA分割・配信構成で再評価する。
+
+## Phase 05 — Daily Plan, Backlog Rescue, and Lesson Integration
+
+**Goal**
+
+利用者が選んだ時間内に、期限超過復習、当日復習、苦手、新規語、現在レッスン、技能練習を一つの「今日の学習」として自動編成し、完了済み項目を失わず中断・再開・再計算できるようにする。
+
+**Files and areas expected to change**
+
+- `src/domain/planning/**`
+- `src/features/today/**`、`src/features/lesson/**`、`src/features/vocabulary/**`
+- `src/infrastructure/db/**`、`src/app/routes/**`
+- Daily Plan unit/component/E2E tests
+
+**Implementation steps**
+
+1. 既存の純粋`buildDailyPlan`を唯一の編成規則として維持し、ReviewState、Weak、LessonProgress、Mastery、設定から候補を作るapplication/Repository境界を実装する。
+2. 5/15/30/45分とcustomのcapacityを接続し、復習8〜12秒、想起・入力15〜25秒、教材の`estimatedSeconds`／`estimatedMinutes`を見積もりへ使う。
+3. `overdue review → due review → weak item → current lesson → new vocabulary → rotating skill practice`の優先順位を画面と保存データへ反映する。
+4. light/standard/thorough/allの4コースを実装し、大量backlogでは新規導入を抑え、80件超でもlight courseが短時間で完了できるようにする。
+5. 今日画面へ残り時間、内訳、開始、続きから、単語ショートカット、空・loading・error状態を実装する。
+6. DailyPlan blockとStudySessionの完了・中断を原子的に保存し、設定時間変更時は完了済みblockを固定して未完了部分だけを再計算する。
+7. 学習日が変わったら新しいplanを作り、前日の未完了を失敗や連続記録の罰として表示しない。
+8. current Stageと弱い技能からskill rotationを決定し、レッスン完了で登録されたreview itemを翌学習日のplanへ反映する。
+9. AppSettingsの`studyDayStartHour`と端末IANAタイムゾーンをDaily Plan・Attempt・Reviewへ一貫して注入し、単語セッション途中reloadも回答確定地点から再開できるようにする。
+10. due 0件、少量、大量、80件超、長期休止、日付変更、時間変更、中断再開をunit/component/E2Eで検証し、Phase品質ゲートを通す。
+
+**Verification commands**
+
+```powershell
+npm run test -- dailyPlan
+npm run test:e2e -- --grep "daily plan|backlog"
+npm run check
+```
+
+**Decisions made**
+
+- 編成規則をReactやDexieへ重複実装せず、純粋domainへ候補と注入時刻を渡す。
+- 再計算では完了済みblockを不変とし、残り時間と未完了候補だけを再編成する。
+- lightを選んだ結果残った項目や前日未完了を失敗扱いにせず、励ます日本語で次回候補として扱う。
+- `all`以外は時間容量を目安として使い、最小の意味あるblockが1件も入らない場合だけ予算超過を許容する。
+- 学習日は端末ローカル日付の単純な文字列化ではなく、AppSettingsの開始時刻とIANAタイムゾーンから決定する。
+
+**Results**
+
+- 計画確定。既存のcapacity、優先順位、backlog抑制、skill rotationの純粋domainを画面・永続化へ接続する段階。
+
+**Known limitations / follow-up**
+
+- Phase 06で実装する技能別教材が未接続の場合、skill rotationは現在利用可能な候補だけで編成する。

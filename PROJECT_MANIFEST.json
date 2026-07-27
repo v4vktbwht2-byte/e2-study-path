@@ -1,10 +1,10 @@
 {
   "package": "E2 Study Path Codex Handoff Full Set",
   "packageVersion": "1.0.0",
-  "generatedAt": "2026-07-26T23:19:49+00:00",
+  "generatedAt": "2026-07-27T00:18:23+00:00",
   "manifestPolicy": "The manifest tracks repository source files and excludes PROJECT_MANIFEST.json, Git metadata, dependencies, and generated artifacts.",
-  "fileCountExcludingManifest": 240,
-  "totalSizeBytesExcludingManifest": 992498,
+  "fileCountExcludingManifest": 274,
+  "totalSizeBytesExcludingManifest": 1253571,
   "files": [
     {
       "path": ".gitignore",
@@ -23,8 +23,8 @@
     },
     {
       "path": "CHANGELOG.md",
-      "sizeBytes": 102,
-      "sha256": "4cf075cd4f776ce7037b63355f9ad481f9c79186060ef593306f560d0cf4f50c"
+      "sizeBytes": 1310,
+      "sha256": "db4c0d53ccac54e8772a7d21800c40f2081c838b3f3dcac12f3ebe29f03df136"
     },
     {
       "path": "checklists/CODE_REVIEW.md",
@@ -193,8 +193,8 @@
     },
     {
       "path": "docs/08_DATA_MODEL_AND_INDEXEDDB.md",
-      "sizeBytes": 6557,
-      "sha256": "a34142876c014bbbaab8bcc689c12be05f3f4138e8bf8422d8738f9b904ce5bd"
+      "sizeBytes": 6589,
+      "sha256": "8cd017e5e864122ac95b08d9c2f64335661cf036f2ab5fdcf0a8e75514c33054"
     },
     {
       "path": "docs/09_REVIEW_ALGORITHM.md",
@@ -253,8 +253,8 @@
     },
     {
       "path": "docs/20_IMPLEMENTATION_STATUS.md",
-      "sizeBytes": 4140,
-      "sha256": "91156327013de47953771378ed2baaff3a6ff5d669f3a6c1c5de05adc5e6417b"
+      "sizeBytes": 5609,
+      "sha256": "f58a40f086d2db282611f8e7475c6536999c0b45a66d1fc6ef55640e03b1612b"
     },
     {
       "path": "docs/21_SOURCE_NOTES.md",
@@ -263,8 +263,8 @@
     },
     {
       "path": "docs/backlog.md",
-      "sizeBytes": 2205,
-      "sha256": "2d78a146acab6fae106d6bc69a3d70c1f6ce35f6af4047b4f2240351ff4cef9f"
+      "sizeBytes": 2528,
+      "sha256": "9b380fb485ed5e1fc474bde0c6c76c96b15f72c194db4bb622489aaeb0c0f781"
     },
     {
       "path": "e2e/app-shell.spec.ts",
@@ -275,6 +275,11 @@
       "path": "e2e/phase03.spec.ts",
       "sizeBytes": 13549,
       "sha256": "66b585549d0c49ef711306dcad5c350bbf92942d6bd24896df6a5245c24f97b0"
+    },
+    {
+      "path": "e2e/phase04.spec.ts",
+      "sizeBytes": 22590,
+      "sha256": "df25e6ddf87a52e97193a632ac24e6f2ab4f6e3c299ca6fc8c16e3fb7ebb5e47"
     },
     {
       "path": "eslint.config.js",
@@ -338,8 +343,8 @@
     },
     {
       "path": "PLANS.md",
-      "sizeBytes": 15867,
-      "sha256": "dec71083c22366675ceaba55e21432bf56e201a557ee6adfe97d6a31fec127c5"
+      "sizeBytes": 21464,
+      "sha256": "23155dff5e076191aae3486ba70b8899af6f32258536222eb0858cc6f6088c60"
     },
     {
       "path": "playwright.config.ts",
@@ -423,8 +428,8 @@
     },
     {
       "path": "README.md",
-      "sizeBytes": 3225,
-      "sha256": "e000f2ed45efc0c9328594e04894f54ebb4e8c3b01d2ad6e42150a9ab7e7a67f"
+      "sizeBytes": 4241,
+      "sha256": "4f22f57145398ad7fb0d5b0ae6a0fd1dd00e541d217263d319eb8e9a43154bdb"
     },
     {
       "path": "scripts/generate_manifest.py",
@@ -523,8 +528,8 @@
     },
     {
       "path": "src/app/router.tsx",
-      "sizeBytes": 2701,
-      "sha256": "1b97527c6ff84cd0b7f4fa5ff930715ed9f7f3d94619cafdfa839db94e7a9a8a"
+      "sizeBytes": 3465,
+      "sha256": "2eb33fb452e7c00f3894a2805dff6949dd0b4cda3ebb45dd102a0da3d496adac"
     },
     {
       "path": "src/app/RouterLoadingPage.module.css",
@@ -562,6 +567,11 @@
       "sha256": "95174694d6fbcd6308d4164e9ff583ea25149bbcddb921c5b88f627c804e23d1"
     },
     {
+      "path": "src/app/routes/VocabularyRoutes.tsx",
+      "sizeBytes": 4536,
+      "sha256": "ee7593dd9e68afdae44bf438e4dccda224793c54d68c90e6ba0eae26e4103b92"
+    },
+    {
       "path": "src/app/startup/initializeApplication.ts",
       "sizeBytes": 2092,
       "sha256": "56d0f83f2ded9fa7a757bbc0924e53b7ca8412be4e340b5dfb19781155449c54"
@@ -588,18 +598,18 @@
     },
     {
       "path": "src/content/pilot/index.ts",
-      "sizeBytes": 336,
-      "sha256": "813dca76a5012fcc23bdd1f49a0ce8adb98b137648ad107fb3054bc132b8aaf4"
+      "sizeBytes": 384,
+      "sha256": "0506fd1a09a6d0a819c99b21dd01a68a2503fe1bc6b4a4ddb28e469a0edde701"
     },
     {
       "path": "src/content/pilot/pilotContentPack.test.ts",
-      "sizeBytes": 10145,
-      "sha256": "4c241ce547b416cffbe549e9e35c30f946c546a0646b783f6a9a803f0dcde7bb"
+      "sizeBytes": 10419,
+      "sha256": "76068e857452710ebb571270290666457518f18e113eeca44b4509284a6dbcf8"
     },
     {
       "path": "src/content/pilot/pilotContentPack.ts",
-      "sizeBytes": 1424,
-      "sha256": "f3cbb3eb2c90aeeaec78feeccdcb24f44a497d51efdcbc3e69bdf992ad36176a"
+      "sizeBytes": 1490,
+      "sha256": "e0807200acff35b7ebec2a87aa7baa31a37725dacc8c28c3a8814700f8764b42"
     },
     {
       "path": "src/content/pilot/stage0.ts",
@@ -620,6 +630,16 @@
       "path": "src/content/pilot/upperStageUnit3.ts",
       "sizeBytes": 21592,
       "sha256": "625f81d5e3b2bba7a1bfe0260994f8d3f268c7f6241ec71f072262708966c735"
+    },
+    {
+      "path": "src/content/pilot/vocabulary.test.ts",
+      "sizeBytes": 5248,
+      "sha256": "5a2db59fc0e5f99999e49eb81d5b624a85dc4e799a315c47db9328d8eb82f649"
+    },
+    {
+      "path": "src/content/pilot/vocabulary.ts",
+      "sizeBytes": 36972,
+      "sha256": "a5ec85cbe7d1083fd9e6f7b9750f6b0550a2c3ea29af10bd655888c92672d36b"
     },
     {
       "path": "src/domain/diagnostic/adaptive.ts",
@@ -678,8 +698,8 @@
     },
     {
       "path": "src/domain/models.ts",
-      "sizeBytes": 3995,
-      "sha256": "da91c4965f0fe759bf2f6d5b725c2be54c3a89c508b4cbe92eb8726655c09e44"
+      "sizeBytes": 4100,
+      "sha256": "68e1466b7695106175798bedfad9212af34a4ec84cbececf1635b001b10370d1"
     },
     {
       "path": "src/domain/planning/capacity.ts",
@@ -800,6 +820,71 @@
       "path": "src/domain/review/types.ts",
       "sizeBytes": 3966,
       "sha256": "5dd1619357220b7bda3ad4f6e3f03030d28c23033e1df4a7a261620664f73cf8"
+    },
+    {
+      "path": "src/domain/vocabulary/answerJudgment.test.ts",
+      "sizeBytes": 1859,
+      "sha256": "fedd3429e2e2957a136b1673f547d51f625d5cb33f0dc44f56fff083119b436e"
+    },
+    {
+      "path": "src/domain/vocabulary/answerJudgment.ts",
+      "sizeBytes": 4520,
+      "sha256": "258f1df1dbcabb81f185a85a284790b8a1b760c6f8fcf0eb44a43a629f29f485"
+    },
+    {
+      "path": "src/domain/vocabulary/confusion.ts",
+      "sizeBytes": 1962,
+      "sha256": "aab3bed2551b10030cd5715ab1d1c6155dd220cf533af7fdd6e20805910b3d02"
+    },
+    {
+      "path": "src/domain/vocabulary/errors.ts",
+      "sizeBytes": 364,
+      "sha256": "9e938719172aa9876edd745f81e9a0e053ad8bfd938d80b59fcf198b53690415"
+    },
+    {
+      "path": "src/domain/vocabulary/index.ts",
+      "sizeBytes": 240,
+      "sha256": "3994bfa1e4f401e25f3eb139453a2b174fc027ff7aae5bf5e337b4082a11c140"
+    },
+    {
+      "path": "src/domain/vocabulary/levelSelection.test.ts",
+      "sizeBytes": 4527,
+      "sha256": "d703da5a300c87de864e503e75739d051770ca520051e80e09b4659c99540fb2"
+    },
+    {
+      "path": "src/domain/vocabulary/levelSelection.ts",
+      "sizeBytes": 3837,
+      "sha256": "144444327500bc3c6b6aca8f659389dec6cf65688c2111b39277178f03aa9b76"
+    },
+    {
+      "path": "src/domain/vocabulary/masteryMapping.ts",
+      "sizeBytes": 2547,
+      "sha256": "e6dfc4f672e054226e2feec22ca9ab71c60f0e5835e5c9fbf3fd64556344dd36"
+    },
+    {
+      "path": "src/domain/vocabulary/quickSort.ts",
+      "sizeBytes": 2010,
+      "sha256": "8fffae3cb8b8eceef38017ac7e695ed87d57ca94c8d3643ac6ed6e59fcc00f51"
+    },
+    {
+      "path": "src/domain/vocabulary/types.ts",
+      "sizeBytes": 3877,
+      "sha256": "f0d5760f6982a157848cb73e42e60ea459695db41fcd9368885ab3daeb0f3305"
+    },
+    {
+      "path": "src/domain/vocabulary/validation.ts",
+      "sizeBytes": 2109,
+      "sha256": "b4d0e4e04956e3a209769bdcedaf77c4401fbece7ef1b97c24fc9c6cb45bfcf4"
+    },
+    {
+      "path": "src/domain/vocabulary/weakWords.test.ts",
+      "sizeBytes": 5712,
+      "sha256": "1da71407a8d63599cacfdf9f7b6af6d1d77e3727d4833350729f69c789b788c3"
+    },
+    {
+      "path": "src/domain/vocabulary/weakWords.ts",
+      "sizeBytes": 4274,
+      "sha256": "2b2e0038426c4623dfd2794be9b7e13eb7827f97cbd33ae8766057f3359f06f6"
     },
     {
       "path": "src/features/course/catalog.ts",
@@ -982,9 +1067,94 @@
       "sha256": "fe2206ab4169873ae7ee47fbc231832ed9d6e84c72db92406db219319bb3fa37"
     },
     {
+      "path": "src/features/review/index.ts",
+      "sizeBytes": 30,
+      "sha256": "a7bc14316206eaa0c181be4b1b31aa91d663d620db61d8e475fea2c6ebc6af40"
+    },
+    {
+      "path": "src/features/review/ReviewPage.tsx",
+      "sizeBytes": 451,
+      "sha256": "21d0d865f0d016a56c7295962085d281699e2b6817793b4f4d382c19dfe3e5f3"
+    },
+    {
+      "path": "src/features/vocabulary/dexieAdapters.test.ts",
+      "sizeBytes": 5694,
+      "sha256": "a893ce6aab3c57173c58d3ba358bf10b89c8cbace4f40fe795f41d9396bd7c49"
+    },
+    {
+      "path": "src/features/vocabulary/dexieAdapters.ts",
+      "sizeBytes": 2122,
+      "sha256": "aff7d5fbfa5c9727cd0b9bec283841047345d9364d7f84e11801fe92520346d6"
+    },
+    {
+      "path": "src/features/vocabulary/index.ts",
+      "sizeBytes": 301,
+      "sha256": "a82ef36ca789a93ea423a09b2a0a1e808c39855dcccf42074a369ae2fa3c8cd9"
+    },
+    {
+      "path": "src/features/vocabulary/model.test.ts",
+      "sizeBytes": 13126,
+      "sha256": "83e807e846b7b6d5cedc6fb757dc5d2723180979c03dec717c60dc6474b924af"
+    },
+    {
+      "path": "src/features/vocabulary/model.ts",
+      "sizeBytes": 22873,
+      "sha256": "b8463c3c99b6d8f1b66c8298fa2a97e6a3d0d94a7c9e732c3cccb76d3afe7883"
+    },
+    {
+      "path": "src/features/vocabulary/PronunciationButton.test.tsx",
+      "sizeBytes": 1349,
+      "sha256": "d10acc561f317cae13d1a07360069a5c9a9137e1b0b418b4bd05ec7ec1662e87"
+    },
+    {
+      "path": "src/features/vocabulary/PronunciationButton.tsx",
+      "sizeBytes": 1401,
+      "sha256": "76a0cbc6974daa9df19b79d08aad8f72292bf6d9e3d9f3c07900f9a5ab9a340d"
+    },
+    {
+      "path": "src/features/vocabulary/types.ts",
+      "sizeBytes": 4440,
+      "sha256": "5536376136ffd16404ac275d82f8abd571bfdb7fa82096bd2054378ed5bec139"
+    },
+    {
+      "path": "src/features/vocabulary/Vocabulary.module.css",
+      "sizeBytes": 4336,
+      "sha256": "6e026550b0d92107d97701abf1cf31d1eec6779fd6b2c2e868b495dc58403e71"
+    },
+    {
+      "path": "src/features/vocabulary/VocabularyHubPage.tsx",
+      "sizeBytes": 7226,
+      "sha256": "2814e8c32a258f7db1b97568792eac88f97bca7af9ecafaa997df0aad23f0985"
+    },
+    {
+      "path": "src/features/vocabulary/VocabularyListPage.tsx",
+      "sizeBytes": 7420,
+      "sha256": "a74e3a7e8634509834d7f4e278d22baac16550daf7752ab14744f55a3044bc22"
+    },
+    {
+      "path": "src/features/vocabulary/VocabularyPages.test.tsx",
+      "sizeBytes": 23478,
+      "sha256": "3cf40f60bc5cefa505be3d171797c7f9fadde28a1bfc3be466693b4e1040081a"
+    },
+    {
+      "path": "src/features/vocabulary/VocabularySessionPage.tsx",
+      "sizeBytes": 34939,
+      "sha256": "2b1d50e46c2909aab84ce9d9fae6d528e1a380c4c5b6ac37a06c123efa80ae04"
+    },
+    {
+      "path": "src/features/vocabulary/webSpeech.ts",
+      "sizeBytes": 213,
+      "sha256": "bb6077316d2eefe16addd6c783fbb7d7b860dee4c0110889b8813fee48c2e4d7"
+    },
+    {
+      "path": "src/features/vocabulary/WordDetailPage.tsx",
+      "sizeBytes": 13569,
+      "sha256": "812b5d865fe68d2c4dbc54a1a686f88661e1836ace3d51f5cf9fe39c512c5731"
+    },
+    {
       "path": "src/infrastructure/content/content.test.ts",
-      "sizeBytes": 3842,
-      "sha256": "709ab46f586c871bcdebb888d5294c5dab8fca80a306ffab835df2b9354eaca6"
+      "sizeBytes": 3861,
+      "sha256": "7e89500b08d298b39d32b3e14d6f9846f22ff2566eeea6b6979ad2496aa8652a"
     },
     {
       "path": "src/infrastructure/content/schemas.ts",
