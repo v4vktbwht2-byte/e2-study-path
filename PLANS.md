@@ -730,3 +730,10 @@ python scripts/verify_handoff.py
 - registry接続の`npm ci`、`npm run check`、75 files・551/551 unit/component、coverage lines 80.18%をPass。
 - root／`/e2-study-path/` buildと71ファイルのartifact検証、desktop／320px E2E 70/70をPass。
 - 最新auditの全依存10／本番2 Highを確認。React Routerは本PWAが使わないunstable RSC API限定、`brace-expansion`は公開runtimeへ含まれないbuild-only間接依存と評価し、stable修正版の追跡を残した。
+
+**Remote results**
+
+- Public repository: `https://github.com/v4vktbwht2-byte/e2-study-path`
+- Public PWA: `https://v4vktbwht2-byte.github.io/e2-study-path/`
+- PR #4、merge commit `b15897b`の`master` CI、GitHub Pages deploy run `30308497828`をPass。
+- 320px実URLで横overflowなし、オフライン準備完了表示、console error 0件を確認。HTML、manifest、Service Worker、192／512／maskable iconはHTTPS 200。manifestの`id`／`start_url`／`scope`は`/e2-study-path/`、`display`は`standalone`。

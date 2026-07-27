@@ -6,17 +6,17 @@
 
 1. [高] 公開ライセンス／配布権利の確定 — Public repositoryは閲覧可能だが再利用許諾ではない。所有者がcode・教材・自作iconの条件を選び、LICENSEとREADMEへ反映する。
 2. [中] upstream dependency advisory追跡 — React RouterはRSC未使用、`brace-expansion`はbuild-only。互換するstable修正版が出たら更新。
-3. [中] GitHub Pages／スマホPWA実環境確認 — Public切替、CI／Pages green、公開URL、install、offline、更新を確認。
-4. [中] 実配信環境でのwaiting Service Worker差替え確認 — 更新案内、保存完了、更新適用、再読込を実際の旧版・新版で確認。
-5. [中] iPhone／Android PWA実機確認 — install、standalone、safe area、offline再起動を確認。
-6. [中] NVDA／VoiceOverによる主要フロー確認 — 実機・支援技術で見出し、label、live region、英日発音切替を確認。
-7. [中] 実ブラウザーの200% zoom・forced colors確認 — 対応環境で情報と操作が失われないことを確認。
-8. [中] MediaRecorder・録音権限の実機確認 — 対応端末で権限・録音・再生・削除を確認。
-9. [中] Phase 11教材batch QA — 人間の英語校閲者が全教材を小batchで校正し、文法、自然さ、難度、文化的偏りを記録。
-10. [低] Web Speechの声質・発音確認 — 利用端末の音声エンジン依存。
+3. [中] 実配信環境でのwaiting Service Worker差替え確認 — 更新案内、保存完了、更新適用、再読込を実際の旧版・新版で確認。
+4. [中] iPhone／Android PWA実機確認 — install、standalone、safe area、offline再起動を確認。
+5. [中] NVDA／VoiceOverによる主要フロー確認 — 実機・支援技術で見出し、label、live region、英日発音切替を確認。
+6. [中] 実ブラウザーの200% zoom・forced colors確認 — 対応環境で情報と操作が失われないことを確認。
+7. [中] MediaRecorder・録音権限の実機確認 — 対応端末で権限・録音・再生・削除を確認。
+8. [中] Phase 11教材batch QA — 人間の英語校閲者が全教材を小batchで校正し、文法、自然さ、難度、文化的偏りを記録。
+9. [低] Web Speechの声質・発音確認 — 利用端末の音声エンジン依存。
 
 ## 完了
 
+- 2026-07-28: `v4vktbwht2-byte/e2-study-path`をPublicで公開し、merge commit `b15897b`の`master` CIとGitHub Pages deploy run `30308497828`をPass。公開PWAの320px表示、横overflowなし、オフライン準備完了表示、console error 0、HTML／manifest／Service Worker／3 iconのHTTPS 200とrepository base pathを確認。
 - 2026-07-28: `master` CIが日本時間0〜4時だけ失敗する進捗E2Eの日付境界不整合を修正。seedを暦日ではなく午前4時開始の学習日へそろえ、日本時間0:30固定のdesktop／320px回帰を2回連続Pass。全E2E 70/70、`npm run check`の551/551、教材検証、本番buildもPass。
 - 2026-07-27: `master`のcoverage CIで顕在化した診断画面のfocus effect競合を修正。見出しの存在だけでなくfocus完了まで待機する回帰テストへ変更し、対象テスト3回連続9/9、全75 test files・551/551、coverage lines 80.18%、lint、typecheckをPass。
 - 2026-07-27: registry接続の`npm ci`と最新auditを実行。全依存10／本番2 HighはRSC未使用とbuild-only間接依存として適用可能性を評価。最終コード状態で551/551 unit/component、coverage lines 80.18%、root／subpath artifact 71ファイル、E2E desktop／320px 70/70をPass。

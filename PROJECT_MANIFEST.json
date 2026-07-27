@@ -1,10 +1,10 @@
 {
   "package": "E2 Study Path Codex Handoff Full Set",
   "packageVersion": "1.0.0",
-  "generatedAt": "2026-07-27T21:39:30+00:00",
+  "generatedAt": "2026-07-27T21:56:39+00:00",
   "manifestPolicy": "The manifest tracks repository source files and excludes PROJECT_MANIFEST.json, Git metadata, dependencies, and generated artifacts.",
   "fileCountExcludingManifest": 456,
-  "totalSizeBytesExcludingManifest": 2693978,
+  "totalSizeBytesExcludingManifest": 2695257,
   "files": [
     {
       "path": ".github/workflows/ci.yml",
@@ -33,8 +33,8 @@
     },
     {
       "path": "CHANGELOG.md",
-      "sizeBytes": 9171,
-      "sha256": "b23a567ffd93f8fb5181685b60db8b5a2ac2f0da1032c582ddbe5d81b3ff8224"
+      "sizeBytes": 9342,
+      "sha256": "b5e118d7614633f047379d155b7fe0d790c0619a60a4d5680f85c6534c12548b"
     },
     {
       "path": "checklists/CODE_REVIEW.md",
@@ -53,8 +53,8 @@
     },
     {
       "path": "checklists/FINAL_RELEASE_CHECKLIST.md",
-      "sizeBytes": 2681,
-      "sha256": "a316062fcaec6b1bca7ee45e426dfb3314346940cd9de1ad0109dcdcef19f4d7"
+      "sizeBytes": 2720,
+      "sha256": "b3e175f3ab774af50fc8fc64f8ea11feaf733d5e05ec4d0af42888318b9c6165"
     },
     {
       "path": "checklists/PHASE_GATE.md",
@@ -243,13 +243,13 @@
     },
     {
       "path": "docs/16_DEPLOYMENT_OPERATIONS.md",
-      "sizeBytes": 2535,
-      "sha256": "4ee594c615b354ee3b709fdc0c2d91d0579e82156120a9950659962bc4c3b396"
+      "sizeBytes": 2806,
+      "sha256": "f5e3fc027e4b635f17ea30e8061fdbc08a0d93141fe758edfe0b6ce55484d584"
     },
     {
       "path": "docs/17_ACCEPTANCE_CRITERIA_TRACEABILITY.md",
-      "sizeBytes": 12025,
-      "sha256": "8dc465b10f0d924632125462641195ec75436702eca197a8d341997204e9a7ec"
+      "sizeBytes": 11970,
+      "sha256": "147a0467f9d85f6bceaa2907e64656c956214155e3372a7ac8a928cdf47df1f1"
     },
     {
       "path": "docs/18_RISK_REGISTER.md",
@@ -263,8 +263,8 @@
     },
     {
       "path": "docs/20_IMPLEMENTATION_STATUS.md",
-      "sizeBytes": 11746,
-      "sha256": "4a6603554f3e6dad271c0279177477971b53abde994073fd544d2c5e3a924537"
+      "sizeBytes": 12123,
+      "sha256": "10ed126f0b9e9d093d6f02d168244d9846b303912d2cc4c7875d992244d94397"
     },
     {
       "path": "docs/21_SOURCE_NOTES.md",
@@ -273,13 +273,13 @@
     },
     {
       "path": "docs/22_PILOT_RELEASE_AUDIT.md",
-      "sizeBytes": 14685,
-      "sha256": "e8a36c37052b074ad9a1d1b5c15f1b685fabf31c17de6cca67ed53b9e89a6a83"
+      "sizeBytes": 14451,
+      "sha256": "f54be4b2e0ed8285d52a1d4bcb13d8540081efd2740f7db057beb368eaa4caf0"
     },
     {
       "path": "docs/backlog.md",
-      "sizeBytes": 6905,
-      "sha256": "bf939ea17988c0a1780ecc152359c95ceff27c3ebdd7ed590d3145baa2ba22b9"
+      "sizeBytes": 7098,
+      "sha256": "23a39236ec1221b180dda1bde080f01c9ccac35e5d7389440bf7a197cdfb032b"
     },
     {
       "path": "e2e/app-shell.spec.ts",
@@ -388,8 +388,8 @@
     },
     {
       "path": "PLANS.md",
-      "sizeBytes": 58953,
-      "sha256": "47f123f0519823181ce0684aa5e8d8725615ef6b77f30d8731960846d40b7b68"
+      "sizeBytes": 59470,
+      "sha256": "1a26b36220f9cbdca61eef0a37228336258fce724f62d8ce4bca0055d564fa1b"
     },
     {
       "path": "playwright.config.ts",

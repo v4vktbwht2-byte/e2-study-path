@@ -37,22 +37,22 @@ Codexは各フェーズ完了時に更新する。
 | Backup/restore   | Complete | backup/adapter tests + Phase 07 E2E  | 厳密JSON、preview、merge/replace、安全backup、録音opt-in、分離削除          |
 | PWA/offline      | Complete | PWA tests + Phase 07 E2E             | install/iOS案内、offline、用途別cache、更新前write flush、base path         |
 | Accessibility    | Complete | axe + component + Phase 08 E2E       | landmark、h1、route focus、live region、Dialog、44px、320px・200%相当       |
-| CI/deploy        | Complete | workflow + root/subpath artifact     | CI成功commit限定のGitHub Pages workflowを実装。Public化・実URL確認は進行中 |
+| CI/deploy        | Complete | remote CI + Pages + live PWA         | Public repository、master CI、Pages deploy、320px実URL・PWA成果物を確認済み |
 
 ## Quality gates
 
 | Command                  | Last result                                                                                   | Date       |
 | ------------------------ | --------------------------------------------------------------------------------------------- | ---------- |
-| npm ci                   | Pass (registry接続、lockfileから533 packages)                                                  | 2026-07-27 |
-| npm run lint             | Pass                                                                                          | 2026-07-27 |
-| npm run typecheck        | Pass                                                                                          | 2026-07-27 |
-| npm run test             | Pass (75 files、551/551)                                                                       | 2026-07-27 |
-| npm run test:coverage    | Pass (79.73% statements / 71.80% branches / 76.29% functions / 80.18% lines)                  | 2026-07-27 |
-| npm run validate:content | Pass (Pilot 140 vocabulary / 31 lessons / 155 exercises / 25 practice sets + contract sample) | 2026-07-27 |
-| npm run build            | Pass (root/subpath、entry 210.06 kB、PWA precache 70件)                                       | 2026-07-27 |
-| npm run verify:dist      | Pass (root/subpath、manifest/SW/asset/source map、71 files)                                   | 2026-07-27 |
-| npm run test:e2e         | Pass (all desktop/320px 70/70、retry 0)                                                        | 2026-07-27 |
-| npm run check            | Pass                                                                                           | 2026-07-27 |
+| npm ci                   | Pass (registry接続、lockfileから533 packages)                                                  | 2026-07-28 |
+| npm run lint             | Pass                                                                                          | 2026-07-28 |
+| npm run typecheck        | Pass                                                                                          | 2026-07-28 |
+| npm run test             | Pass (75 files、551/551)                                                                       | 2026-07-28 |
+| npm run test:coverage    | Pass (79.73% statements / 71.80% branches / 76.29% functions / 80.18% lines)                  | 2026-07-28 |
+| npm run validate:content | Pass (Pilot 140 vocabulary / 31 lessons / 155 exercises / 25 practice sets + contract sample) | 2026-07-28 |
+| npm run build            | Pass (root/subpath、entry 210.06 kB、PWA precache 70件)                                       | 2026-07-28 |
+| npm run verify:dist      | Pass (root/subpath、manifest/SW/asset/source map、71 files)                                   | 2026-07-28 |
+| npm run test:e2e         | Pass (all desktop/320px 70/70、retry 0)                                                        | 2026-07-28 |
+| npm run check            | Pass                                                                                           | 2026-07-28 |
 
 ## Known issues
 
@@ -61,7 +61,7 @@ Codexは各フェーズ完了時に更新する。
 - MediaRecorderの録音・権限拒否とWeb Speechの音声品質・端末差は対応端末での実機確認が必要。非対応時のtext fallbackは自動テスト済み。
 - 実際のwaiting Service Worker差替え、`beforeinstallprompt`、Storage永続化、iOS standaloneは配信環境・対応実機で最終確認が必要。
 - `vite-plugin-pwa`内部の`inlineDynamicImports`非推奨警告が残るが、Service Worker生成と70件のprecache注入は成功している。
-- GitHub remote `v4vktbwht2-byte/e2-study-path`をD-025でPublicへ切り替え、GitHub Pagesから公開する。repository visibility、Actions、Pages URLの実確認は進行中。
+- GitHub remote `v4vktbwht2-byte/e2-study-path`はPublic、`master` CIとPages deployはgreen。`https://v4vktbwht2-byte.github.io/e2-study-path/`で320px表示、横overflowなし、manifest／Service Worker／3アイコンのHTTPS 200、オフライン準備完了表示を確認済み。
 - ソフトウェアライセンスはリポジトリ所有者の最終判断待ち。Public repositoryの閲覧やPWA利用を、複製・改変・再配布の許諾と扱わない旨をREADMEへ明記した。
 - README冒頭とlicense節へ、実装・文書・教材が生成AI（OpenAI Codex）を利用して作成・編集され、専門家による全件校閲済みではないことを明記した。
 - 最新registry auditは全依存10件／本番依存2件のHighを報告。本番側の`react-router@7.18.1`はunstable RSC API使用時だけに影響する`GHSA-qwww-vcr4-c8h2`で、本PWAはRSC／SSR／server actionを使用しない。開発側は`vite-plugin-pwa`→`workbox-build`配下の`brace-expansion@2.1.2`で、公開runtimeへ含まれず外部入力を処理しないbuild経路。stableな互換修正版を追跡する。
@@ -80,3 +80,4 @@ Codexは各フェーズ完了時に更新する。
 - 2026-07-27 Phase 08: 7日・30日記録、6技能傾向、弱点、Stage進行、7設定の即時保存・反映、route focus、単一main・h1、live region、Dialog復帰、44px操作領域、320px・文字200%相当reflowを実装。518 unit/component tests、全E2E desktop/320px 64/64、主要route axe serious／critical 0件、`npm run check`が成功した。
 - 2026-07-27 Phase 09: clean install、CI、失敗時Playwright artifact、CI成功commit限定のGitHub Pages OIDC deploy、repository base path、production artifact検証、同期例外rollback対応の共通IndexedDB seed helper、v1 migration／破損backup／DST／MediaRecorderテスト、第三者向け運用READMEを実装。531 unit/component tests、coverage lines 80.14%、全E2E desktop/320px 70/70、root/subpath build、71ファイルのartifact検証が成功した。
 - 2026-07-27 Phase 10: `AC-REL-001`〜`012`、全repository、教材、PWA、backup、mobile、accessibility、文書を監査。backup完全往復、timezone offset merge、全user-data write gate、backup snapshot barrier、英日混在lang、作文回答例、教材表現、E2E初期化待ちを補強し、app 0.2.0／content 0.7.0／DB 2を確定した。全品質ゲートは75 test files・547/547件、coverage lines 80.33%、全E2E 70/70、root/subpath 70ファイル、教材検証をPass。最終競合修正後はlint／typecheck／format／静的経路監査をPassし、動的再実行を環境制限として記録した。
+- 2026-07-28 Post-Phase 10: coverage focus競合と午前4時学習日境界のE2Eを安定化。PR #4、`master` CI、GitHub Pages deployをgreenにし、Public repositoryと実URLの320px表示、manifest、Service Worker、PWA icon、オフライン準備完了表示を確認した。

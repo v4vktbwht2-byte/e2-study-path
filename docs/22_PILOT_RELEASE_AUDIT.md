@@ -9,7 +9,7 @@
 - IndexedDB schema version: `2`
 - release-level acceptance: `AC-REL-001`〜`AC-REL-012`をすべてPass
 - 最終レビュー: Blocker 0 / P1 0 / P2 0
-- 公開判定: D-025でリポジトリ所有者がPublic GitHub Pages公開を選択。最終コード状態の動的ゲートと最新registry auditを完了し、AI作成・非公式・未校閲範囲・license未決定をREADMEへ明示した。remote CI／Pagesと実機確認を継続する。
+- 公開判定: D-025でPublic GitHub Pages公開を実施。最終コード状態の動的ゲート、最新registry audit、remote `master` CI、Pages deploy、実URLの320px表示とPWA成果物確認を完了し、AI作成・非公式・未校閲範囲・license未決定をREADMEへ明示した。実端末確認を継続する。
 
 本判定は英検公式または日本英語検定協会公認を意味しない。収録教材、音声fallback、短縮模試の結果は本プロジェクト独自の学習用内容である。
 
@@ -121,7 +121,6 @@ runtime validationとは別に、ID、英語、日本語、正答、解説、出
 | -------- | --------------------------------- | -------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------- |
 | High     | 公開ライセンス／配布権利          | リポジトリ所有者がcode・教材・自作iconの配布条件を選び、LICENSEとREADMEへ反映                                        | Public閲覧・PWA利用は可能。複製・改変・再配布を許諾しない旨を明記       |
 | Medium   | upstream dependency advisory     | React Router 8.3.0相当のstable修正版とPWA build依存の修正版が利用可能になったら互換性確認後に更新                    | RSC／SSR未使用。`brace-expansion`はbuild-onlyで外部入力なし              |
-| Medium   | GitHub CI／GitHub Pages           | Public remoteのCIとPages deployがgreenになり、公開URLでinstall、offline、更新を確認                                  | workflowとlocal `/e2-study-path/` artifactは検証済み                     |
 | Medium   | iOS／Android install              | Safari共有メニュー／対応ブラウザーからinstallし、standalone起動、offline再起動、safe areaを確認                      | アプリ内にiOS手順、対応ブラウザーにはinstall UI                          |
 | Medium   | waiting Service Worker            | 旧版を開いたまま新版を配信し、案内→保存完了→更新→再読込で学習データが保持されることを確認                            | 書込みflush、失敗時fail-closed、backup／cache recovery                   |
 | Medium   | NVDA／VoiceOver                    | オンボーディング→診断→Today→単語→技能練習を読み上げ、見出し、label、live region、英日発音切替を確認                  | axe、keyboard E2E、semantic component test、`lang`分割                   |
@@ -132,7 +131,7 @@ runtime validationとは別に、ID、英語、日本語、正答、解説、出
 
 ## Recommended Phase 11 batches
 
-1. 公開前ゲート: remote CI、GitHub Pages、実配信Service Worker更新を1つのrelease rehearsalとして完了する。
+1. 実配信更新ゲート: 旧版・新版を使ったwaiting Service Worker差替えをrelease rehearsalとして完了する。
 2. 実機アクセシビリティ: iPhone／Android、NVDA／VoiceOver、200% zoom／forced colors、録音・音声を端末別matrixで確認する。
 3. 教材拡張: Stageごとの語彙・レッスン・技能教材を小batchで追加し、人間の英語校閲と`CONTENT_QA.md`をbatchごとに完了する。
 4. 所有者判断: 正式名称と公開ライセンスを確定し、brandingと配布条件へ反映する。

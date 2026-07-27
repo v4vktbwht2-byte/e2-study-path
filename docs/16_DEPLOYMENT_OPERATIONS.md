@@ -23,6 +23,8 @@ D-025により、Public GitHub repositoryからGitHub Pagesへ配備する。
 
 GitHub PagesのSourceはGitHub Actionsとし、`github-pages` environmentは既定branchだけをdeploy可能にする。Cloudflare Pages + AccessはD-024の旧方針として廃止する。
 
+2026-07-28にmerge commit `b15897b`の`master` CIとPages deploy run `30308497828`が成功した。公開URLで320px表示、横overflowなし、オフライン準備完了表示、HTML／manifest／Service Worker／192・512・maskable iconのHTTPS 200を確認した。
+
 ## 3. Alternative hosts
 
 生成した静的 `dist/` は他の静的hostでも公開できる。移行時はbase path、manifest、Service Worker scope、認証境界を再確認する。
