@@ -17,6 +17,7 @@
 
 ## 完了
 
+- 2026-07-27: `master`のcoverage CIで顕在化した診断画面のfocus effect競合を修正。見出しの存在だけでなくfocus完了まで待機する回帰テストへ変更し、対象テスト3回連続9/9、全75 test files・551/551、coverage lines 80.18%、lint、typecheckをPass。
 - 2026-07-27: registry接続の`npm ci`と最新auditを実行。全依存10／本番2 HighはRSC未使用とbuild-only間接依存として適用可能性を評価。最終コード状態で551/551 unit/component、coverage lines 80.18%、root／subpath artifact 71ファイル、E2E desktop／320px 70/70をPass。
 - 2026-07-27: Cloudflare Pages + Access方針をD-025で置き換え、Public GitHub + GitHub Pagesへ変更。README冒頭とlicense節へ、プログラム・文書・教材が生成AI（OpenAI Codex）を利用して作成・編集され、専門家による全件校閲済みではないことを明記した。
 - 2026-07-27: `v4vktbwht2-byte/e2-study-path`をprivateで作成し、`master`の`2b8fe14`をpush。Cloudflare Pages + Accessを配備先に確定し、GitHub Pages自動deployを廃止した。

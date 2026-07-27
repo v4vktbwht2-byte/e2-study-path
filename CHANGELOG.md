@@ -7,6 +7,7 @@
 - README冒頭とlicense節へ、プログラム・文書・教材が生成AI（OpenAI Codex）を利用して作成・編集され、専門家による全件校閲済みではないことを明記。
 - 公開前に追跡ファイル、秘密情報pattern、commit作者情報を監査。
 - 最新registry auditを実行し、HighをRSC未使用とbuild-only間接依存として評価。最終状態で551/551 unit/component、coverage lines 80.18%、root/subpath artifact 71ファイル、E2E 70/70をPass。
+- `master`のcoverage CIで顕在化した診断画面のfocus effect競合を修正し、見出しのfocus完了まで待機する安定したテストへ変更。
 
 ## 0.2.0 - 2026-07-27
 

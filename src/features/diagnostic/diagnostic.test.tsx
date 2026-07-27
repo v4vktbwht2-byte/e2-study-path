@@ -1,4 +1,4 @@
-import { render, screen, within } from "@testing-library/react";
+import { render, screen, waitFor, within } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { MemoryRouter } from "react-router-dom";
 import { describe, expect, it, vi } from "vitest";
@@ -226,25 +226,30 @@ describe("診断画面", () => {
         name: "初期診断を準備しています",
       }),
     ).toBeInTheDocument();
-    expect(
-      await screen.findByRole("heading", { level: 2, name: "最初の問題" }),
-    ).toHaveFocus();
+    const firstQuestionHeading = await screen.findByRole("heading", {
+      level: 2,
+      name: "最初の問題",
+    });
+    await waitFor(() => expect(firstQuestionHeading).toHaveFocus());
     await user.click(screen.getByRole("button", { name: "分からない" }));
-    expect(
-      await screen.findByRole("heading", { level: 2, name: "2問目" }),
-    ).toHaveFocus();
+    const secondQuestionHeading = await screen.findByRole("heading", {
+      level: 2,
+      name: "2問目",
+    });
+    await waitFor(() => expect(secondQuestionHeading).toHaveFocus());
     await user.click(screen.getByRole("button", { name: "分からない" }));
-    expect(
-      await screen.findByRole("heading", { level: 2, name: "3問目" }),
-    ).toHaveFocus();
+    const thirdQuestionHeading = await screen.findByRole("heading", {
+      level: 2,
+      name: "3問目",
+    });
+    await waitFor(() => expect(thirdQuestionHeading).toHaveFocus());
     await user.click(screen.getByRole("button", { name: "分からない" }));
 
-    expect(
-      await screen.findByRole("heading", {
-        level: 1,
-        name: "おすすめの開始地点",
-      }),
-    ).toHaveFocus();
+    const resultHeading = await screen.findByRole("heading", {
+      level: 1,
+      name: "おすすめの開始地点",
+    });
+    await waitFor(() => expect(resultHeading).toHaveFocus());
     const lessonsSection = screen
       .getByRole("heading", { level: 2, name: "最初の3レッスン" })
       .closest("section");
