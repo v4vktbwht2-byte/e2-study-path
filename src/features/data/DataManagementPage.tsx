@@ -421,6 +421,7 @@ export function DataManagementPage({
   if (overviewState.status === "loading") {
     return (
       <section className={styles.page} aria-busy="true">
+        <h1 tabIndex={-1}>データ管理を準備しています</h1>
         <Card as="section" padding="large">
           <p role="status">保存容量とデータの状態を確認しています…</p>
         </Card>

@@ -38,7 +38,7 @@ export function ReadingResult({
   }).length;
 
   return (
-    <main className={styles.studyPage}>
+    <section className={styles.studyPage}>
       <header className={styles.pageHeader}>
         <p className={styles.eyebrow}>読解・結果</p>
         <h1>読解セットを完了しました</h1>
@@ -95,6 +95,6 @@ export function ReadingResult({
           読解一覧へ戻る
         </Button>
       )}
-    </main>
+    </section>
   );
 }

@@ -78,11 +78,17 @@ export function PracticeEntryRoute() {
   }, [db, navigate, planContext, setId]);
 
   if (setId !== undefined && dispatchState.status === "loading") {
-    return <p role="status">今日の技能練習を開いています。</p>;
+    return (
+      <section aria-busy="true">
+        <h1 tabIndex={-1}>技能練習</h1>
+        <p role="status">今日の技能練習を開いています。</p>
+      </section>
+    );
   }
   if (dispatchState.status === "error") {
     return (
       <ErrorState
+        headingLevel={1}
         title="技能教材を開けませんでした"
         description={dispatchState.message}
         onRetry={() => navigate("/practice", { replace: true })}

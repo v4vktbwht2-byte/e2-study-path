@@ -91,6 +91,7 @@ export function VocabularyListPage({
   if (loadState.status === "loading") {
     return (
       <section className={styles.page} aria-busy="true">
+        <h1 tabIndex={-1}>単語一覧を準備しています</h1>
         <p role="status">単語一覧を読み込んでいます。</p>
       </section>
     );
@@ -101,6 +102,7 @@ export function VocabularyListPage({
         <ErrorState
           title="単語一覧を開けませんでした"
           description={loadState.error.message}
+          headingLevel={1}
           onRetry={() => setReloadKey((value) => value + 1)}
         />
       </section>

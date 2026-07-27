@@ -6,6 +6,7 @@ export interface EmptyStateProps extends Omit<HTMLAttributes<HTMLElement>, "titl
   title: ReactNode;
   description?: ReactNode;
   icon?: ReactNode;
+  headingLevel?: 1 | 2;
   actions?: ReactNode;
 }
 
@@ -13,11 +14,13 @@ export function EmptyState({
   title,
   description,
   icon,
+  headingLevel = 2,
   actions,
   className,
   ...sectionProps
 }: EmptyStateProps) {
   const titleId = useId();
+  const Heading = headingLevel === 1 ? "h1" : "h2";
 
   return (
     <section
@@ -30,9 +33,9 @@ export function EmptyState({
           {icon}
         </div>
       ) : null}
-      <h2 id={titleId} className={styles.title}>
+      <Heading id={titleId} className={styles.title}>
         {title}
-      </h2>
+      </Heading>
       {description ? <div className={styles.description}>{description}</div> : null}
       {actions ? <div className={styles.actions}>{actions}</div> : null}
     </section>

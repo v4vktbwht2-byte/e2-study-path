@@ -1,5 +1,7 @@
 .topActions {
   display: flex;
+  width: 100%;
+  min-width: 0;
   align-items: center;
   gap: var(--space-1, 4px);
 }
@@ -36,6 +38,7 @@
   }
 
   .topLink {
+    flex: 1 1 0;
     padding-inline: 4px;
   }
 }

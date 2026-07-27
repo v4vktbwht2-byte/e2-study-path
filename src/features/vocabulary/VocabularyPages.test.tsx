@@ -197,6 +197,89 @@ function savedAttempt(
 }
 
 describe("単語ページ", () => {
+  it("ページを置き換える読込エラーを各画面の主見出しとして伝える", async () => {
+    const { store } = createStore();
+    const failingContent: VocabularyContentPort = {
+      listVocabulary: vi.fn().mockRejectedValue(new Error("教材を読めません")),
+      getVocabulary: vi.fn().mockRejectedValue(new Error("教材を読めません")),
+    };
+
+    const hub = render(
+      <VocabularyHubPage content={failingContent} store={store} onStart={vi.fn()} />,
+    );
+    expect(
+      screen.getByRole("heading", {
+        level: 1,
+        name: "単語学習を準備しています",
+      }),
+    ).toBeInTheDocument();
+    expect(
+      await screen.findByRole("heading", {
+        level: 1,
+        name: "単語ハブを開けませんでした",
+      }),
+    ).toBeInTheDocument();
+    hub.unmount();
+
+    const list = render(<VocabularyListPage content={failingContent} store={store} />);
+    expect(
+      screen.getByRole("heading", {
+        level: 1,
+        name: "単語一覧を準備しています",
+      }),
+    ).toBeInTheDocument();
+    expect(
+      await screen.findByRole("heading", {
+        level: 1,
+        name: "単語一覧を開けませんでした",
+      }),
+    ).toBeInTheDocument();
+    list.unmount();
+
+    const detail = render(
+      <WordDetailPage
+        wordId="missing"
+        content={failingContent}
+        store={store}
+        clock={clock}
+      />,
+    );
+    expect(
+      screen.getByRole("heading", {
+        level: 1,
+        name: "単語詳細を準備しています",
+      }),
+    ).toBeInTheDocument();
+    expect(
+      await screen.findByRole("heading", {
+        level: 1,
+        name: "単語詳細を開けませんでした",
+      }),
+    ).toBeInTheDocument();
+    detail.unmount();
+
+    render(
+      <VocabularySessionPage
+        mode="new"
+        content={failingContent}
+        store={store}
+        clock={clock}
+      />,
+    );
+    expect(
+      screen.getByRole("heading", {
+        level: 1,
+        name: "新しい単語を準備しています",
+      }),
+    ).toBeInTheDocument();
+    expect(
+      await screen.findByRole("heading", {
+        level: 1,
+        name: "単語セッションを開始できませんでした",
+      }),
+    ).toBeInTheDocument();
+  });
+
   it("HubでNew 5/10/15とLevel 1〜7を画面から指定する", async () => {
     const onStart = vi.fn();
     const first = ITEMS[0];

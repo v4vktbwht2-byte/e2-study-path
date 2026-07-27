@@ -132,6 +132,12 @@ describe("今日画面", () => {
     };
 
     render(<TodayPage port={port} clock={clock} />);
+    expect(
+      screen.getByRole("heading", {
+        level: 1,
+        name: "今日の学習を準備しています",
+      }),
+    ).toBeInTheDocument();
     await waitFor(() => expect(countPendingUpdateWrites()).toBe(1));
 
     resolveSnapshot?.(snapshot());

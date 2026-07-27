@@ -64,7 +64,7 @@ export function ReadingQuestions({
   }, [question.id, step]);
 
   return (
-    <main className={styles.studyPage}>
+    <section className={styles.studyPage}>
       <header className={styles.studyHeader}>
         <div>
           <p className={styles.eyebrow}>読解・設問</p>
@@ -247,7 +247,7 @@ export function ReadingQuestions({
           中断する
         </Button>
       )}
-    </main>
+    </section>
   );
 }
 

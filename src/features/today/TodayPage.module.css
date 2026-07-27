@@ -73,7 +73,7 @@
   gap: var(--space-2);
 }
 
-.stats span {
+.stats > div {
   display: grid;
   gap: var(--space-1);
   min-width: 0;
@@ -83,6 +83,15 @@
   background: var(--color-surface-muted);
   font-size: var(--font-size-sm);
   text-align: center;
+}
+
+.stats dt,
+.stats dd {
+  margin: 0;
+}
+
+.stats dd {
+  order: -1;
 }
 
 .stats strong {

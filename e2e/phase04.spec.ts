@@ -630,7 +630,9 @@ test.describe("Phase 04 vocabulary / review / Again の主要フロー", () => {
       .fill("borrow");
     await page.getByRole("combobox", { name: "ステージ" }).selectOption("2");
     await page.getByRole("combobox", { name: "品詞" }).selectOption("verb");
-    await expect(page.getByRole("status")).toHaveText("1語を表示しています。");
+    await expect(
+      page.getByRole("status").filter({ hasText: "1語を表示しています。" }),
+    ).toHaveText("1語を表示しています。");
 
     const borrowCard = page.getByRole("article").filter({
       has: page.getByRole("heading", {
@@ -685,7 +687,9 @@ test.describe("Phase 04 vocabulary / review / Again の主要フロー", () => {
       .getByRole("searchbox", { name: "単語・意味・メモを検索" })
       .fill("borrow");
     await page.getByRole("checkbox", { name: "お気に入りだけ" }).check();
-    await expect(page.getByRole("status")).toHaveText("1語を表示しています。");
+    await expect(
+      page.getByRole("status").filter({ hasText: "1語を表示しています。" }),
+    ).toHaveText("1語を表示しています。");
     await expect(
       page.getByRole("article").filter({
         has: page.getByRole("heading", {

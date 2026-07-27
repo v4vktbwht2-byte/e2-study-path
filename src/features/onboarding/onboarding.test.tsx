@@ -109,6 +109,12 @@ describe("オンボーディング画面", () => {
       </MemoryRouter>,
     );
 
+    expect(
+      screen.getByRole("heading", {
+        level: 1,
+        name: "初回設定を準備しています",
+      }),
+    ).toBeInTheDocument();
     await user.click(
       await screen.findByRole("button", {
         name: "設定を始める",

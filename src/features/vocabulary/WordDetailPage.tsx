@@ -126,6 +126,7 @@ export function WordDetailPage({
   if (loadState.status === "loading") {
     return (
       <section className={styles.page} aria-busy="true">
+        <h1 tabIndex={-1}>単語詳細を準備しています</h1>
         <p role="status">単語の詳細を読み込んでいます。</p>
       </section>
     );
@@ -136,6 +137,7 @@ export function WordDetailPage({
         <ErrorState
           title="単語詳細を開けませんでした"
           description={loadState.error.message}
+          headingLevel={1}
           onRetry={() => setReloadKey((value) => value + 1)}
         />
       </section>

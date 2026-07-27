@@ -382,6 +382,7 @@ export function LessonRenderer({
   if (loadState.status === "loading") {
     return (
       <section className={styles.page} aria-busy="true">
+        <h1 tabIndex={-1}>レッスンを準備しています</h1>
         <p role="status">レッスンを読み込んでいます。</p>
       </section>
     );
@@ -392,6 +393,7 @@ export function LessonRenderer({
         <ErrorState
           title="レッスンを開けませんでした"
           description={loadState.error.message}
+          headingLevel={1}
           onRetry={() => {
             setReloadKey((current) => current + 1);
           }}
@@ -408,6 +410,7 @@ export function LessonRenderer({
         <ErrorState
           title="レッスンの内容がありません"
           description="別のレッスンを選んでください。"
+          headingLevel={1}
         />
       </section>
     );

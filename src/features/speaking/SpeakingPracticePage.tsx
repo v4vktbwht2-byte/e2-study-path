@@ -3,6 +3,7 @@ import { resolveStudyDay } from "../../domain/planning";
 import {
   Button,
   Card,
+  Dialog,
   EmptyState,
   ErrorState,
   InlineAlert,
@@ -103,6 +104,7 @@ export function SpeakingPracticePage({
   >(recorder.isSupported() ? "idle" : "unsupported");
   const [recordingId, setRecordingId] = useState<string>();
   const [recordingUrl, setRecordingUrl] = useState<string>();
+  const [deleteConfirmationOpen, setDeleteConfirmationOpen] = useState(false);
   const [message, setMessage] = useState<string>();
   const [saving, setSaving] = useState(false);
   const startedAtRef = useRef(clock.now());
@@ -198,13 +200,19 @@ export function SpeakingPracticePage({
   };
 
   if (loadState.status === "loading") {
-    return <p role="status">スピーキング教材を読み込んでいます。</p>;
+    return (
+      <section className={styles.page} aria-busy="true">
+        <h1 tabIndex={-1}>スピーキング練習を準備しています</h1>
+        <p role="status">スピーキング教材を読み込んでいます。</p>
+      </section>
+    );
   }
   if (loadState.status === "error") {
     return (
       <ErrorState
         title="スピーキングを開けませんでした"
         description={loadState.message}
+        headingLevel={1}
       />
     );
   }
@@ -213,6 +221,7 @@ export function SpeakingPracticePage({
       <EmptyState
         title="スピーキング教材がありません"
         description="教材を読み込んでから、もう一度お試しください。"
+        headingLevel={1}
       />
     );
   }
@@ -322,6 +331,7 @@ export function SpeakingPracticePage({
     if (recordingId === undefined) {
       return;
     }
+    setDeleteConfirmationOpen(false);
     setSaving(true);
     try {
       await store.deleteRecording(recordingId);
@@ -466,13 +476,13 @@ export function SpeakingPracticePage({
           )}
           {recordingUrl === undefined ? null : (
             <div className={styles.playback}>
-              <audio controls src={recordingUrl}>
+              <audio controls src={recordingUrl} aria-label="保存した録音を再生">
                 録音を再生できない場合は、テキスト回答を確認してください。
               </audio>
               <Button
                 variant="tertiary"
                 disabled={saving}
-                onClick={() => void deleteRecording()}
+                onClick={() => setDeleteConfirmationOpen(true)}
               >
                 録音を削除
               </Button>
@@ -480,6 +490,32 @@ export function SpeakingPracticePage({
           )}
         </Card>
       ) : null}
+
+      <Dialog
+        open={deleteConfirmationOpen}
+        title="録音を削除しますか"
+        description="この録音は端末から削除され、元に戻せません。テキスト回答と学習履歴は残ります。"
+        onClose={() => setDeleteConfirmationOpen(false)}
+        actions={
+          <>
+            <Button
+              variant="tertiary"
+              disabled={saving}
+              onClick={() => setDeleteConfirmationOpen(false)}
+            >
+              キャンセル
+            </Button>
+            <Button
+              variant="danger"
+              isLoading={saving}
+              loadingLabel="削除中"
+              onClick={() => void deleteRecording()}
+            >
+              録音を削除
+            </Button>
+          </>
+        }
+      />
 
       {step === "intro" ? (
         <Card as="section" padding="large">

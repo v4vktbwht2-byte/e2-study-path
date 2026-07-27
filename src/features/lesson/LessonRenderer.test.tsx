@@ -164,6 +164,34 @@ function progressStore(initial?: LessonProgress) {
 }
 
 describe("レッスンレンダラー", () => {
+  it("ページを置き換える読込エラーを主見出しとして伝える", async () => {
+    const { store } = progressStore();
+    const failed = render(
+      <LessonRenderer
+        lessonId="lesson-a"
+        content={{
+          getLesson: vi.fn().mockRejectedValue(new Error("教材を読めません")),
+          getExercises: vi.fn().mockResolvedValue([]),
+        }}
+        progressStore={store}
+        clock={clock}
+      />,
+    );
+    expect(
+      screen.getByRole("heading", {
+        level: 1,
+        name: "レッスンを準備しています",
+      }),
+    ).toBeInTheDocument();
+    expect(
+      await screen.findByRole("heading", {
+        level: 1,
+        name: "レッスンを開けませんでした",
+      }),
+    ).toBeInTheDocument();
+    failed.unmount();
+  });
+
   it("保存されたセクション位置から再開して見出しへフォーカスする", async () => {
     const { store } = progressStore(progress("inProgress", 1));
     render(

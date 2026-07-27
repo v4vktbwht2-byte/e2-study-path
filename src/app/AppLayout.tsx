@@ -4,6 +4,7 @@ import { PwaStatusRegion, usePwaUpdateParticipant } from "../features/pwa";
 import { flushPendingUpdateWrites } from "../infrastructure/pwa";
 import { AppShell, BottomNavigation, Card, TopBar } from "../shared/components";
 import styles from "./AppLayout.module.css";
+import { RouteFocusManager } from "./RouteFocusManager";
 
 type MainTabId = "today" | "course" | "vocabulary" | "practice" | "progress";
 
@@ -58,7 +59,8 @@ function getCurrentTab(pathname: string): MainTabId | undefined {
 
 function RouteLoadingState() {
   return (
-    <Card as="section" className={styles.loading} aria-live="polite">
+    <Card as="section" className={styles.loading} aria-live="polite" aria-busy="true">
+      <h1 tabIndex={-1}>画面を読み込んでいます</h1>
       <p role="status">画面を読み込んでいます…</p>
     </Card>
   );
@@ -134,6 +136,7 @@ export function AppLayout() {
         />
       }
     >
+      <RouteFocusManager />
       <PwaStatusRegion />
       <Suspense fallback={<RouteLoadingState />}>
         <Outlet />

@@ -2,6 +2,13 @@
 
 ## Unreleased
 
+- Phase 08「記録・設定・UX状態・アクセシビリティ」を完了。
+  - 7日・30日の学習記録、6技能傾向、弱点候補、Stage進行を端末内の実データから集計する記録画面を追加。
+  - 学習時間、新規上限、復習強度、読み上げ速度、テーマ、文字倍率、動き軽減の即時保存・即時反映を追加。
+  - route遷移focus、単一main・h1、live region、Dialog復帰、44px操作領域、320px・文字200%相当reflowを整備。
+  - 主要14 routeと実データ入りTodayのaxe、キーボード完結、設定reload、進捗実データ、mobile reflow E2Eを追加。
+- Phase 08検証として73 test files・518/518件、全E2E desktop/320px 64/64（Phase 08固有10/10）、axe serious／critical 0件、production build、PWA precache 70件が成功。
+- 次のPhaseをPhase 09「全テスト・CI・静的デプロイ」へ更新。
 - Phase 07「PWA・オフライン・安全な更新・バックアップ／復元」を完了。
   - prompt更新型Service Worker、manifest、自作192/512/maskable icon、offline fallback、version付き教材catalog、用途別runtime cacheを追加。
   - 共通offline表示、install prompt、iOS手順、更新banner、Storage Estimate、永続保存、音声cache削除、app cache再構築を追加。

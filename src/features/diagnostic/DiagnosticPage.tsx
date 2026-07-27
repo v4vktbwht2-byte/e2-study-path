@@ -311,6 +311,9 @@ export function DiagnosticPage({
   if (view === "loading") {
     return (
       <section className={styles.page} aria-busy="true" aria-live="polite">
+        <h1 ref={pageHeadingRef} className={styles.pageTitle} tabIndex={-1}>
+          初期診断を準備しています
+        </h1>
         <Card as="section" className={styles.centered}>
           <p role="status">診断の続きがあるか確認しています…</p>
         </Card>

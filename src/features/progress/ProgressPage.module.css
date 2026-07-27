@@ -1,0 +1,357 @@
+.page {
+  display: grid;
+  width: min(100%, 60rem);
+  gap: var(--space-4);
+  margin: 0 auto;
+  padding: var(--space-4);
+}
+
+.header {
+  display: grid;
+  gap: var(--space-2);
+}
+
+.header h1,
+.header p,
+.section h2,
+.section h3,
+.section p,
+.continuity h2,
+.continuity p,
+.state h2,
+.state p {
+  margin: 0;
+}
+
+.eyebrow {
+  color: var(--color-primary-strong);
+  font-size: var(--font-size-sm);
+  font-weight: 800;
+  letter-spacing: 0.04em;
+}
+
+.periodSelector {
+  display: grid;
+  gap: var(--space-2);
+  min-width: 0;
+  margin: 0;
+  border: 0;
+  padding: 0;
+}
+
+.periodSelector legend {
+  padding: 0;
+  font-weight: 800;
+}
+
+.periodOptions {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--space-2);
+}
+
+.periodOptions label {
+  display: flex;
+  min-height: var(--tap-target-min);
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-2);
+  border: 1px solid var(--color-border-strong);
+  border-radius: var(--radius-button);
+  padding: var(--space-2) var(--space-3);
+  background: var(--color-surface);
+  cursor: pointer;
+  font-weight: 700;
+}
+
+.periodOptions label:hover {
+  border-color: var(--color-primary);
+}
+
+.periodOptions label.selectedPeriod {
+  border-color: var(--color-primary);
+  background: var(--color-info-surface);
+  color: var(--color-primary-strong);
+}
+
+.periodOptions input {
+  width: 1.25rem;
+  height: 1.25rem;
+  margin: 0;
+  accent-color: var(--color-primary);
+}
+
+.periodSelector:disabled label {
+  cursor: wait;
+  opacity: 0.72;
+}
+
+.section,
+.continuity {
+  display: grid;
+  gap: var(--space-4);
+}
+
+.sectionHeading {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: var(--space-3);
+}
+
+.sectionHeading > div {
+  display: grid;
+  min-width: 0;
+  gap: var(--space-1);
+}
+
+.sectionHeading > a,
+.insightList a {
+  display: inline-flex;
+  min-height: var(--tap-target-min);
+  align-items: center;
+}
+
+.sectionLead,
+.textSummary,
+.positiveEmpty {
+  color: var(--color-text-muted);
+}
+
+.textSummary,
+.positiveEmpty {
+  border-radius: var(--radius-sm);
+  padding: var(--space-3);
+  background: var(--color-surface-muted);
+}
+
+.metrics {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 9rem), 1fr));
+  gap: var(--space-3);
+  margin: 0;
+}
+
+.metric {
+  display: grid;
+  min-width: 0;
+  gap: var(--space-1);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm);
+  padding: var(--space-3);
+  background: var(--color-surface-muted);
+}
+
+.metric dt {
+  color: var(--color-text-muted);
+  font-size: var(--font-size-sm);
+  font-weight: 700;
+}
+
+.metric dd {
+  margin: 0;
+}
+
+.metricValue {
+  color: var(--color-primary-strong);
+  font-size: var(--font-size-xl);
+  font-weight: 800;
+}
+
+.metricDetail {
+  color: var(--color-text-muted);
+  font-size: var(--font-size-sm);
+}
+
+.chartGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 20rem), 1fr));
+  gap: var(--space-3);
+}
+
+.chart {
+  display: grid;
+  min-width: 0;
+  gap: var(--space-2);
+  margin: 0;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm);
+  padding: var(--space-3);
+}
+
+.chartTitle {
+  font-weight: 800;
+}
+
+.plot {
+  display: grid;
+  height: 6rem;
+  align-items: end;
+  grid-template-columns: repeat(auto-fit, minmax(0, 1fr));
+  gap: clamp(1px, 0.35vw, 4px);
+  border-bottom: 1px solid var(--color-border-strong);
+}
+
+.bar {
+  display: block;
+  width: 100%;
+  height: var(--bar-size);
+  min-width: 0;
+  border-radius: 3px 3px 0 0;
+  background: var(--color-primary);
+}
+
+.chartDates {
+  display: flex;
+  justify-content: space-between;
+  color: var(--color-text-muted);
+  font-size: var(--font-size-sm);
+}
+
+.chartSummary {
+  color: var(--color-text-muted);
+  font-size: var(--font-size-sm);
+}
+
+.skillGrid,
+.stageGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 16rem), 1fr));
+  gap: var(--space-3);
+}
+
+.skillCard,
+.stageCard {
+  display: grid;
+  min-width: 0;
+  gap: var(--space-3);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm);
+  padding: var(--space-3);
+}
+
+.skillHeader,
+.stageHeader {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: var(--space-2);
+}
+
+.trendLabel,
+.stageHeader span {
+  display: inline-flex;
+  min-height: 1.75rem;
+  align-items: center;
+  border-radius: 999px;
+  padding: var(--space-1) var(--space-2);
+  background: var(--color-surface-muted);
+  color: var(--color-text);
+  font-size: var(--font-size-sm);
+  font-weight: 700;
+  line-height: 1.2;
+}
+
+.noScore {
+  color: var(--color-text-muted);
+}
+
+.insightGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 18rem), 1fr));
+  gap: var(--space-4);
+}
+
+.insightGrid section {
+  display: grid;
+  align-content: start;
+  gap: var(--space-2);
+}
+
+.insightList {
+  display: grid;
+  gap: var(--space-2);
+  margin: 0;
+  padding-inline-start: var(--space-6);
+}
+
+.insightList li {
+  min-width: 0;
+}
+
+.insightList li > span {
+  display: block;
+  color: var(--color-text-muted);
+  font-size: var(--font-size-sm);
+}
+
+.stageCard.currentStage {
+  border-color: var(--color-primary);
+  background: var(--color-info-surface);
+}
+
+.continuity dl {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: var(--space-2);
+  margin: 0;
+}
+
+.continuity dl > div {
+  display: grid;
+  gap: var(--space-1);
+  border-radius: var(--radius-sm);
+  padding: var(--space-3);
+  background: var(--color-surface-muted);
+}
+
+.continuity dt {
+  color: var(--color-text-muted);
+  font-size: var(--font-size-sm);
+  font-weight: 700;
+}
+
+.continuity dd {
+  margin: 0;
+  color: var(--color-primary-strong);
+  font-size: var(--font-size-lg);
+  font-weight: 800;
+}
+
+.state {
+  display: grid;
+  min-height: 10rem;
+  place-content: center;
+  gap: var(--space-2);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-card);
+  padding: var(--space-6);
+  background: var(--color-surface);
+  text-align: center;
+}
+
+@media (max-width: 30rem) {
+  .page {
+    padding: var(--space-3);
+  }
+
+  .sectionHeading,
+  .skillHeader,
+  .stageHeader {
+    display: grid;
+  }
+
+  .continuity dl {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 20rem) {
+  .page {
+    padding-inline: var(--space-2);
+  }
+
+  .periodOptions {
+    grid-template-columns: 1fr;
+  }
+}

@@ -46,6 +46,7 @@ function useCourseProfile() {
 function CourseRouteLoading() {
   return (
     <section aria-busy="true" aria-live="polite">
+      <h1 tabIndex={-1}>コース</h1>
       <Card as="section">
         <p role="status">学習地点を読み込んでいます…</p>
       </Card>

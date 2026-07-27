@@ -104,13 +104,19 @@ export function PracticeHubPage({ port, onOpen }: PracticeHubPageProps) {
   }, [state]);
 
   if (state.status === "loading") {
-    return <p role="status">技能練習を読み込んでいます。</p>;
+    return (
+      <section className={styles.page} aria-busy="true">
+        <h1 tabIndex={-1}>技能練習を準備しています</h1>
+        <p role="status">技能練習を読み込んでいます。</p>
+      </section>
+    );
   }
   if (state.status === "error") {
     return (
       <ErrorState
         title="技能練習を開けませんでした"
         description={state.message}
+        headingLevel={1}
         onRetry={() => setReloadKey((current) => current + 1)}
       />
     );
@@ -120,6 +126,7 @@ export function PracticeHubPage({ port, onOpen }: PracticeHubPageProps) {
       <EmptyState
         title="技能別の教材がありません"
         description="教材を端末へ読み込んでから、もう一度お試しください。"
+        headingLevel={1}
       />
     );
   }

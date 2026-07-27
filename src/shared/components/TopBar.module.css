@@ -2,6 +2,8 @@
   position: sticky;
   z-index: 20;
   top: 0;
+  width: 100%;
+  min-width: 0;
   padding-top: var(--safe-area-top);
   border-bottom: 1px solid var(--color-border);
   background: color-mix(in srgb, var(--color-surface) 94%, transparent);
@@ -12,6 +14,7 @@
   display: flex;
   width: 100%;
   max-width: var(--content-max-width);
+  min-width: 0;
   min-height: 3.5rem;
   align-items: center;
   gap: var(--space-2);
@@ -26,10 +29,13 @@
 }
 
 .title {
+  overflow: hidden;
   margin: 0;
   color: var(--color-text);
   font-size: var(--font-size-lg);
   line-height: var(--line-height-compact);
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 .subtitle {
@@ -44,9 +50,21 @@
 .leading,
 .actions {
   display: flex;
+  min-width: 0;
   flex: 0 0 auto;
   align-items: center;
   gap: var(--space-1);
+}
+
+@media (max-width: 14rem) {
+  .inner {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .actions {
+    width: 100%;
+  }
 }
 
 .leading > :is(a, button),

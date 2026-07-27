@@ -22,7 +22,7 @@ export function ReadingReader({
 }: ReadingReaderProps) {
   const fontScale = READING_FONT_SCALES[fontScaleIndex] ?? 1;
   return (
-    <main className={styles.studyPage}>
+    <section className={styles.studyPage}>
       <header className={styles.studyHeader}>
         <div>
           <p className={styles.eyebrow}>読解・本文</p>
@@ -92,6 +92,6 @@ export function ReadingReader({
         )}
         <Button onClick={onStartQuestions}>設問へ進む</Button>
       </div>
-    </main>
+    </section>
   );
 }

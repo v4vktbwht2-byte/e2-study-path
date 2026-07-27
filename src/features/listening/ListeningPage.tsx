@@ -290,20 +290,21 @@ export function ListeningPage({
 
   if (loadState.kind === "loading") {
     return (
-      <main className={styles.page} aria-busy="true">
+      <section className={styles.page} aria-busy="true">
         <p className={styles.eyebrow}>Listening</p>
         <h1>リスニング教材を準備しています</h1>
         <p role="status">端末に保存された教材を読み込んでいます。</p>
-      </main>
+      </section>
     );
   }
 
   if (loadState.kind === "error") {
     return (
-      <main className={styles.page}>
+      <section className={styles.page}>
         <ErrorState
           title="リスニング教材を開けませんでした"
           description={loadState.message}
+          headingLevel={1}
           onRetry={() => setLoadRevision((revision) => revision + 1)}
         />
         {onBack ? (
@@ -311,16 +312,17 @@ export function ListeningPage({
             戻る
           </Button>
         ) : null}
-      </main>
+      </section>
     );
   }
 
   if (loadState.sets.length === 0) {
     return (
-      <main className={styles.page}>
+      <section className={styles.page}>
         <EmptyState
           title="利用できるリスニング教材はまだありません"
           description="教材が追加されるまで、単語やレッスンを進められます。"
+          headingLevel={1}
           actions={
             onBack ? (
               <Button variant="secondary" onClick={onBack}>
@@ -329,13 +331,13 @@ export function ListeningPage({
             ) : undefined
           }
         />
-      </main>
+      </section>
     );
   }
 
   if (!selectedSet) {
     return (
-      <main className={styles.page}>
+      <section className={styles.page}>
         <header className={styles.header}>
           <div>
             <p className={styles.eyebrow}>Listening</p>
@@ -376,13 +378,13 @@ export function ListeningPage({
             </li>
           ))}
         </ul>
-      </main>
+      </section>
     );
   }
 
   if (!mode) {
     return (
-      <main className={styles.page}>
+      <section className={styles.page}>
         <header className={styles.header}>
           <div>
             <p className={styles.eyebrow}>ステージ {selectedSet.stage}</p>
@@ -414,14 +416,14 @@ export function ListeningPage({
             </Button>
           </Card>
         </div>
-      </main>
+      </section>
     );
   }
 
   if (completion) {
     const correct = completion.attempt.correct;
     return (
-      <main className={styles.page}>
+      <section className={styles.page}>
         <Card as="section" className={styles.resultCard} aria-live="polite">
           <span className={styles.completeMark} aria-hidden="true">
             ✓
@@ -446,14 +448,14 @@ export function ListeningPage({
             <Button onClick={closeSet}>別の教材を選ぶ</Button>
           </div>
         </Card>
-      </main>
+      </section>
     );
   }
 
   const canAnswer = mode === "review" || examPlaybackFinished || fallbackActive;
 
   return (
-    <main className={styles.page}>
+    <section className={styles.page}>
       <header className={styles.header}>
         <div>
           <p className={styles.eyebrow}>
@@ -630,6 +632,6 @@ export function ListeningPage({
           </InlineAlert>
         ) : null}
       </Card>
-    </main>
+    </section>
   );
 }

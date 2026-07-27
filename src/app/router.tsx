@@ -98,6 +98,11 @@ function lazyFoundationRoute(routeId: FoundationRouteId) {
         const { MockRoute } = await import("./routes/MockRoute");
         return { Component: MockRoute };
       };
+    case "progress":
+      return async () => {
+        const { ProgressRoute } = await import("./routes/ProgressRoute");
+        return { Component: ProgressRoute };
+      };
     case "settings":
       return async () => {
         const { SettingsPage } = await import("../features/settings");

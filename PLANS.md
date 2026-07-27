@@ -5,7 +5,7 @@
 ## 現在のPhase
 
 - Phase: 08 — Progress, Settings, UX States, and Accessibility
-- Status: Phase 07完了・Phase 08計画準備
+- Status: Phase 08完了・Phase 09開始待ち
 - Last updated: 2026-07-27
 
 ## Phase 00〜10 高水準計画
@@ -470,3 +470,64 @@ python scripts/verify_handoff.py
 - `beforeinstallprompt`、Storage永続化、容量推定はブラウザー判断のため、非対応・拒否時の説明を常に用意する。
 - `vite-plugin-pwa`の内部から`inlineDynamicImports`非推奨警告が出るが、Service Worker生成とprecache注入は成功している。依存更新時に解消を確認する。
 - PWA依存追加後の`npm install`はhigh severity advisory 10件を報告した。詳細監査は依存メタデータの外部送信承認が得られず未実施のため、Phase 09の再確認対象とする。
+
+## Phase 08 — Progress, Settings, UX States, and Accessibility
+
+**Goal**
+
+端末内の実学習データを7日・30日の記録、技能傾向、弱点、ステージ進行として説明可能に表示する。設定を即時保存・即時反映し、主要画面をキーボード、支援技術、320px幅、200%文字倍率、ダークテーマ、動き軽減で安全に使える状態へ仕上げる。
+
+**Files and areas expected to change**
+
+- `src/domain/progress/**`、`src/features/progress/**`、`src/app/routes/**`
+- `src/features/settings/**`、設定repository、起動時appearance適用
+- `src/shared/components/**`、`src/shared/styles/**`、主要featureのUX state
+- `e2e/phase08.spec.ts`、axe・settings・progress・mobile tests
+- `README.md`、`CHANGELOG.md`、`docs/17_ACCEPTANCE_CRITERIA_TRACEABILITY.md`、`docs/20_IMPLEMENTATION_STATUS.md`、`docs/backlog.md`
+
+**Implementation steps**
+
+1. Attempt、ReviewState、Mastery、LessonProgress、StudySession、教材stageを一括読込する進捗portを定義し、日付境界を固定できるpure TypeScript集計へ渡す。
+2. 7日・30日について、日別学習時間、復習、新規、完了レッスン、学習日数、連続日数、再開を集計する。時間は完了sessionの開始・終了差を基準にし、不正・未完了値を安全に除外する。
+3. 語彙・文法・読解・聞き取り・作文・会話の傾向を、対象Attemptと習熟度から説明付きで表示する。グラフと同じ情報を数値・日本語要約でも提供する。
+4. recognition-recall gap、lapse、低正答率、遅い回答、期限超過から苦手候補を決定的に順位付けし、項目IDだけでなく利用可能な教材名を表示する。
+5. stage別の完了レッスン数・全レッスン数と現在地を表示し、履歴なしの空状態、読込失敗、再試行を実装する。
+6. daily minutes、新規上限、review intensity、speech rate、theme、font scale、reduced motionを入力ごとに検証して保存し、表示設定は同じ操作内でroot属性へ反映する。保存失敗は画面内で通知する。
+7. app version、教材version、IndexedDB version、非公式注記を設定画面へ表示する。
+8. 主要routeのloading、empty、error、offline、unsupported、not found、fatal recovery、破壊操作確認を監査し、重要エラーを永続的なInline表示または専用画面で伝える。
+9. 見出し・landmark・label・live region・focus移動・Dialog復帰・44px操作領域・200%文字倍率・320px overflow・dark contrast・reduced motionを監査して修正する。
+10. `@axe-core/playwright`の安定版を固定導入し、主要routeを実データ状態で走査する。キーボード、設定reload、進捗更新、320px・200%表示もPlaywrightで検証する。
+11. READMEへ自動検査の範囲とスクリーンリーダー・実機を含む手動確認項目を記録し、Phase品質ゲートとhandoff検証を通す。
+
+**Verification commands**
+
+```powershell
+npm run test -- progress
+npm run test:e2e -- --grep "accessibility|settings|progress|mobile"
+npm run check
+python scripts/verify_handoff.py
+```
+
+**Decisions made**
+
+- グラフは補助表現とし、同じ数値と傾向を見出し・表・日本語要約でも提供する。
+- streakは学習を責める指標にせず、現在の連続日数と期間内学習日数を小さく表示し、再開した日を肯定する。
+- 設定は楽観表示で隠さず、保存完了または失敗を画面内live regionで通知する。表示設定は保存操作と同時にroot属性へ適用する。
+- WCAG 2.2 AAを目標とするが、自動axe合格だけで完全適合を宣言しない。スクリーンリーダー、iOS PWA、200%ブラウザーzoomは手動確認事項として残す。
+
+**Results**
+
+- StudySession、Attempt、ReviewState、Mastery、LessonProgressを集計し、7日・30日の学習時間、復習・新規・レッスン数、6技能傾向、弱点候補、Stage進行を説明付きで表示した。
+- daily minutes、新規上限、復習強度、読み上げ速度、テーマ、文字倍率、動き軽減の7設定を検証・即時保存し、表示設定を起動時と変更時に反映した。
+- route遷移とloading完了時の主見出しfocus、単一main landmark、各画面のh1、live region、Dialog復帰、44px操作領域、320px・文字200%相当のreflowを整備した。
+- 録音削除へ確認Dialogを追加し、loading、empty、error、offline、unsupported、not found、fatal recoveryの主要状態を監査した。
+- `@axe-core/playwright` 4.12.1を固定し、主要14 routeと実データ入りTodayを走査した。重大度serious／criticalの違反は0件だった。
+- `npm run check`は73 test files・518/518件、教材検証、production buildまで成功した。全Playwright E2Eはdesktop／320pxで64/64件、Phase 08固有は10/10件成功した。
+- production buildはentry 210.34 kB、500 kB超のchunk警告なし、PWA precache 70件で成功した。
+
+**Known limitations**
+
+- NVDA／VoiceOver、iOS／Androidのホーム画面PWA、実ブラウザーの200% zoom・forced colorsは対応端末での手動確認が必要。
+- MediaRecorderの権限・録音・再生・削除とWeb Speechの声質は対応実機での確認が必要。
+- `vite-plugin-pwa`内部の`inlineDynamicImports`非推奨警告は継続しているが、Service Worker生成と70件のprecache注入は成功している。
+- high severity advisory 10件の詳細監査は、依存メタデータの外部送信承認が得られず未実施のままPhase 09へ引き継ぐ。

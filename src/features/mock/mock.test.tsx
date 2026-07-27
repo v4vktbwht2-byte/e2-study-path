@@ -190,6 +190,45 @@ describe("短縮模試のDexie保存", () => {
 });
 
 describe("短縮模試画面", () => {
+  it("ページを置き換える空・エラー状態を主見出しとして伝える", async () => {
+    const empty = render(
+      <MockPracticePage
+        store={{
+          load: vi.fn().mockResolvedValue({ sets: [], studyDayStartHour: 4 }),
+          complete: vi.fn().mockResolvedValue(undefined),
+        }}
+      />,
+    );
+    expect(
+      screen.getByRole("heading", {
+        level: 1,
+        name: "短縮模試を準備しています",
+      }),
+    ).toBeInTheDocument();
+    expect(
+      await screen.findByRole("heading", {
+        level: 1,
+        name: "短縮模試がありません",
+      }),
+    ).toBeInTheDocument();
+    empty.unmount();
+
+    render(
+      <MockPracticePage
+        store={{
+          load: vi.fn().mockRejectedValue(new Error("教材を読めません")),
+          complete: vi.fn().mockResolvedValue(undefined),
+        }}
+      />,
+    );
+    expect(
+      await screen.findByRole("heading", {
+        level: 1,
+        name: "短縮模試を開けませんでした",
+      }),
+    ).toBeInTheDocument();
+  });
+
   it("全問を完了し、公式スコアではない結果と復習導線を表示する", async () => {
     const content = parseMockPracticeSet(mockPracticeSets[0]!);
     const complete = vi.fn<MockPracticeStore["complete"]>().mockResolvedValue();

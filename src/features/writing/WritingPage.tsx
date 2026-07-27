@@ -214,6 +214,7 @@ export function WritingPage({
     | undefined
   >(undefined);
   const editorHeadingRef = useRef<HTMLHeadingElement>(null);
+  const focusedPromptIdRef = useRef<string | undefined>(undefined);
 
   useEffect(() => {
     if (
@@ -298,9 +299,15 @@ export function WritingPage({
 
   useEffect(() => {
     if (loadState.status === "ready") {
-      editorHeadingRef.current?.focus();
+      const loadedPromptId = loadState.data.prompt.id;
+      if (focusedPromptIdRef.current === undefined) {
+        focusedPromptIdRef.current = loadedPromptId;
+      } else if (focusedPromptIdRef.current !== loadedPromptId) {
+        focusedPromptIdRef.current = loadedPromptId;
+        editorHeadingRef.current?.focus();
+      }
     }
-  }, [loadState.status, selectedPromptId]);
+  }, [loadState]);
 
   const persistEditor = useCallback(
     async (editor: WritingEditorSnapshot, revision: number): Promise<boolean> => {
@@ -517,43 +524,50 @@ export function WritingPage({
         ? `${parsedPrompts.error.message} 教材データを確認してください。`
         : parsedPrompts.error.message;
     return (
-      <main className={styles.page}>
-        <ErrorState title="作文課題を開けませんでした" description={description} />
-      </main>
+      <section className={styles.page}>
+        <ErrorState
+          title="作文課題を開けませんでした"
+          description={description}
+          headingLevel={1}
+        />
+      </section>
     );
   }
 
   if (prompts.length === 0) {
     return (
-      <main className={styles.page}>
+      <section className={styles.page}>
         <EmptyState
           title="練習できる作文課題がまだありません"
           description="教材を追加すると、要約と意見英作文をここで練習できます。"
           icon="✎"
+          headingLevel={1}
         />
-      </main>
+      </section>
     );
   }
 
   if (loadState.status === "loading") {
     return (
-      <main className={styles.page} aria-busy="true">
+      <section className={styles.page} aria-busy="true">
+        <h1 tabIndex={-1}>ライティングを準備しています</h1>
         <p role="status">下書きと提出履歴を読み込んでいます…</p>
-      </main>
+      </section>
     );
   }
 
   if (loadState.status === "error") {
     return (
-      <main className={styles.page}>
+      <section className={styles.page}>
         <ErrorState
           title="ライティングを開けませんでした"
           description={loadState.error.message}
+          headingLevel={1}
           onRetry={() => {
             setReloadKey((current) => current + 1);
           }}
         />
-      </main>
+      </section>
     );
   }
 
@@ -561,7 +575,7 @@ export function WritingPage({
   const wordGuide = evaluateWritingWordCount(data.prompt.type, data.editor.draft);
 
   return (
-    <main className={styles.page}>
+    <section className={styles.page}>
       <header className={styles.header}>
         <div>
           <p className={styles.eyebrow}>技能別練習・ライティング</p>
@@ -862,6 +876,6 @@ export function WritingPage({
           </ol>
         )}
       </section>
-    </main>
+    </section>
   );
 }

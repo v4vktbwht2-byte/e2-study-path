@@ -173,6 +173,7 @@ export function TodayPage({
   if (state.status === "loading") {
     return (
       <section className={styles.page} aria-busy="true" aria-live="polite">
+        <h1 tabIndex={-1}>今日の学習を準備しています</h1>
         <Card as="section" padding="large">
           <p role="status">今日の学習を準備しています…</p>
         </Card>
@@ -323,32 +324,38 @@ export function TodayPage({
               label="今日の完了率"
               valueText={`${completedCount}/${plan.blocks.length}項目・${completionRate}%`}
             />
-            <div className={styles.stats} aria-label="今日の内訳">
-              <span>
-                <strong>{plan.sourceSnapshot.dueCount}</strong>
-                復習期限
-              </span>
-              <span>
-                <strong>
-                  {
-                    pendingPresentations.filter(
-                      ({ block }) => block.category === "weakItem",
-                    ).length
-                  }
-                </strong>
-                苦手
-              </span>
-              <span>
-                <strong>
-                  {
-                    pendingPresentations.filter(
-                      ({ block }) => block.category === "newVocabulary",
-                    ).length
-                  }
-                </strong>
-                新しい単語
-              </span>
-            </div>
+            <dl className={styles.stats} aria-label="今日の内訳">
+              <div>
+                <dt>復習期限</dt>
+                <dd>
+                  <strong>{plan.sourceSnapshot.dueCount}</strong>
+                </dd>
+              </div>
+              <div>
+                <dt>苦手</dt>
+                <dd>
+                  <strong>
+                    {
+                      pendingPresentations.filter(
+                        ({ block }) => block.category === "weakItem",
+                      ).length
+                    }
+                  </strong>
+                </dd>
+              </div>
+              <div>
+                <dt>新しい単語</dt>
+                <dd>
+                  <strong>
+                    {
+                      pendingPresentations.filter(
+                        ({ block }) => block.category === "newVocabulary",
+                      ).length
+                    }
+                  </strong>
+                </dd>
+              </div>
+            </dl>
             {firstActionable === undefined ? null : (
               <Button size="large" fullWidth onClick={() => openBlock(firstActionable)}>
                 {hasProgress ? "続きから" : "今日の学習を始める"}
@@ -364,7 +371,11 @@ export function TodayPage({
               </div>
               <strong>{selectedMinutes}分</strong>
             </div>
-            <div className={styles.minuteChoices} aria-label="学習時間を選択">
+            <div
+              className={styles.minuteChoices}
+              role="group"
+              aria-label="学習時間を選択"
+            >
               {MINUTE_PRESETS.map((minutes) => (
                 <button
                   key={minutes}

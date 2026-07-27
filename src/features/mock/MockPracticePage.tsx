@@ -153,11 +153,20 @@ export function MockPracticePage({
   );
 
   if (loadState.status === "loading") {
-    return <p role="status">短縮模試を読み込んでいます。</p>;
+    return (
+      <section className={styles.page} aria-busy="true">
+        <h1 tabIndex={-1}>短縮模試を準備しています</h1>
+        <p role="status">短縮模試を読み込んでいます。</p>
+      </section>
+    );
   }
   if (loadState.status === "error") {
     return (
-      <ErrorState title="短縮模試を開けませんでした" description={loadState.message} />
+      <ErrorState
+        title="短縮模試を開けませんでした"
+        description={loadState.message}
+        headingLevel={1}
+      />
     );
   }
   if (loadState.sets.length === 0) {
@@ -165,6 +174,7 @@ export function MockPracticePage({
       <EmptyState
         title="短縮模試がありません"
         description="教材を読み込んでから、もう一度お試しください。"
+        headingLevel={1}
       />
     );
   }
@@ -485,6 +495,7 @@ export function MockPracticePage({
       <ErrorState
         title="問題を表示できません"
         description="教材のセクションを確認してください。"
+        headingLevel={1}
       />
     );
   }

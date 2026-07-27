@@ -149,9 +149,9 @@ export function ExerciseRenderer({ exercise, onResult }: ExerciseRendererProps) 
 
       {exercise.type === "readingQuestion" ? (
         readingPassage !== undefined ? (
-          <div className={styles.sourceMaterial} aria-label="読解本文">
+          <section className={styles.sourceMaterial} aria-label="読解本文">
             <p lang="en">{readingPassage}</p>
-          </div>
+          </section>
         ) : (
           <InlineAlert tone="warning">
             読解問題の本文を読み込めませんでした。

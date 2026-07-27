@@ -105,6 +105,50 @@ describe("読解画面", () => {
     ).toBeInTheDocument();
   });
 
+  it("練習ページを置き換える未検出・エラー状態を主見出しとして伝える", async () => {
+    const { store } = learningStore();
+    const missing = render(
+      <ReadingPracticePage
+        setId="missing"
+        content={{
+          listReadingSets: vi.fn(() => Promise.resolve([])),
+          getReadingSet: vi.fn(() => Promise.resolve(undefined)),
+        }}
+        store={store}
+      />,
+    );
+    expect(
+      screen.getByRole("heading", {
+        level: 1,
+        name: "読解教材を準備しています",
+      }),
+    ).toBeInTheDocument();
+    expect(
+      await screen.findByRole("heading", {
+        level: 1,
+        name: "指定された読解教材が見つかりません",
+      }),
+    ).toBeInTheDocument();
+    missing.unmount();
+
+    render(
+      <ReadingPracticePage
+        setId="broken"
+        content={{
+          listReadingSets: vi.fn(() => Promise.resolve([])),
+          getReadingSet: vi.fn(() => Promise.reject(new Error("教材を読めません"))),
+        }}
+        store={store}
+      />,
+    );
+    expect(
+      await screen.findByRole("heading", {
+        level: 1,
+        name: "読解教材を開けませんでした",
+      }),
+    ).toBeInTheDocument();
+  });
+
   it("本文・根拠選択・解説・お気に入り・結果保存を一続きで完了する", async () => {
     const { store, completePractice, addVocabularyFavorite } = learningStore();
     const time = mutableClock("2026-07-27T00:00:00.000Z");

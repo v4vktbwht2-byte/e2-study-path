@@ -159,6 +159,7 @@ export function StageDetail({
   if (state.status === "loading") {
     return (
       <section className={styles.page} aria-busy="true">
+        <h1 tabIndex={-1}>ステージ情報を準備しています</h1>
         <p role="status">ステージ情報を読み込んでいます。</p>
       </section>
     );
@@ -169,6 +170,7 @@ export function StageDetail({
         <ErrorState
           title="ステージ情報を読み込めませんでした"
           description={state.error.message}
+          headingLevel={1}
           onRetry={reload}
         />
       </section>
@@ -184,6 +186,7 @@ export function StageDetail({
         <ErrorState
           title="ステージが見つかりません"
           description="ステージマップへ戻って、もう一度選んでください。"
+          headingLevel={1}
         />
       </section>
     );

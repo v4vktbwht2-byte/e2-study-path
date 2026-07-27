@@ -221,6 +221,12 @@ describe("診断画面", () => {
     );
 
     expect(
+      screen.getByRole("heading", {
+        level: 1,
+        name: "初期診断を準備しています",
+      }),
+    ).toBeInTheDocument();
+    expect(
       await screen.findByRole("heading", { level: 2, name: "最初の問題" }),
     ).toHaveFocus();
     await user.click(screen.getByRole("button", { name: "分からない" }));

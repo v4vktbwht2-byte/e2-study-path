@@ -1,5 +1,5 @@
 import { IDBKeyRange, indexedDB } from "fake-indexeddb";
-import { render, screen } from "@testing-library/react";
+import { render, screen, waitFor, within } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { speakingPracticeSets } from "../../content/pilot/practiceSpeaking";
@@ -156,6 +156,105 @@ describe("スピーキング教材と保存", () => {
 });
 
 describe("スピーキング画面", () => {
+  it("ページを置き換える空・エラー状態を主見出しとして伝える", async () => {
+    const recorder: SpeakingRecorder = {
+      isSupported: () => false,
+      start: vi.fn().mockResolvedValue(undefined),
+      stop: vi.fn(),
+      dispose: vi.fn(),
+    };
+    const baseStore = {
+      saveRecording: vi.fn().mockResolvedValue(undefined),
+      deleteRecording: vi.fn().mockResolvedValue(undefined),
+      complete: vi.fn().mockResolvedValue(undefined),
+    };
+    const empty = render(
+      <SpeakingPracticePage
+        store={{
+          ...baseStore,
+          load: vi.fn().mockResolvedValue({ sets: [], studyDayStartHour: 4 }),
+        }}
+        recorder={recorder}
+      />,
+    );
+    expect(
+      screen.getByRole("heading", {
+        level: 1,
+        name: "スピーキング練習を準備しています",
+      }),
+    ).toBeInTheDocument();
+    expect(
+      await screen.findByRole("heading", {
+        level: 1,
+        name: "スピーキング教材がありません",
+      }),
+    ).toBeInTheDocument();
+    empty.unmount();
+
+    render(
+      <SpeakingPracticePage
+        store={{
+          ...baseStore,
+          load: vi.fn().mockRejectedValue(new Error("教材を読めません")),
+        }}
+        recorder={recorder}
+      />,
+    );
+    expect(
+      await screen.findByRole("heading", {
+        level: 1,
+        name: "スピーキングを開けませんでした",
+      }),
+    ).toBeInTheDocument();
+  });
+
+  it("保存した録音は確認ダイアログを通してから削除する", async () => {
+    const content = parseSpeakingPracticeSet(speakingPracticeSets[0]!);
+    const deleteRecording = vi
+      .fn<SpeakingPracticeStore["deleteRecording"]>()
+      .mockResolvedValue();
+    const recorder: SpeakingRecorder = {
+      isSupported: () => true,
+      start: vi.fn().mockResolvedValue(undefined),
+      stop: vi.fn().mockResolvedValue({
+        blob: new Blob(["recording"], { type: "audio/webm" }),
+        durationMs: 1_000,
+        mimeType: "audio/webm",
+      }),
+      dispose: vi.fn(),
+    };
+    const user = userEvent.setup();
+    render(
+      <SpeakingPracticePage
+        store={{
+          load: vi.fn().mockResolvedValue({
+            sets: [content],
+            studyDayStartHour: 4,
+          }),
+          saveRecording: vi.fn().mockResolvedValue(undefined),
+          deleteRecording,
+          complete: vi.fn(),
+        }}
+        recorder={recorder}
+        clock={{ now: () => NOW }}
+        setId={content.set.id}
+      />,
+    );
+
+    await user.click(await screen.findByRole("button", { name: "練習を始める" }));
+    await user.click(screen.getByRole("button", { name: "マイクを確認して録音開始" }));
+    await user.click(await screen.findByRole("button", { name: "録音を停止して保存" }));
+    await user.click(await screen.findByRole("button", { name: "録音を削除" }));
+
+    const dialog = screen.getByRole("dialog", { name: "録音を削除しますか" });
+    expect(dialog).toHaveTextContent("元に戻せません");
+    expect(deleteRecording).not.toHaveBeenCalled();
+    await user.click(within(dialog).getByRole("button", { name: "録音を削除" }));
+
+    await waitFor(() => expect(deleteRecording).toHaveBeenCalledOnce());
+    expect(screen.getByText("録音を端末から削除しました。")).toBeInTheDocument();
+  });
+
   it("録音非対応でもテキストと自己評価で完了できる", async () => {
     const content = parseSpeakingPracticeSet(speakingPracticeSets[0]!);
     const complete = vi.fn<SpeakingPracticeStore["complete"]>().mockResolvedValue();

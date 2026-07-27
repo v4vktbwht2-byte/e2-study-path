@@ -58,7 +58,8 @@
   --duration-normal: 220ms;
   --ease-standard: cubic-bezier(0.2, 0, 0, 1);
 
-  --tap-target-min: 2.75rem;
+  /* 文字倍率とは独立したCSS pxで、拡大時も横幅を圧迫せず44pxを守る。 */
+  --tap-target-min: 44px;
   --content-max-width: 60rem;
   --safe-area-top: env(safe-area-inset-top, 0px);
   --safe-area-right: env(safe-area-inset-right, 0px);

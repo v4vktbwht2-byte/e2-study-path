@@ -76,7 +76,7 @@ export function CourseMapView({
                   <p className={styles.stageNumber}>ステージ{stage.definition.stage}</p>
                   <h2>{stage.definition.titleJa}</h2>
                 </div>
-                <div className={styles.badges} aria-label="ステージの状態">
+                <div className={styles.badges} role="group" aria-label="ステージの状態">
                   {stage.isCurrentStage ? (
                     <span className={styles.currentBadge}>現在地</span>
                   ) : null}
@@ -154,6 +154,7 @@ export function CourseMap({
   if (state.status === "loading") {
     return (
       <section className={styles.page} aria-busy="true">
+        <h1 tabIndex={-1}>ステージマップを準備しています</h1>
         <p role="status">コース情報を読み込んでいます。</p>
       </section>
     );
@@ -164,6 +165,7 @@ export function CourseMap({
         <ErrorState
           title="コース情報を読み込めませんでした"
           description={state.error.message}
+          headingLevel={1}
           onRetry={reload}
         />
       </section>

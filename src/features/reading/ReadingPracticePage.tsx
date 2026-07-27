@@ -162,32 +162,35 @@ export function ReadingPracticePage({
 
   if (loadState.status === "loading") {
     return (
-      <main className={styles.studyPage} aria-busy="true">
+      <section className={styles.studyPage} aria-busy="true">
+        <h1 tabIndex={-1}>読解教材を準備しています</h1>
         <p role="status">読解教材を読み込んでいます。</p>
-      </main>
+      </section>
     );
   }
   if (loadState.status === "error") {
     return (
-      <main className={styles.studyPage}>
+      <section className={styles.studyPage}>
         <ErrorState
           title="読解教材を開けませんでした"
           description={loadState.error.message}
+          headingLevel={1}
           onRetry={() => {
             setReloadKey((current) => current + 1);
           }}
         />
-      </main>
+      </section>
     );
   }
   if (loadState.status === "missing") {
     return (
-      <main className={styles.studyPage}>
+      <section className={styles.studyPage}>
         <EmptyState
           title="指定された読解教材が見つかりません"
           description="読解一覧から別の教材を選んでください。"
+          headingLevel={1}
         />
-      </main>
+      </section>
     );
   }
 
@@ -259,15 +262,16 @@ export function ReadingPracticePage({
   const question = set.payload.questions[questionIndex];
   if (question === undefined) {
     return (
-      <main className={styles.studyPage}>
+      <section className={styles.studyPage}>
         <ErrorState
           title="設問を表示できませんでした"
           description="読解教材を読み直してください。"
+          headingLevel={1}
           onRetry={() => {
             setReloadKey((current) => current + 1);
           }}
         />
-      </main>
+      </section>
     );
   }
 

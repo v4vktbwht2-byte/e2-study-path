@@ -39,7 +39,7 @@ export function ReadingHubPage({ content, onSelectSet }: ReadingHubPageProps) {
   }, [content, reloadKey]);
 
   return (
-    <main className={styles.page}>
+    <section className={styles.page}>
       <header className={styles.pageHeader}>
         <p className={styles.eyebrow}>技能練習</p>
         <h1>読解</h1>
@@ -66,6 +66,6 @@ export function ReadingHubPage({ content, onSelectSet }: ReadingHubPageProps) {
       ) : (
         <ReadingSetList sets={loadState.sets} onSelectSet={onSelectSet} />
       )}
-    </main>
+    </section>
   );
 }

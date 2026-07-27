@@ -105,6 +105,7 @@ export function VocabularyHubPage({
   if (loadState.status === "loading") {
     return (
       <section className={styles.page} aria-busy="true">
+        <h1 tabIndex={-1}>単語学習を準備しています</h1>
         <p role="status">単語の学習状況を読み込んでいます。</p>
       </section>
     );
@@ -115,6 +116,7 @@ export function VocabularyHubPage({
         <ErrorState
           title="単語ハブを開けませんでした"
           description={loadState.error.message}
+          headingLevel={1}
           onRetry={() => setReloadKey((value) => value + 1)}
         />
       </section>

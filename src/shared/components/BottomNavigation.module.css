@@ -2,6 +2,8 @@
   position: sticky;
   z-index: 20;
   bottom: 0;
+  width: 100%;
+  min-width: 0;
   padding: 0 max(var(--space-2), var(--safe-area-right))
     max(var(--space-2), var(--safe-area-bottom))
     max(var(--space-2), var(--safe-area-left));
@@ -96,6 +98,18 @@
 @media (max-width: 29.999rem) {
   .link {
     flex-direction: column;
+  }
+}
+
+@media (max-width: 14rem) {
+  .navigation {
+    padding-right: max(4px, var(--safe-area-right));
+    padding-left: max(4px, var(--safe-area-left));
+  }
+
+  .list {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(var(--tap-target-min), 1fr));
   }
 }
 

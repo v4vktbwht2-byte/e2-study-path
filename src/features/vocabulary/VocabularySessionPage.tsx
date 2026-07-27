@@ -806,6 +806,7 @@ export function VocabularySessionPage({
   if (loadState.status === "loading") {
     return (
       <section className={styles.page} aria-busy="true">
+        <h1 tabIndex={-1}>{MODE_TITLE[mode]}を準備しています</h1>
         <p role="status">単語セッションを準備しています。</p>
       </section>
     );
@@ -816,6 +817,7 @@ export function VocabularySessionPage({
         <ErrorState
           title="単語セッションを開始できませんでした"
           description={loadState.error.message}
+          headingLevel={1}
           onRetry={() => setReloadKey((value) => value + 1)}
         />
       </section>
@@ -926,6 +928,7 @@ export function VocabularySessionPage({
         <ErrorState
           title="次の問題を準備できませんでした"
           description="単語ハブへ戻って、もう一度お試しください。"
+          headingLevel={1}
           actions={
             onBack !== undefined ? (
               <Button onClick={onBack}>{backLabel}</Button>
@@ -1236,7 +1239,11 @@ export function VocabularySessionPage({
                 推奨評価: <strong>{RATING_LABEL[draftAnswer.suggestedRating]}</strong>
                 。必要なら変更できます。
               </p>
-              <div className={styles.ratingRow} aria-label="最終評価を選択">
+              <div
+                className={styles.ratingRow}
+                role="group"
+                aria-label="最終評価を選択"
+              >
                 {(["again", "hard", "good", "easy"] as const).map((rating) => (
                   <Button
                     key={rating}

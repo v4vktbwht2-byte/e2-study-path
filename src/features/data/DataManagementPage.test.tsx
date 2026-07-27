@@ -148,20 +148,26 @@ describe("DataManagementPage", () => {
 
     render(<DataManagementPage port={port} />);
 
+    expect(
+      screen.getByRole("heading", {
+        level: 1,
+        name: "データ管理を準備しています",
+      }),
+    ).toBeInTheDocument();
     expect(screen.getByRole("status")).toHaveTextContent(
       "保存容量とデータの状態を確認しています",
     );
 
     resolveOverview?.(DEFAULT_OVERVIEW);
 
-    expect(
-      await screen.findByRole("heading", { name: "データ管理" }),
-    ).toBeInTheDocument();
-    expect(
-      screen.getByRole("progressbar", {
-        name: "このサイトが利用している保存容量の目安",
-      }),
-    ).toHaveAttribute("aria-valuetext", "2 MB / 利用可能な目安 100 MB");
+    const storageProgress = await screen.findByRole("progressbar", {
+      name: "このサイトが利用している保存容量の目安",
+    });
+    expect(screen.getByRole("heading", { name: "データ管理" })).toBeInTheDocument();
+    expect(storageProgress).toHaveAttribute(
+      "aria-valuetext",
+      "2 MB / 利用可能な目安 100 MB",
+    );
 
     const recordingsOption = screen.getByRole("checkbox", {
       name: /スピーキング録音も含める/u,

@@ -79,6 +79,12 @@ describe("WritingPage", () => {
     const user = userEvent.setup();
     renderWriting(new MemoryWritingPort());
 
+    expect(
+      screen.getByRole("heading", {
+        level: 1,
+        name: "ライティングを準備しています",
+      }),
+    ).toBeInTheDocument();
     const editor = await screen.findByLabelText("英文を書く");
     expect(
       screen.getByText("45〜55語は練習の目安です。", { exact: false }),
@@ -204,6 +210,7 @@ describe("WritingPage", () => {
     );
     expect(
       screen.getByRole("heading", {
+        level: 1,
         name: "練習できる作文課題がまだありません",
       }),
     ).toBeVisible();
@@ -217,7 +224,10 @@ describe("WritingPage", () => {
       <WritingPage practiceSets={[invalidSet]} port={new MemoryWritingPort()} />,
     );
     expect(
-      screen.getByRole("heading", { name: "作文課題を開けませんでした" }),
+      screen.getByRole("heading", {
+        level: 1,
+        name: "作文課題を開けませんでした",
+      }),
     ).toBeVisible();
     invalid.unmount();
 
@@ -226,6 +236,7 @@ describe("WritingPage", () => {
     renderWriting(failedPort);
     expect(
       await screen.findByRole("heading", {
+        level: 1,
         name: "ライティングを開けませんでした",
       }),
     ).toBeVisible();

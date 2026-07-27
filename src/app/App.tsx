@@ -1,6 +1,7 @@
 import { Suspense } from "react";
 import { RouterProvider } from "react-router-dom";
 import { PwaProvider } from "../features/pwa";
+import { AppearanceSettingsSync } from "../features/settings/AppearanceSettingsSync";
 import { FatalErrorBoundary } from "./FatalErrorBoundary";
 import { RouterLoadingPage } from "./RouterLoadingPage";
 import { createAppRouter } from "./router";
@@ -13,9 +14,12 @@ export function App() {
     <FatalErrorBoundary>
       <PwaProvider>
         <StartupGate>
-          <Suspense fallback={<RouterLoadingPage />}>
-            <RouterProvider router={appRouter} />
-          </Suspense>
+          <>
+            <AppearanceSettingsSync />
+            <Suspense fallback={<RouterLoadingPage />}>
+              <RouterProvider router={appRouter} />
+            </Suspense>
+          </>
         </StartupGate>
       </PwaProvider>
     </FatalErrorBoundary>

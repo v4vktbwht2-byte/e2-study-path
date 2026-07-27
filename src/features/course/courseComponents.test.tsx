@@ -56,9 +56,13 @@ describe("コース画面", () => {
     );
 
     expect(
-      await screen.findByRole("heading", { name: "ステージマップ" }),
+      screen.getByRole("heading", {
+        level: 1,
+        name: "ステージマップを準備しています",
+      }),
     ).toBeInTheDocument();
-    expect(screen.getByText("はじめての英語")).toBeInTheDocument();
+    expect(await screen.findByText("はじめての英語")).toBeInTheDocument();
+    expect(screen.getByRole("heading", { name: "ステージマップ" })).toBeInTheDocument();
     expect(screen.getByText("英検2級対策")).toBeInTheDocument();
     expect(screen.getByText("現在地")).toBeInTheDocument();
     expect(screen.getByText("おすすめ開始地点")).toBeInTheDocument();
@@ -87,6 +91,12 @@ describe("コース画面", () => {
       />,
     );
 
+    expect(
+      screen.getByRole("heading", {
+        level: 1,
+        name: "ステージ情報を準備しています",
+      }),
+    ).toBeInTheDocument();
     expect(
       await screen.findByRole("heading", { name: "1文を作る" }),
     ).toBeInTheDocument();
@@ -118,11 +128,38 @@ describe("コース画面", () => {
       />,
     );
 
-    expect(await screen.findByText("一時的な読み込みエラー")).toBeInTheDocument();
+    expect(
+      await screen.findByRole("heading", {
+        level: 1,
+        name: "コース情報を読み込めませんでした",
+      }),
+    ).toBeInTheDocument();
+    expect(screen.getByText("一時的な読み込みエラー")).toBeInTheDocument();
     await userEvent.setup().click(screen.getByRole("button", { name: "もう一度試す" }));
     expect(
       await screen.findByRole("heading", { name: "ステージマップ" }),
     ).toBeInTheDocument();
     expect(listLessons).toHaveBeenCalledTimes(2);
+  });
+
+  it("ステージ読込エラーをページの主見出しとして伝える", async () => {
+    render(
+      <StageDetail
+        stage={1}
+        content={{
+          listLessons: vi.fn().mockRejectedValue(new Error("教材を読めません")),
+        }}
+        progressStore={progressStore}
+        recommendedStage={1}
+        onOpenLesson={vi.fn()}
+      />,
+    );
+
+    expect(
+      await screen.findByRole("heading", {
+        level: 1,
+        name: "ステージ情報を読み込めませんでした",
+      }),
+    ).toBeInTheDocument();
   });
 });

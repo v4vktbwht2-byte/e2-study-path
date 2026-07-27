@@ -92,6 +92,7 @@ describe("リスニング画面", () => {
     resolveSets?.([]);
     expect(
       await screen.findByRole("heading", {
+        level: 1,
         name: "利用できるリスニング教材はまだありません",
       }),
     ).toBeInTheDocument();
@@ -100,7 +101,13 @@ describe("リスニング画面", () => {
       listListeningSets: () => Promise.reject(new Error("教材DBを読めません")),
     };
     rerender(<ListeningPage content={failingContent} store={store} audio={audio} />);
-    expect(await screen.findByText("教材DBを読めません")).toBeInTheDocument();
+    expect(
+      await screen.findByRole("heading", {
+        level: 1,
+        name: "リスニング教材を開けませんでした",
+      }),
+    ).toBeInTheDocument();
+    expect(screen.getByText("教材DBを読めません")).toBeInTheDocument();
     expect(screen.getByRole("button", { name: "もう一度試す" })).toBeInTheDocument();
   });
 

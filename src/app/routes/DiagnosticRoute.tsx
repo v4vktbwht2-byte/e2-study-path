@@ -166,6 +166,7 @@ export function DiagnosticRoute() {
   if (state.status === "loading") {
     return (
       <section aria-busy="true" aria-live="polite">
+        <h1 tabIndex={-1}>初期診断</h1>
         <Card as="section">
           <p role="status">診断教材を読み込んでいます…</p>
         </Card>

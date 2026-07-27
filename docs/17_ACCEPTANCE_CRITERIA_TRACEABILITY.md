@@ -70,11 +70,15 @@ Given キーボードのみ
 When オンボーディングから単語1問を完了する
 Then マウスなしで完了でき、フォーカスが見える。
 
+Phase 08 verification: `e2e/phase08.spec.ts`でオンボーディングから単語1問の回答までをキーボードだけで完了し、route遷移後の主見出しfocusを確認する。主要14 routeと実データ入りTodayをaxeで走査し、serious／critical違反0件、各画面の単一main・単一h1・主見出しfocusを確認する。
+
 ### AC-REL-011 Mobile
 
 Given 320px幅
 When 今日→単語セッション→完了
 Then 横スクロールや隠れた主要ボタンなしで完了する。
+
+Phase 08 verification: `e2e/phase08.spec.ts`で320px・文字200%相当と160px reflow proxyを確認し、既存Phase 04 E2Eで320pxの単語セッション完了を確認する。主要操作領域は共通tokenとcomponent testsで44px以上を維持する。
 
 ### AC-REL-012 Content legality
 
@@ -149,7 +153,11 @@ Phase 06 verification: Pilotの技能教材25セットはすべて`source.type =
 
 ### Phase 08
 
-- progress/settings/a11y polish complete
+- Complete: 7日・30日記録、6技能傾向、弱点、Stage進行が実データから集計・説明される。
+- Complete: 7設定が検証・即時保存され、テーマ、文字倍率、動き軽減が変更時と再起動時に反映される。
+- Complete: 単一main・h1、route focus、live region、Dialog復帰、44px操作領域、320px・文字200%相当のreflowを整備した。
+- Evidence: 73 test files・518 unit/component tests、全E2E desktop/320px 64/64（Phase 08固有10/10）、主要route axe serious／critical 0件、`npm run check`成功。
+- Manual pending: NVDA／VoiceOver、iOS／Android PWA、実ブラウザーzoom・forced colors、実機録音。
 
 ### Phase 09
 

@@ -5,13 +5,18 @@
   margin: 0 auto;
 }
 
-.header {
+.header,
+.sectionHeading,
+.settingsCard,
+.linksCard {
   display: grid;
   gap: var(--space-2);
 }
 
 .header h1,
 .header p,
+.sectionHeading h2,
+.sectionHeading p,
 .linksCard h2,
 .linksCard p {
   margin: 0;
@@ -23,9 +28,120 @@
   font-weight: 700;
 }
 
-.linksCard {
+.saveStatus {
+  min-height: 1.5em;
+  margin: calc(var(--space-3) * -1) 0 0;
+  color: var(--color-text-muted);
+  font-size: var(--font-size-sm);
+}
+
+.fieldGrid {
   display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--space-4);
+  margin-top: var(--space-2);
+}
+
+.field {
+  display: grid;
+  align-content: start;
+  gap: var(--space-2);
+  min-width: 0;
+  font-weight: 700;
+}
+
+.field input,
+.field select {
+  width: 100%;
+  min-width: 0;
+  min-height: var(--tap-target-min);
+  padding: var(--space-2) var(--space-3);
+  border: 1px solid var(--color-border-strong);
+  border-radius: var(--radius-button);
+  background: var(--color-surface);
+}
+
+.field input[aria-invalid="true"] {
+  border-color: var(--color-danger);
+}
+
+.fieldControl {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: center;
+  gap: var(--space-2);
+}
+
+.field small,
+.choice small,
+.toggle small {
+  color: var(--color-text-muted);
+  font-weight: 400;
+  line-height: var(--line-height-body);
+}
+
+.fieldError {
+  min-height: 1.4em;
+  color: var(--color-danger);
+  font-size: var(--font-size-sm);
+  font-weight: 700;
+}
+
+.choiceFieldset {
+  min-width: 0;
+  padding: 0;
+  border: 0;
+  margin: var(--space-2) 0 0;
+}
+
+.choiceFieldset legend {
+  padding: 0;
+  margin-bottom: var(--space-2);
+  font-weight: 700;
+}
+
+.choiceGrid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--space-2);
+}
+
+.choice,
+.toggle {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
   gap: var(--space-3);
+  min-height: var(--tap-target-min);
+  align-items: start;
+  padding: var(--space-3);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-button);
+  background: var(--color-surface);
+  cursor: pointer;
+}
+
+.choice:has(input:checked),
+.toggle:has(input:checked) {
+  border-color: var(--color-primary);
+  background: var(--color-info-surface);
+}
+
+.choice input,
+.toggle input {
+  width: 1.25rem;
+  height: 1.25rem;
+  margin: 0.15rem 0 0;
+  accent-color: var(--color-primary);
+}
+
+.choice span,
+.toggle span {
+  display: grid;
+  gap: var(--space-1);
+}
+
+.toggle {
+  margin-top: var(--space-2);
 }
 
 .links {
@@ -36,10 +152,46 @@
 
 .link {
   display: inline-flex;
-  min-height: 44px;
+  min-height: var(--tap-target-min);
   align-items: center;
   color: var(--color-primary-strong);
   font-weight: 700;
+}
+
+.appInformation {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: var(--space-2);
+  margin: var(--space-2) 0;
+}
+
+.appInformation > div {
+  display: grid;
+  gap: var(--space-1);
+  min-width: 0;
+  padding: var(--space-3);
+  border-radius: var(--radius-sm);
+  background: var(--color-surface-muted);
+}
+
+.appInformation dt {
+  color: var(--color-text-muted);
+  font-size: var(--font-size-sm);
+  font-weight: 700;
+}
+
+.appInformation dd {
+  margin: 0;
+  font-weight: 700;
+  overflow-wrap: anywhere;
+}
+
+@media (max-width: 36rem) {
+  .fieldGrid,
+  .choiceGrid,
+  .appInformation {
+    grid-template-columns: 1fr;
+  }
 }
 
 @media (max-width: 24rem) {

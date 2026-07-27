@@ -7,6 +7,8 @@ import {
   BottomNavigation,
   Button,
   Dialog,
+  EmptyState,
+  ErrorState,
   InlineAlert,
   ProgressBar,
   TopBar,
@@ -89,6 +91,22 @@ describe("共通UIコンポーネント", () => {
 
     expect(screen.getByRole("alert")).toHaveTextContent("保存できませんでした");
     expect(screen.getByRole("alert")).toHaveTextContent("エラー");
+  });
+
+  it("空・エラー状態の見出し階層を表示場所に合わせて選べる", () => {
+    render(
+      <>
+        <EmptyState title="一覧内の空状態" />
+        <ErrorState title="ページ全体のエラー" headingLevel={1} />
+      </>,
+    );
+
+    expect(
+      screen.getByRole("heading", { level: 2, name: "一覧内の空状態" }),
+    ).toBeInTheDocument();
+    expect(
+      screen.getByRole("heading", { level: 1, name: "ページ全体のエラー" }),
+    ).toBeInTheDocument();
   });
 
   it("TopBarのブランド名をページ見出しとして強制しない", () => {

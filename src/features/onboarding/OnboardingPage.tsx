@@ -181,6 +181,9 @@ export function OnboardingPage({
   if (loadingState === "loading") {
     return (
       <section className={styles.page} aria-busy="true" aria-live="polite">
+        <h1 className={styles.heading} tabIndex={-1}>
+          初回設定を準備しています
+        </h1>
         <Card as="section" className={styles.centered}>
           <p role="status">初回設定を読み込んでいます…</p>
         </Card>
