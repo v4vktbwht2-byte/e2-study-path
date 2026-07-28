@@ -1,10 +1,10 @@
 {
   "package": "E2 Study Path Codex Handoff Full Set",
   "packageVersion": "1.0.0",
-  "generatedAt": "2026-07-28T14:25:21+00:00",
+  "generatedAt": "2026-07-28T15:03:29+00:00",
   "manifestPolicy": "The manifest tracks repository source files and excludes PROJECT_MANIFEST.json, Git metadata, dependencies, and generated artifacts.",
   "fileCountExcludingManifest": 456,
-  "totalSizeBytesExcludingManifest": 2699457,
+  "totalSizeBytesExcludingManifest": 2703339,
   "files": [
     {
       "path": ".github/workflows/ci.yml",
@@ -33,8 +33,8 @@
     },
     {
       "path": "CHANGELOG.md",
-      "sizeBytes": 9867,
-      "sha256": "212c5ca26ae2323b1918701cd5d0a32b416c8b67d1363d61c62d15c86cf91dc0"
+      "sizeBytes": 10270,
+      "sha256": "a8ddbc7c62b8a768b49ec68d084e3b31bdbcb7fca7e469f851216cfb035148d2"
     },
     {
       "path": "checklists/CODE_REVIEW.md",
@@ -263,8 +263,8 @@
     },
     {
       "path": "docs/20_IMPLEMENTATION_STATUS.md",
-      "sizeBytes": 12574,
-      "sha256": "68d1dea9f41c123d1741eac5726a26c541764ef2f64b580e12dc823777b4f4ce"
+      "sizeBytes": 12577,
+      "sha256": "e1ff57d7cc7011f5864d952d6cfd31c402f761686f29c999545312b1d4b48934"
     },
     {
       "path": "docs/21_SOURCE_NOTES.md",
@@ -278,8 +278,8 @@
     },
     {
       "path": "docs/backlog.md",
-      "sizeBytes": 7741,
-      "sha256": "72aa0263f87bcc10e486457f989624b6b1c94cc5495582e9e15ee73155f9e4dc"
+      "sizeBytes": 7745,
+      "sha256": "9c5a3475864310fa51987808893c67584cbfc76b510cd762374cda94cf53f01d"
     },
     {
       "path": "e2e/app-shell.spec.ts",
@@ -354,12 +354,12 @@
     {
       "path": "package-lock.json",
       "sizeBytes": 330717,
-      "sha256": "978e45f0b5ca0c46a3cc188dd1844819f05047392de1e43951e09421ecb46e3c"
+      "sha256": "9a6ebd4304cb02b3970806bb1194630bdc01bba12a4dc9a023164d9a44b8e30c"
     },
     {
       "path": "package.json",
       "sizeBytes": 2374,
-      "sha256": "fb7060c4811d7a5288fbe37e683614593f495118d65ec9e637f6e49b64c679b8"
+      "sha256": "44a8c28eb3f64a10d4572ec90742d26cc3c78878a92819c19d21317811c1c6e3"
     },
     {
       "path": "planning/BACKLOG.md",
@@ -388,8 +388,8 @@
     },
     {
       "path": "PLANS.md",
-      "sizeBytes": 60510,
-      "sha256": "5e460e3419f57377934b816fbd6fd956e262a3934da9bce8a488bf1adc3d3a34"
+      "sizeBytes": 61788,
+      "sha256": "f0ee0bb67f00987f7cd4839f5c155a5305c94153a0097632feb36c20c75753e2"
     },
     {
       "path": "playwright.config.ts",
@@ -503,8 +503,8 @@
     },
     {
       "path": "README.md",
-      "sizeBytes": 35103,
-      "sha256": "9c2351ae200270235f84ebe81ec17d78b12157a26179bb0064de01191a4accc4"
+      "sizeBytes": 35102,
+      "sha256": "a100999847bc48b628ad84eec3d31f8a50b24aec6cebd4456fb680768aa315f2"
     },
     {
       "path": "scripts/generate_manifest.py",
@@ -1318,13 +1318,13 @@
     },
     {
       "path": "src/features/lesson/LessonRenderer.test.tsx",
-      "sizeBytes": 22159,
-      "sha256": "1bde017520c467b095b049bbddce192d9780c5faa4416fc347ee976c90963513"
+      "sizeBytes": 24021,
+      "sha256": "343284fe058754b55b7bf1482019a5d8a5533e2ad70e5f8761e9721ef8fde18b"
     },
     {
       "path": "src/features/lesson/LessonRenderer.tsx",
-      "sizeBytes": 20256,
-      "sha256": "f026716835993c5f716ffd260805d70e4ffd1ec44b60740365a037102bf124b7"
+      "sizeBytes": 20589,
+      "sha256": "229e5df4f85091ffa2ebefe9b375987a8c219f494fdd82e1cf10c98d0841a29e"
     },
     {
       "path": "src/features/lesson/LessonSectionView.tsx",

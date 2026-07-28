@@ -105,6 +105,7 @@ export function LessonRenderer({
   const [answeredExerciseIds, setAnsweredExerciseIds] = useState<Set<string>>(
     () => new Set(),
   );
+  const answeredExerciseIdsRef = useRef<Set<string>>(new Set());
   const [answerRequiredMessage, setAnswerRequiredMessage] = useState<string>();
   const headingRef = useRef<HTMLHeadingElement>(null);
   const attemptSequenceRef = useRef(0);
@@ -119,6 +120,7 @@ export function LessonRenderer({
     setSaveError(undefined);
     setCompletionMessage(undefined);
     setPlanReviewCompleted(false);
+    answeredExerciseIdsRef.current = new Set();
     setAnsweredExerciseIds(new Set());
     setAnswerRequiredMessage(undefined);
 
@@ -150,7 +152,11 @@ export function LessonRenderer({
                     sections.length,
                   );
           setSectionIndex(resumeIndex);
-          setAnsweredExerciseIds(new Set(reviewCheckpoint?.answeredExerciseIds ?? []));
+          const restoredAnsweredExerciseIds = new Set(
+            reviewCheckpoint?.answeredExerciseIds ?? [],
+          );
+          answeredExerciseIdsRef.current = restoredAnsweredExerciseIds;
+          setAnsweredExerciseIds(restoredAnsweredExerciseIds);
           setLoadState({
             status: "ready",
             data: {
@@ -351,7 +357,7 @@ export function LessonRenderer({
         attempt,
         session: data.session,
       });
-      const nextAnsweredExerciseIds = new Set(answeredExerciseIds);
+      const nextAnsweredExerciseIds = new Set(answeredExerciseIdsRef.current);
       nextAnsweredExerciseIds.add(result.exerciseId);
       if (planContext !== undefined && terminalStatus(data.progress) !== undefined) {
         const saved = await persistReviewCheckpoint(
@@ -363,13 +369,13 @@ export function LessonRenderer({
           throw new Error("復習の回答位置を保存できませんでした。");
         }
       }
+      answeredExerciseIdsRef.current = nextAnsweredExerciseIds;
       setAnsweredExerciseIds(nextAnsweredExerciseIds);
       setAnswerRequiredMessage(undefined);
       await onExerciseResult?.(result);
       pendingAttemptIdsRef.current.delete(result.exerciseId);
     },
     [
-      answeredExerciseIds,
       clock,
       onExerciseResult,
       persistReviewCheckpoint,

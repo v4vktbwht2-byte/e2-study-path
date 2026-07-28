@@ -1,4 +1,4 @@
-import { render, screen, waitFor } from "@testing-library/react";
+import { fireEvent, render, screen, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { describe, expect, it, vi } from "vitest";
 import type { LessonProgress } from "../../domain/models";
@@ -99,6 +99,21 @@ function contentWithExercise(value: Exercise): LessonContentReader {
         ),
       }),
     getExercises: () => Promise.resolve([value]),
+  };
+}
+
+function contentWithExercises(values: readonly Exercise[]): LessonContentReader {
+  return {
+    getLesson: () =>
+      Promise.resolve({
+        ...lesson(),
+        sections: lesson().sections.map((section) =>
+          section.id === "exercise"
+            ? { ...section, exerciseIds: values.map((value) => value.id) }
+            : section,
+        ),
+      }),
+    getExercises: () => Promise.resolve(values),
   };
 }
 
@@ -317,6 +332,46 @@ describe("レッスンレンダラー", () => {
     expect(recordAttempt).toHaveBeenCalledTimes(1);
 
     await user.click(screen.getByRole("button", { name: "次へ" }));
+    expect(
+      await screen.findByRole("heading", { name: "まとめ", level: 2 }),
+    ).toBeInTheDocument();
+  });
+
+  it("同じセクションの複数回答が続けて保存されても回答済み状態を失わない", async () => {
+    const secondExercise: Exercise = {
+      ...exercise(),
+      id: "exercise-b",
+      prompt: "goodbye の意味を選んでください。",
+    };
+    const { store, recordAttempt } = progressStore(progress("inProgress", 1));
+    render(
+      <LessonRenderer
+        lessonId="lesson-a"
+        content={contentWithExercises([exercise(), secondExercise])}
+        progressStore={store}
+        clock={clock}
+      />,
+    );
+    await waitFor(() => {
+      expect(screen.getAllByRole("heading", { level: 3 })).toHaveLength(2);
+    });
+
+    const choices = screen.getAllByRole("radio", { name: "こんにちは" });
+    const submitButtons = screen.getAllByRole("button", { name: "答えを確認" });
+    expect(choices).toHaveLength(2);
+    expect(submitButtons).toHaveLength(2);
+
+    fireEvent.click(choices[0]!);
+    fireEvent.click(choices[1]!);
+    fireEvent.click(submitButtons[0]!);
+    fireEvent.click(submitButtons[1]!);
+
+    await waitFor(() => {
+      expect(screen.getAllByText("確認できました")).toHaveLength(2);
+    });
+    expect(recordAttempt).toHaveBeenCalledTimes(2);
+
+    await userEvent.setup().click(screen.getByRole("button", { name: "次へ" }));
     expect(
       await screen.findByRole("heading", { name: "まとめ", level: 2 }),
     ).toBeInTheDocument();

@@ -740,3 +740,32 @@ python scripts/verify_handoff.py
 - Public PWA: `https://v4vktbwht2-byte.github.io/e2-study-path/`
 - PR #4、merge commit `b15897b`の`master` CI、GitHub Pages deploy run `30308497828`をPass。
 - 320px実URLで横overflowなし、オフライン準備完了表示、console error 0件を確認。HTML、manifest、Service Worker、192／512／maskable iconはHTTPS 200。manifestの`id`／`start_url`／`scope`は`/e2-study-path/`、`display`は`standalone`。
+
+## Post-Phase 10 — Production Service Worker update rehearsal
+
+**Goal**
+
+GitHub Pages上の`0.2.0`を開いたままpatch release `0.2.1`を配信し、waiting Service Workerの案内、更新前保存、差替え、再読込、IndexedDBデータ保持を実環境で確認する。
+
+**Decisions made**
+
+- 更新前の観測データは、初回設定完了済み・1日の学習時間30分とする。
+- app versionだけを`0.2.1`へ上げ、Pilot content `0.7.0`とIndexedDB schema `2`は変更しない。
+- 依存advisoryは2026-07-28の最新registryで再確認したが、React Routerの修正版は`react-router@8.3.0`だけで対応するstable `react-router-dom`がなく、`brace-expansion@5.0.8`もPWA build依存の2系とmajor不一致のため、強制overrideせず追跡を続ける。
+
+**Verification**
+
+```powershell
+npm audit
+npm audit --omit=dev
+npm run check
+npm run test:coverage
+$env:VITE_BASE_PATH = "/e2-study-path/"
+npm run build
+npm run verify:dist
+Remove-Item Env:VITE_BASE_PATH
+npm run test:e2e
+python scripts/verify_handoff.py
+```
+
+実配信確認は、旧版タブを保持したままPages deploy完了を待ち、「アプリの更新があります」→「保存して更新」→version `0.2.1`→1日30分保持の順に確認する。
