@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- 実配信環境のwaiting Service Worker差替えを確認するpatch releaseとして、アプリversionを`0.2.1`へ更新。Pilot content `0.7.0`とDB schema `2`は変更しない。
+- 同じレッスンセクションの複数回答を続けて保存した際、古い回答済み集合で後の状態が上書きされる競合を修正し、複数回答の同時確定回帰テストを追加。
 - GitHubに`v4vktbwht2-byte/e2-study-path`をprivate repositoryとして作成し、`master`をpush。
 - Cloudflare Pages + Access方針をPublic GitHub + GitHub Pagesへ変更し、スマホ向け公開URL・install手順とCI成功commit限定の自動deployを追加。
 - README冒頭とlicense節へ、プログラム・文書・教材が生成AI（OpenAI Codex）を利用して作成・編集され、専門家による全件校閲済みではないことを明記。

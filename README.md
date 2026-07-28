@@ -33,7 +33,7 @@
 
 ## 現在の実装状況
 
-Phase 00〜10を完了し、Pilot Release `0.2.0`として引き渡せる状態です。Pilot教材は`0.7.0`、IndexedDB schemaは`2`です。
+Phase 00〜10を完了し、Pilot Release `0.2.1`として引き渡せる状態です。Pilot教材は`0.7.0`、IndexedDB schemaは`2`です。
 
 Phase 10では`AC-REL-001`〜`AC-REL-012`、全repository、教材、PWA、backup、mobile、accessibility、文書を横断監査しました。backupの完全往復、timezone offsetを含むmerge、複数タブの破壊操作と旧autosave、英日混在教材の読み上げ、作文回答例と語数検証、教材表現を補強し、最終再レビューをBlocker 0／P1 0／P2 0としました。詳細は[`docs/22_PILOT_RELEASE_AUDIT.md`](docs/22_PILOT_RELEASE_AUDIT.md)です。
 
