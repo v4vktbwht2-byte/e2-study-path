@@ -75,7 +75,7 @@ jobs:
         run: npm run verify:dist
 
       - name: Pages成果物を保存
-        uses: actions/upload-pages-artifact@v4
+        uses: actions/upload-pages-artifact@v5
         with:
           path: ./dist
 
@@ -98,4 +98,4 @@ jobs:
 
       - name: GitHub Pagesへ反映
         id: deployment
-        uses: actions/deploy-pages@v4
+        uses: actions/deploy-pages@v5
