@@ -62,6 +62,7 @@ Codexは各フェーズ完了時に更新する。
 - 実際のwaiting Service Worker差替え、`beforeinstallprompt`、Storage永続化、iOS standaloneは配信環境・対応実機で最終確認が必要。
 - `vite-plugin-pwa`内部の`inlineDynamicImports`非推奨警告が残るが、Service Worker生成と70件のprecache注入は成功している。
 - GitHub remote `v4vktbwht2-byte/e2-study-path`はPublic、`master` CIとPages deployはgreen。`https://v4vktbwht2-byte.github.io/e2-study-path/`で320px表示、横overflowなし、manifest／Service Worker／3アイコンのHTTPS 200、オフライン準備完了表示を確認済み。
+- GitHub Pages workflowはNode.js 24対応の`actions/upload-pages-artifact@v5`と`actions/deploy-pages@v5`を使用する。
 - D-026でOSSライセンスを付与しない権利留保方針を確定した。Public repository上の閲覧・ForkにはGitHub利用規約、第三者成果物には各ライセンスが適用される旨をREADMEと`LICENSE_AND_BRANDING.md`へ明記した。
 - README冒頭とlicense節へ、実装・文書・教材が生成AI（OpenAI Codex）を利用して作成・編集され、専門家による全件校閲済みではないことを明記した。
 - 最新registry auditは全依存10件／本番依存2件のHighを報告。本番側の`react-router@7.18.1`はunstable RSC API使用時だけに影響する`GHSA-qwww-vcr4-c8h2`で、本PWAはRSC／SSR／server actionを使用しない。開発側は`vite-plugin-pwa`→`workbox-build`配下の`brace-expansion@2.1.2`で、公開runtimeへ含まれず外部入力を処理しないbuild経路。stableな互換修正版を追跡する。
