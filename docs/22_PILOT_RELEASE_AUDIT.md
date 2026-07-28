@@ -13,6 +13,8 @@
 
 本判定は英検公式または日本英語検定協会公認を意味しない。収録教材、音声fallback、短縮模試の結果は本プロジェクト独自の学習用内容である。
 
+2026-07-29にpatch release `0.2.1`を配信し、waiting Service Workerの実配信差替えと学習設定保持を確認した。Pilot content `0.7.0`とIndexedDB schema `2`は変更していない。
+
 ## Release-level acceptance results
 
 | ID         | Result | Primary evidence                                                                                                               |
@@ -101,8 +103,8 @@ runtime validationとは別に、ID、英語、日本語、正答、解説、出
 | ------------------------------ | -------------------------------------------------------------------------------------------- |
 | clean install                  | Pass — registry接続の`npm ci`、lockfileから533 packages                                      |
 | lint／typecheck                | Pass                                                                                         |
-| unit/component                 | Pass — 75 test files・551/551                                                                 |
-| coverage                       | Pass — 79.73% statements／71.80% branches／76.29% functions／80.18% lines                    |
+| unit/component                 | Pass — 75 test files・552/552                                                                 |
+| coverage                       | Pass — 79.74% statements／71.80% branches／76.29% functions／80.19% lines                    |
 | content validation             | Pass — Pilot 140語・31レッスン・155演習・25技能セット                                       |
 | root／repository subpath build | Pass — entry 210.06 kB、PWA precache 70件                                                    |
 | production artifact            | Pass — root／`/e2-study-path/`、manifest／SW／asset／source map方針、71 files                 |
@@ -121,7 +123,6 @@ runtime validationとは別に、ID、英語、日本語、正答、解説、出
 | -------- | --------------------------------- | -------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------- |
 | Medium   | upstream dependency advisory     | React Router 8.3.0相当のstable修正版とPWA build依存の修正版が利用可能になったら互換性確認後に更新                    | RSC／SSR未使用。`brace-expansion`はbuild-onlyで外部入力なし              |
 | Medium   | iOS／Android install              | Safari共有メニュー／対応ブラウザーからinstallし、standalone起動、offline再起動、safe areaを確認                      | アプリ内にiOS手順、対応ブラウザーにはinstall UI                          |
-| Medium   | waiting Service Worker            | 旧版を開いたまま新版を配信し、案内→保存完了→更新→再読込で学習データが保持されることを確認                            | 書込みflush、失敗時fail-closed、backup／cache recovery                   |
 | Medium   | NVDA／VoiceOver                    | オンボーディング→診断→Today→単語→技能練習を読み上げ、見出し、label、live region、英日発音切替を確認                  | axe、keyboard E2E、semantic component test、`lang`分割                   |
 | Medium   | 200% zoom／forced colors          | 実ブラウザーで拡大・強制色を有効にし、情報欠落、横スクロール、focus消失、隠れた主要操作がないことを確認              | 200%相当reflow、160px proxy、focus／contrast CSSを自動検証               |
 | Medium   | MediaRecorder／権限拒否           | 対応端末で許可・拒否・録音・再生・削除を確認                                                                         | text response fallback、unsupported／拒否／失敗test                      |
@@ -130,7 +131,8 @@ runtime validationとは別に、ID、英語、日本語、正答、解説、出
 
 ## Recommended Phase 11 batches
 
-1. 実配信更新ゲート: 旧版・新版を使ったwaiting Service Worker差替えをrelease rehearsalとして完了する。
-2. 実機アクセシビリティ: iPhone／Android、NVDA／VoiceOver、200% zoom／forced colors、録音・音声を端末別matrixで確認する。
-3. 教材拡張: Stageごとの語彙・レッスン・技能教材を小batchで追加し、人間の英語校閲と`CONTENT_QA.md`をbatchごとに完了する。
-4. 所有者判断: 正式名称を確定し、brandingへ反映する。
+2026-07-29に実配信更新ゲートを完了した。PR #10、merge commit `c8032ad`、master CI run `30372613667`、Pages deploy run `30373042462`をPassし、`0.2.0`→`0.2.1`の案内、保存、差替え、追加再読込、1日30分設定保持を確認した。
+
+1. 実機アクセシビリティ: iPhone／Android、NVDA／VoiceOver、200% zoom／forced colors、録音・音声を端末別matrixで確認する。
+2. 教材拡張: Stageごとの語彙・レッスン・技能教材を小batchで追加し、人間の英語校閲と`CONTENT_QA.md`をbatchごとに完了する。
+3. 所有者判断: 正式名称を確定し、brandingへ反映する。

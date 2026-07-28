@@ -25,6 +25,8 @@ GitHub PagesのSourceはGitHub Actionsとし、`github-pages` environmentは既�
 
 2026-07-28にmerge commit `b15897b`の`master` CIとPages deploy run `30308497828`が成功した。公開URLで320px表示、横overflowなし、オフライン準備完了表示、HTML／manifest／Service Worker／192・512・maskable iconのHTTPS 200を確認した。
 
+2026-07-29にPR #10、merge commit `c8032ad`のmaster CI run `30372613667`、Pages deploy run `30373042462`が成功した。`0.2.0`を開いたタブに1日30分設定を保存したまま`0.2.1`を配信し、「アプリの更新があります」→「保存して更新」→再読込後の`0.2.1`表示と設定保持を確認した。Pilot contentは`0.7.0`、DB schemaは`2`のまま変更していない。
+
 ## 3. Alternative hosts
 
 生成した静的 `dist/` は他の静的hostでも公開できる。移行時はbase path、manifest、Service Worker scope、認証境界を再確認する。

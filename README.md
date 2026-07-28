@@ -40,8 +40,8 @@ Phase 10では`AC-REL-001`〜`AC-REL-012`、全repository、教材、PWA、backu
 Phase 10の全品質ゲート実行結果は次のとおりです。
 
 - clean install: workspace直下の`node_modules`／`dist`削除後、lockfileから533 packagesを再構築
-- unit/componentテスト: 75ファイル・551/551件成功
-- coverage: Statements 79.73% / Branches 71.80% / Functions 76.29% / Lines 80.18%
+- unit/componentテスト: 75ファイル・552/552件成功
+- coverage: Statements 79.74% / Branches 71.80% / Functions 76.29% / Lines 80.19%
 - Playwright E2E: 全フローdesktop/320pxで70/70成功（retry 0）
 - axe: 主要14 routeと実データ入りTodayでserious／critical違反0件
 - Pilot教材検証: 140語・31レッスン・155演習・技能25セット
@@ -50,7 +50,7 @@ Phase 10の全品質ゲート実行結果は次のとおりです。
 
 最終コードレビューで追加した全ユーザーデータ保存の共有ロック、バックアップsnapshot barrier、回帰テストを含め、通常権限環境で`npm run check`、`npm run test:coverage`、root／subpathのbuildと`npm run verify:dist`、`npm run test:e2e`を再実行し、すべて成功しました。
 
-Web Speechの声質・発音、MediaRecorderの実権限・録音・再生、iPhone Safari／ホーム画面PWA、実際のwaiting Service Worker差替え、NVDA／VoiceOver、実ブラウザーの200% zoom・forced colorsは実機・配信環境での確認を継続します。2026-07-27の最新registry監査は、全依存10件／本番依存2件のHighを報告しました。本番側はこの静的PWAが使わないunstable RSC APIだけに影響するReact Router勧告、開発側はbuild時だけの間接`brace-expansion`です。いずれも該当機能・外部入力経路がなく、stableな修正版公開を追跡します。本リポジトリは個人学習を主目的とし、オープンソースライセンスを付与せず権利を留保します。
+2026-07-29にGitHub Pagesで`0.2.0`を開いたまま`0.2.1`を配信し、更新通知、更新前保存、Service Worker差替え、再読込、1日30分設定の保持を実確認しました。Web Speechの声質・発音、MediaRecorderの実権限・録音・再生、iPhone Safari／ホーム画面PWA、NVDA／VoiceOver、実ブラウザーの200% zoom・forced colorsは実機確認を継続します。2026-07-28の最新registry監査は、全依存10件／本番依存2件のHighを報告しました。本番側はこの静的PWAが使わないunstable RSC APIだけに影響するReact Router勧告、開発側はbuild時だけの間接`brace-expansion`です。いずれも該当機能・外部入力経路がなく、stableな修正版公開を追跡します。本リポジトリは個人学習を主目的とし、オープンソースライセンスを付与せず権利を留保します。
 
 ## 必要環境
 
