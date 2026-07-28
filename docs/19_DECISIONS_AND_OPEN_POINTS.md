@@ -29,18 +29,18 @@
 | D-023 | 破壊操作と通常保存をorigin単位の世代・排他lockで調停する   | 複数タブの旧autosaveが全削除・置換復元後にデータを復活させないよう、shared／exclusive lock取得後に世代を検証し、調停API非対応時は破壊操作をfail-closedにする |
 | D-024 | 非公開GitHub + Cloudflare Pages + Accessを配備構成とする    | source codeを非公開に保ち、production／preview URLをAccess policyで利用者限定にする。GitHub Pagesの自動公開は削除し、CIだけを継続する                 |
 | D-025 | Public GitHub + GitHub PagesでPWAを公開する                 | Cloudflare設定の負担を避け、スマホからURLを開いてinstallできる構成にする。D-024を置き換え、READMEにAI作成・非公式・未校閲範囲を明示する               |
+| D-026 | OSSライセンスを付与せず権利を留保する                      | 個人学習を主目的とするため、第三者への複製・改変・再配布権は付与しない。Public repository上の閲覧・ForkにはGitHub利用規約、第三者成果物には各ライセンスを適用する |
 
 ## Open points for repository owner after Pilot
 
 以下はPilot実装を止めない。
 
 1. 正式なアプリ名
-2. 公開ライセンス
-3. 商用レベルの教材制作体制
-4. 人間による英語校閲者
-5. 音声収録またはTTSサービス
-6. クラウド同期の要否
-7. AI添削の要否と予算
+2. 商用レベルの教材制作体制
+3. 人間による英語校閲者
+4. 音声収録またはTTSサービス
+5. クラウド同期の要否
+6. AI添削の要否と予算
 
 ## Decision log template
 

@@ -75,7 +75,7 @@ Phase 10 local Pilot repository result: 2026-07-27 environment-limited Pass。�
 
 ## External pre-publication and Phase 11 checks
 
-- [ ] 公開ライセンス／配布権利の確定（High、実公開前）
+- [x] 公開ライセンス／配布権利の確定（D-026: OSSライセンスを付与せず権利留保）
 - [x] latest registry `npm audit`／`npm audit --omit=dev`実行・適用可能性評価
 - [ ] upstream dependencyのstable修正版適用（Medium、RSC未使用／build-only）
 - [x] remote GitHub CI／GitHub Pages（Public repository、master CI、Pages deploy、実URLのPWA成果物を確認）

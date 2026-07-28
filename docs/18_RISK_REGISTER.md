@@ -22,7 +22,7 @@
 | R-018 | 非公式スコアが合格保証に見える      |      Medium |   High | 「練習指標」表示、公式CSEを模倣しない                                                  |
 | R-019 | 最新dependency advisoryを見落とす   |     Unknown |   High | lockfile、offline audit、CI、既知CVEの修正版確認、公開前に承認済み環境でregistry audit |
 | R-020 | 最終修正後の動的ゲートが未実行      |     Unknown |   High | lint／型／静的監査、追加回帰テスト、実公開前に通常環境で全動的ゲートを再実行           |
-| R-021 | Public repository／Pagesへ不適切な情報を公開する |      Medium |   High | secret・個人情報監査、source map非公開、AI作成・非公式・未校閲範囲・license未決定をREADMEで明示 |
+| R-021 | Public repository／Pagesへ不適切な情報を公開する |      Medium |   High | secret・個人情報監査、source map非公開、AI作成・非公式・未校閲範囲・D-026の権利留保方針をREADMEで明示 |
 
 ## Phase 10 residual review
 
@@ -31,5 +31,5 @@
 - R-005／R-007／R-008／R-017はWindows上の自動検証をPass。実配信Service Worker、iOS／Android、NVDA／VoiceOver、実zoom／forced colors、実音声は外部手動確認を残す。
 - R-019は最新registry auditを実行。React Router HighはRSC未使用、`brace-expansion`はbuild-onlyで外部入力なしと確認し、upstream stable修正版を追跡する。
 - R-020は通常権限環境でunit 551/551、coverage、root／subpath artifact、E2E 70/70を再実行し、解消した。
-- R-021はD-025で公開前の追跡ファイル・token pattern・commit作者情報を監査し、README冒頭へAI作成表示を追加。公開artifactと実Pages URLの再確認を残す。
+- R-021はD-025で公開前の追跡ファイル・token pattern・commit作者情報を監査し、README冒頭へAI作成表示を追加。公開artifactと実Pages URLを確認し、D-026でOSSライセンスを付与しない権利留保方針を確定した。
 - Phase 10終了時点で既知のCritical／High実装不具合は0件。残余リスクの再現手順とfallbackは`docs/22_PILOT_RELEASE_AUDIT.md`に記録する。
