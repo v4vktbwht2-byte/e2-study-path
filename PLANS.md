@@ -732,6 +732,7 @@ python scripts/verify_handoff.py
 - 最新auditの全依存10／本番2 Highを確認。React Routerは本PWAが使わないunstable RSC API限定、`brace-expansion`は公開runtimeへ含まれないbuild-only間接依存と評価し、stable修正版の追跡を残した。
 - D-026でOSSライセンスを付与しない権利留保方針を確定し、README、権利方針、decision log、release audit、backlogを同期した。
 - Pages再配信で検出したNode.js 20廃止警告に対し、`actions/upload-pages-artifact`と`actions/deploy-pages`をv5、`actions/configure-pages`をv6へ更新し、全Actionを公式のNode.js 24対応版へ移行した。
+- masterのcoverage CIで、レッスン再開見出しの表示完了後・focus effect完了前に判定するテスト競合が顕在化した。診断画面と同じくfocus完了を`waitFor`で待つよう修正し、対象テスト10回連続、全75ファイル・551/551件のcoverageをPassした。
 
 **Remote results**
 

@@ -1,10 +1,10 @@
 {
   "package": "E2 Study Path Codex Handoff Full Set",
   "packageVersion": "1.0.0",
-  "generatedAt": "2026-07-28T13:46:32+00:00",
+  "generatedAt": "2026-07-28T14:25:21+00:00",
   "manifestPolicy": "The manifest tracks repository source files and excludes PROJECT_MANIFEST.json, Git metadata, dependencies, and generated artifacts.",
   "fileCountExcludingManifest": 456,
-  "totalSizeBytesExcludingManifest": 2698393,
+  "totalSizeBytesExcludingManifest": 2699457,
   "files": [
     {
       "path": ".github/workflows/ci.yml",
@@ -13,8 +13,8 @@
     },
     {
       "path": ".github/workflows/deploy-pages.yml",
-      "sizeBytes": 2622,
-      "sha256": "f6300011eaa21bbd6bd17fbff558e40cc8176c6994f69daf89325d343dc45736"
+      "sizeBytes": 2723,
+      "sha256": "eeeadbb17c22670c719ed95cebbb4f8e0a93e704515f56d9d490102d48b9739a"
     },
     {
       "path": ".gitignore",
@@ -33,8 +33,8 @@
     },
     {
       "path": "CHANGELOG.md",
-      "sizeBytes": 9710,
-      "sha256": "8fadf9106eb5ad4b21a6281927b7b87c02ea065965ee076e3f065e77bffdcf89"
+      "sizeBytes": 9867,
+      "sha256": "212c5ca26ae2323b1918701cd5d0a32b416c8b67d1363d61c62d15c86cf91dc0"
     },
     {
       "path": "checklists/CODE_REVIEW.md",
@@ -263,8 +263,8 @@
     },
     {
       "path": "docs/20_IMPLEMENTATION_STATUS.md",
-      "sizeBytes": 12346,
-      "sha256": "aabfe97eefa51ead3b18293d2e8cdc7908dcce49108a6f847441a2c41f6ce202"
+      "sizeBytes": 12574,
+      "sha256": "68d1dea9f41c123d1741eac5726a26c541764ef2f64b580e12dc823777b4f4ce"
     },
     {
       "path": "docs/21_SOURCE_NOTES.md",
@@ -278,8 +278,8 @@
     },
     {
       "path": "docs/backlog.md",
-      "sizeBytes": 7493,
-      "sha256": "948f75eca783552a3797e65268aa96ddd1e16efe9206495d58de4989b29dd949"
+      "sizeBytes": 7741,
+      "sha256": "72aa0263f87bcc10e486457f989624b6b1c94cc5495582e9e15ee73155f9e4dc"
     },
     {
       "path": "e2e/app-shell.spec.ts",
@@ -388,8 +388,8 @@
     },
     {
       "path": "PLANS.md",
-      "sizeBytes": 60201,
-      "sha256": "3718a4ca40279e09e21db86c8bf7404b3ce0cd01fb0f0acbbc9d58ebbcd2352c"
+      "sizeBytes": 60510,
+      "sha256": "5e460e3419f57377934b816fbd6fd956e262a3934da9bce8a488bf1adc3d3a34"
     },
     {
       "path": "playwright.config.ts",
@@ -1318,8 +1318,8 @@
     },
     {
       "path": "src/features/lesson/LessonRenderer.test.tsx",
-      "sizeBytes": 22138,
-      "sha256": "cfec8a61c22db4a3adbf23ca2c4c8904eaf858aef0849b319067e1ba91496ce3"
+      "sizeBytes": 22159,
+      "sha256": "1bde017520c467b095b049bbddce192d9780c5faa4416fc347ee976c90963513"
     },
     {
       "path": "src/features/lesson/LessonRenderer.tsx",
