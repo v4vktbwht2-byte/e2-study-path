@@ -10,6 +10,7 @@
 - `master`のcoverage CIで顕在化した診断画面のfocus effect競合を修正し、見出しのfocus完了まで待機する安定したテストへ変更。
 - 日本時間0〜4時に暦日と午前4時開始の学習日がずれて失敗する進捗E2Eを修正し、日本時間0:30固定の境界回帰へ変更。
 - Public repositoryの`master` CIとGitHub Pages deployを成功させ、公開PWAの320px表示、manifest、Service Worker、3 icon、HTTPS応答を実URLで確認。
+- D-026でOSSライセンスを付与しない権利留保方針を確定し、個人学習目的、GitHub上の閲覧・Fork、第三者成果物の各ライセンスをREADMEと権利方針文書へ明記。
 
 ## 0.2.0 - 2026-07-27
 

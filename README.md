@@ -50,7 +50,7 @@ Phase 10の全品質ゲート実行結果は次のとおりです。
 
 最終コードレビューで追加した全ユーザーデータ保存の共有ロック、バックアップsnapshot barrier、回帰テストを含め、通常権限環境で`npm run check`、`npm run test:coverage`、root／subpathのbuildと`npm run verify:dist`、`npm run test:e2e`を再実行し、すべて成功しました。
 
-Web Speechの声質・発音、MediaRecorderの実権限・録音・再生、iPhone Safari／ホーム画面PWA、実際のwaiting Service Worker差替え、NVDA／VoiceOver、実ブラウザーの200% zoom・forced colorsは実機・配信環境での確認を継続します。2026-07-27の最新registry監査は、全依存10件／本番依存2件のHighを報告しました。本番側はこの静的PWAが使わないunstable RSC APIだけに影響するReact Router勧告、開発側はbuild時だけの間接`brace-expansion`です。いずれも該当機能・外部入力経路がなく、stableな修正版公開を追跡します。software licenseは未決定のため、公開repositoryの閲覧や公開PWAの利用が、source code・教材・文書の複製、改変、再配布を許諾するものではありません。
+Web Speechの声質・発音、MediaRecorderの実権限・録音・再生、iPhone Safari／ホーム画面PWA、実際のwaiting Service Worker差替え、NVDA／VoiceOver、実ブラウザーの200% zoom・forced colorsは実機・配信環境での確認を継続します。2026-07-27の最新registry監査は、全依存10件／本番依存2件のHighを報告しました。本番側はこの静的PWAが使わないunstable RSC APIだけに影響するReact Router勧告、開発側はbuild時だけの間接`brace-expansion`です。いずれも該当機能・外部入力経路がなく、stableな修正版公開を追跡します。本リポジトリは個人学習を主目的とし、オープンソースライセンスを付与せず権利を留保します。
 
 ## 必要環境
 
@@ -264,7 +264,7 @@ backupにはprofile、設定、復習予定、習熟度、進捗、回答履歴�
 
 ## 静的デプロイ
 
-公開操作はrepository ownerの承認を得てから行い、教材、画像、音声、依存assetを配信する権利と、未決定のsoftware licenseの扱いを先に確認してください。
+公開操作はrepository ownerの承認を得てから行い、教材、画像、音声、依存assetを配信する権利、第三者ライセンス、本リポジトリの権利留保方針を先に確認してください。
 
 ### GitHub Pages（採用構成）
 
@@ -388,7 +388,9 @@ JSONをeditorで保存し直さず、書き出した元fileを選びます。画
 
 本リポジトリの実装、文書、教材は生成AI（OpenAI Codex）を利用して作成・編集しています。人間による指示、検証、部分的な読み合わせを行っていますが、英語教育・試験対策の専門家による全件校閲済みではありません。内容の正確性、完全性、特定目的への適合性は保証されません。
 
-software licenseは未決定です。repositoryをPublicにしていることをopen sourceや再配布許可と解釈しないでください。明示的なlicenseが追加されるまで、著作権法上認められる場合を除き、source code、教材、文書の複製、改変、再配布を許諾していません。`LICENSE_AND_BRANDING.md`も確認してください。
+本リポジトリはリポジトリ所有者の個人学習を主目的とし、MIT、Apache-2.0、GPL等のオープンソースライセンスを付与しません。Public repositoryと公開PWAは閲覧・操作できますが、適用法令およびGitHub利用規約で認められる場合を除き、source code、文書、教材、自作icon等の複製、改変、再配布、販売、再hosting、他作品への組込みを許諾していません。GitHub上の閲覧・ForkにはGitHub利用規約が適用され、npm依存package等の第三者成果物には各ライセンスが引き続き適用されます。詳細は[`LICENSE_AND_BRANDING.md`](LICENSE_AND_BRANDING.md)を確認してください。
+
+GitHub公式の説明: [リポジトリのライセンス](https://docs.github.com/ja/repositories/managing-your-repositorys-settings-and-features/customizing-your-repository/licensing-a-repository)
 
 ## アクセシビリティ手動確認チェックリスト
 

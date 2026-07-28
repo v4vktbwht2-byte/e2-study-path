@@ -66,7 +66,7 @@ git status --short
 
 **Known limitations / follow-up**
 
-- Phase 00時点では公開先とソフトウェアライセンスは所有者判断待ち。Pages用設定は作成するが、認証を要する公開操作は行わない。
+- Phase 00時点では公開先とソフトウェアライセンスは所有者判断待ち。後にD-025でPublic GitHub Pages、D-026でOSSライセンスを付与しない権利留保方針を確定した。
 - iPhone実機とスクリーンリーダーの最終手動確認は外部確認が必要。
 
 ## Phase 01 — Scaffold, App Shell, and Design Foundation
@@ -576,7 +576,7 @@ python scripts/verify_handoff.py
 - CIを含めPlaywright retryは0回とし、flakyを再実行だけでgreen扱いにしない。失敗時のtrace、screenshot、HTML reportをartifactとして調査する。
 - Pages deployと通常CIを分離し、`dist/`はGitHub Pages以外の静的hostでもそのまま配信できるようにする。
 - source mapは既定で公開せず、外部telemetryとsecretを導入しない。
-- licenseは所有者判断が未確定のため追加しない。
+- Phase 09時点ではlicenseが所有者判断待ちのため追加しない。後にD-026で、個人学習目的としてOSSライセンスを付与しない方針を確定した。
 
 **Results**
 
@@ -669,7 +669,7 @@ python scripts/verify_handoff.py
 - 最新registry dependency audit、remote CI／Cloudflare Pages／Access、実配信waiting Service Worker、iOS／Android PWA、NVDA／VoiceOver、実zoom／forced colors、MediaRecorder、Web Speech、人間の英語校閲者による全件レビューを外部確認として残す。
 - 最終競合修正後の`npm run check`、`npm run test:coverage`、root／subpath build・artifact検証、`npm run test:e2e`は環境制限で未再実行。直前の全実行値と変更後の静的検証を証跡として残し、実公開前のHigh gateとする。
 - offline audit、artifact、E2E、fallbackはローカルで確認するが、実公開はHigh priorityの最新registry audit完了後に行う。
-- 公開ライセンスと正式名称はリポジトリ所有者の判断待ち。配備先はD-024でCloudflare Pages + Accessに確定した。
+- Phase 10完了時点では公開ライセンスと正式名称はリポジトリ所有者の判断待ちだった。後にD-025でPublic GitHub Pages、D-026でOSSライセンスを付与しない権利留保方針へ変更した。
 
 ## Post-Phase 10 — Private GitHub and Cloudflare handoff
 
@@ -696,14 +696,14 @@ python scripts/verify_handoff.py
 
 **Goal**
 
-Cloudflareの設定を必要とせず、スマホから公開URLを開いてPWAとしてinstallできるGitHub Pages構成へ変更する。第三者がrepositoryと教材を閲覧する前提で、AI作成・非公式・未校閲範囲とlicense未決定をREADMEへ明示する。
+Cloudflareの設定を必要とせず、スマホから公開URLを開いてPWAとしてinstallできるGitHub Pages構成へ変更する。第三者がrepositoryと教材を閲覧する前提で、AI作成・非公式・未校閲範囲と権利条件をREADMEへ明示する。
 
 **Decisions made**
 
 - D-024をD-025で置き換え、`v4vktbwht2-byte/e2-study-path`をPublic repositoryへ変更する。
 - GitHub Pagesのproject URL `/e2-study-path/`へ、既定branchのCI成功commitだけを自動deployする。
 - README冒頭とlicense節に、実装・文書・教材が生成AI（OpenAI Codex）を利用して作成・編集されたこと、専門家による全件校閲済みではないことを表示する。
-- licenseが追加されるまでは、Public表示を複製・改変・再配布の許諾と扱わない。
+- D-026で、個人学習を主目的としてOSSライセンスを付与せず、Public表示を複製・改変・再配布等の許諾と扱わない方針を確定する。
 
 **Verification**
 
@@ -723,13 +723,14 @@ python scripts/verify_handoff.py
 **Known limitations**
 
 - 公開URLでのiPhone／Android install、standalone、offline再起動、waiting Service Worker差替えは実端末確認を残す。
-- software license、正式名称、人間の英語校閲者による全件レビューは所有者判断・Phase 11作業として残す。
+- 正式名称と人間の英語校閲者による全件レビューは所有者判断・Phase 11作業として残す。software licenseはD-026で確定済み。
 
 **Local results**
 
 - registry接続の`npm ci`、`npm run check`、75 files・551/551 unit/component、coverage lines 80.18%をPass。
 - root／`/e2-study-path/` buildと71ファイルのartifact検証、desktop／320px E2E 70/70をPass。
 - 最新auditの全依存10／本番2 Highを確認。React Routerは本PWAが使わないunstable RSC API限定、`brace-expansion`は公開runtimeへ含まれないbuild-only間接依存と評価し、stable修正版の追跡を残した。
+- D-026でOSSライセンスを付与しない権利留保方針を確定し、README、権利方針、decision log、release audit、backlogを同期した。
 
 **Remote results**
 
