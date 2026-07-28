@@ -769,3 +769,15 @@ python scripts/verify_handoff.py
 ```
 
 実配信確認は、旧版タブを保持したままPages deploy完了を待ち、「アプリの更新があります」→「保存して更新」→version `0.2.1`→1日30分保持の順に確認する。
+
+**Results**
+
+- ローカルで75 test files・552/552件、coverage lines 80.19%、全E2E desktop／320px 70/70、root／subpath build、71ファイルartifact、format、handoff manifestをPassした。
+- 全E2Eの負荷実行で、同じセクションの複数回答保存が古い回答済み集合を上書きし得る競合を検出した。最新集合をrefへ累積するよう修正し、複数回答同時確定の回帰テストを追加した。
+- PR #10、merge commit `c8032ad`、master CI run `30372613667`、GitHub Pages deploy run `30373042462`をPassした。
+- 実配信`0.2.0`で初回設定済み・1日30分を確認後、`0.2.1`を配信した。更新通知と「保存して更新」を確認し、差替え後と追加再読込後の両方でapp `0.2.1`、1日30分、content `0.7.0`、DB `2`が保持された。
+
+**Remaining**
+
+- upstream dependency advisoryは互換するstable修正版待ち。
+- iPhone／Android install・standalone・offline再起動、NVDA／VoiceOver、実zoom／forced colors、MediaRecorder、Web Speech、人間の英語校閲を継続する。

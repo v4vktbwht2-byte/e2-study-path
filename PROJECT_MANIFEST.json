@@ -1,10 +1,10 @@
 {
   "package": "E2 Study Path Codex Handoff Full Set",
   "packageVersion": "1.0.0",
-  "generatedAt": "2026-07-28T15:03:29+00:00",
+  "generatedAt": "2026-07-28T15:28:53+00:00",
   "manifestPolicy": "The manifest tracks repository source files and excludes PROJECT_MANIFEST.json, Git metadata, dependencies, and generated artifacts.",
   "fileCountExcludingManifest": 456,
-  "totalSizeBytesExcludingManifest": 2703339,
+  "totalSizeBytesExcludingManifest": 2715249,
   "files": [
     {
       "path": ".github/workflows/ci.yml",
@@ -33,8 +33,8 @@
     },
     {
       "path": "CHANGELOG.md",
-      "sizeBytes": 10270,
-      "sha256": "a8ddbc7c62b8a768b49ec68d084e3b31bdbcb7fca7e469f851216cfb035148d2"
+      "sizeBytes": 10461,
+      "sha256": "85e998bbccd410041adce933bfd46a087ac2c33171e34abc4dd5687dd3beea31"
     },
     {
       "path": "checklists/CODE_REVIEW.md",
@@ -243,13 +243,13 @@
     },
     {
       "path": "docs/16_DEPLOYMENT_OPERATIONS.md",
-      "sizeBytes": 2811,
-      "sha256": "7add5e1d6f9889c53c7ee51e3b2684dee01ca86f909e7369c2ff0b6ef432e9a4"
+      "sizeBytes": 3227,
+      "sha256": "fe1206e0ec451d388f8b0174bed8efccb63a40aa8839fde6ba448062cdc227c8"
     },
     {
       "path": "docs/17_ACCEPTANCE_CRITERIA_TRACEABILITY.md",
-      "sizeBytes": 11972,
-      "sha256": "0cba0d1a30439e15a0adc2a88f9660ebf8d57b981739d798e72a80a25784e3b8"
+      "sizeBytes": 12018,
+      "sha256": "ff464a29bb52c59451b0fb051b148471c6875de6d0db7eed616568e3edfd03f0"
     },
     {
       "path": "docs/18_RISK_REGISTER.md",
@@ -263,8 +263,8 @@
     },
     {
       "path": "docs/20_IMPLEMENTATION_STATUS.md",
-      "sizeBytes": 12577,
-      "sha256": "e1ff57d7cc7011f5864d952d6cfd31c402f761686f29c999545312b1d4b48934"
+      "sizeBytes": 12995,
+      "sha256": "8d78a125d88aef02bf9e4daa428dce91092470ebc81cebaa66b9da1469fef11d"
     },
     {
       "path": "docs/21_SOURCE_NOTES.md",
@@ -273,13 +273,13 @@
     },
     {
       "path": "docs/22_PILOT_RELEASE_AUDIT.md",
-      "sizeBytes": 14165,
-      "sha256": "decea7c55b617d824bcd8ae82a2f0f4862badbcf55d6bb2240bc6a86ab8149a5"
+      "sizeBytes": 14197,
+      "sha256": "9bc8e25c3a193cf220ae78bfc7f43817ef365773e6eb77fa87fc79d5e7aeff3b"
     },
     {
       "path": "docs/backlog.md",
-      "sizeBytes": 7745,
-      "sha256": "9c5a3475864310fa51987808893c67584cbfc76b510cd762374cda94cf53f01d"
+      "sizeBytes": 7954,
+      "sha256": "eea89bcac9e11b54ebb7c086eaeae301f1ac7441cd535a5c42648575b6d4eb97"
     },
     {
       "path": "e2e/app-shell.spec.ts",
@@ -353,8 +353,8 @@
     },
     {
       "path": "package-lock.json",
-      "sizeBytes": 330717,
-      "sha256": "9a6ebd4304cb02b3970806bb1194630bdc01bba12a4dc9a023164d9a44b8e30c"
+      "sizeBytes": 340051,
+      "sha256": "7c955ead271120f6a3d793835bfd36c8e39e1c3525c4352aefeaf96bf99e009e"
     },
     {
       "path": "package.json",
@@ -388,8 +388,8 @@
     },
     {
       "path": "PLANS.md",
-      "sizeBytes": 61788,
-      "sha256": "f0ee0bb67f00987f7cd4839f5c155a5305c94153a0097632feb36c20c75753e2"
+      "sizeBytes": 62921,
+      "sha256": "8457cef8d68edabd707995289e66e6b67f3f0e1d3c03918a5a086b76f34187b2"
     },
     {
       "path": "playwright.config.ts",
@@ -503,8 +503,8 @@
     },
     {
       "path": "README.md",
-      "sizeBytes": 35102,
-      "sha256": "a100999847bc48b628ad84eec3d31f8a50b24aec6cebd4456fb680768aa315f2"
+      "sizeBytes": 35233,
+      "sha256": "25f63b7348172638fd5e49d20866cb0f1568a6593f1fd824ff3a9123e19fd210"
     },
     {
       "path": "scripts/generate_manifest.py",

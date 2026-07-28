@@ -5,16 +5,16 @@
 ## 残タスク（優先度順）
 
 1. [中] upstream dependency advisory追跡 — React RouterはRSC未使用、`brace-expansion`はbuild-only。互換するstable修正版が出たら更新。
-2. [中] 実配信環境でのwaiting Service Worker差替え確認 — 更新案内、保存完了、更新適用、再読込を実際の旧版・新版で確認。
-3. [中] iPhone／Android PWA実機確認 — install、standalone、safe area、offline再起動を確認。
-4. [中] NVDA／VoiceOverによる主要フロー確認 — 実機・支援技術で見出し、label、live region、英日発音切替を確認。
-5. [中] 実ブラウザーの200% zoom・forced colors確認 — 対応環境で情報と操作が失われないことを確認。
-6. [中] MediaRecorder・録音権限の実機確認 — 対応端末で権限・録音・再生・削除を確認。
-7. [中] Phase 11教材batch QA — 人間の英語校閲者が全教材を小batchで校正し、文法、自然さ、難度、文化的偏りを記録。
-8. [低] Web Speechの声質・発音確認 — 利用端末の音声エンジン依存。
+2. [中] iPhone／Android PWA実機確認 — install、standalone、safe area、offline再起動を確認。
+3. [中] NVDA／VoiceOverによる主要フロー確認 — 実機・支援技術で見出し、label、live region、英日発音切替を確認。
+4. [中] 実ブラウザーの200% zoom・forced colors確認 — 対応環境で情報と操作が失われないことを確認。
+5. [中] MediaRecorder・録音権限の実機確認 — 対応端末で権限・録音・再生・削除を確認。
+6. [中] Phase 11教材batch QA — 人間の英語校閲者が全教材を小batchで校正し、文法、自然さ、難度、文化的偏りを記録。
+7. [低] Web Speechの声質・発音確認 — 利用端末の音声エンジン依存。
 
 ## 完了
 
+- 2026-07-29: PR #10、merge commit `c8032ad`、master CI run `30372613667`、GitHub Pages deploy run `30373042462`をPass。公開`0.2.0`で1日30分を保存したまま更新通知→「保存して更新」→`0.2.1`→追加再読込を行い、設定、教材`0.7.0`、DB `2`の保持を確認。実配信waiting Service Worker差替えを残タスクから完了へ移した。
 - 2026-07-28: master coverage CIで顕在化したレッスン再開見出しのfocus effect競合を、focus完了まで`waitFor`する安定したテストへ修正。対象テスト10回連続、全75ファイル・551/551件のcoverageをPass。
 - 2026-07-28: Pages再配信で検出したNode.js 20廃止警告に対し、`actions/upload-pages-artifact`と`actions/deploy-pages`をv5、`actions/configure-pages`をv6へ更新し、全Actionを公式のNode.js 24対応版へ移行。
 - 2026-07-28: D-026で「OSSライセンスを付与せず権利留保」を確定。READMEと`LICENSE_AND_BRANDING.md`へ個人学習目的、複製・改変・再配布等を許諾しないこと、GitHub利用規約上の閲覧・Fork、第三者成果物の各ライセンスを明記し、公開ライセンス判断を残タスクから完了へ移した。
