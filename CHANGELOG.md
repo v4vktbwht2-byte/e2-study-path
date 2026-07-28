@@ -12,6 +12,7 @@
 - Public repositoryの`master` CIとGitHub Pages deployを成功させ、公開PWAの320px表示、manifest、Service Worker、3 icon、HTTPS応答を実URLで確認。
 - D-026でOSSライセンスを付与しない権利留保方針を確定し、個人学習目的、GitHub上の閲覧・Fork、第三者成果物の各ライセンスをREADMEと権利方針文書へ明記。
 - GitHub Pages workflowの`upload-pages-artifact`と`deploy-pages`をv5、`configure-pages`をv6へ更新し、全ActionをNode.js 24対応版へ移行。
+- masterのcoverage CIで顕在化したレッスン再開見出しのfocus effect競合を、focus完了まで待機する安定したテストへ修正。
 
 ## 0.2.0 - 2026-07-27
 

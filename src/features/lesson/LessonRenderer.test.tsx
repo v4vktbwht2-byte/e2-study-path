@@ -207,7 +207,7 @@ describe("レッスンレンダラー", () => {
       name: "確認",
       level: 2,
     });
-    expect(heading).toHaveFocus();
+    await waitFor(() => expect(heading).toHaveFocus());
     expect(screen.getByText(/前回の続きから再開しました/)).toBeInTheDocument();
     expect(screen.getByRole("progressbar")).toHaveAttribute("aria-valuenow", "2");
   });
