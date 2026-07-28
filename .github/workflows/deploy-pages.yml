@@ -94,7 +94,7 @@ jobs:
 
     steps:
       - name: GitHub Pagesを準備
-        uses: actions/configure-pages@v5
+        uses: actions/configure-pages@v6
 
       - name: GitHub Pagesへ反映
         id: deployment

@@ -15,7 +15,7 @@
 
 ## 完了
 
-- 2026-07-28: Pages再配信で検出した`actions/upload-artifact`のNode.js 20廃止警告に対し、`actions/upload-pages-artifact`と`actions/deploy-pages`を公式のNode.js 24対応v5へ更新。
+- 2026-07-28: Pages再配信で検出したNode.js 20廃止警告に対し、`actions/upload-pages-artifact`と`actions/deploy-pages`をv5、`actions/configure-pages`をv6へ更新し、全Actionを公式のNode.js 24対応版へ移行。
 - 2026-07-28: D-026で「OSSライセンスを付与せず権利留保」を確定。READMEと`LICENSE_AND_BRANDING.md`へ個人学習目的、複製・改変・再配布等を許諾しないこと、GitHub利用規約上の閲覧・Fork、第三者成果物の各ライセンスを明記し、公開ライセンス判断を残タスクから完了へ移した。
 - 2026-07-28: `v4vktbwht2-byte/e2-study-path`をPublicで公開し、merge commit `b15897b`の`master` CIとGitHub Pages deploy run `30308497828`をPass。公開PWAの320px表示、横overflowなし、オフライン準備完了表示、console error 0、HTML／manifest／Service Worker／3 iconのHTTPS 200とrepository base pathを確認。
 - 2026-07-28: `master` CIが日本時間0〜4時だけ失敗する進捗E2Eの日付境界不整合を修正。seedを暦日ではなく午前4時開始の学習日へそろえ、日本時間0:30固定のdesktop／320px回帰を2回連続Pass。全E2E 70/70、`npm run check`の551/551、教材検証、本番buildもPass。

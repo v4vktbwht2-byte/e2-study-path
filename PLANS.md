@@ -731,7 +731,7 @@ python scripts/verify_handoff.py
 - root／`/e2-study-path/` buildと71ファイルのartifact検証、desktop／320px E2E 70/70をPass。
 - 最新auditの全依存10／本番2 Highを確認。React Routerは本PWAが使わないunstable RSC API限定、`brace-expansion`は公開runtimeへ含まれないbuild-only間接依存と評価し、stable修正版の追跡を残した。
 - D-026でOSSライセンスを付与しない権利留保方針を確定し、README、権利方針、decision log、release audit、backlogを同期した。
-- Pages再配信で検出したNode.js 20廃止警告に対し、`actions/upload-pages-artifact`と`actions/deploy-pages`を公式のNode.js 24対応v5へ更新した。
+- Pages再配信で検出したNode.js 20廃止警告に対し、`actions/upload-pages-artifact`と`actions/deploy-pages`をv5、`actions/configure-pages`をv6へ更新し、全Actionを公式のNode.js 24対応版へ移行した。
 
 **Remote results**
 

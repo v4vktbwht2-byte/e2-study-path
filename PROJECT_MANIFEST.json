@@ -1,10 +1,10 @@
 {
   "package": "E2 Study Path Codex Handoff Full Set",
   "packageVersion": "1.0.0",
-  "generatedAt": "2026-07-28T13:31:54+00:00",
+  "generatedAt": "2026-07-28T13:46:32+00:00",
   "manifestPolicy": "The manifest tracks repository source files and excludes PROJECT_MANIFEST.json, Git metadata, dependencies, and generated artifacts.",
   "fileCountExcludingManifest": 456,
-  "totalSizeBytesExcludingManifest": 2698204,
+  "totalSizeBytesExcludingManifest": 2698393,
   "files": [
     {
       "path": ".github/workflows/ci.yml",
@@ -14,7 +14,7 @@
     {
       "path": ".github/workflows/deploy-pages.yml",
       "sizeBytes": 2622,
-      "sha256": "fd90c669d8543b9898af9756e90231705580a1820580f89aba8b92b7e85f62b2"
+      "sha256": "f6300011eaa21bbd6bd17fbff558e40cc8176c6994f69daf89325d343dc45736"
     },
     {
       "path": ".gitignore",
@@ -33,8 +33,8 @@
     },
     {
       "path": "CHANGELOG.md",
-      "sizeBytes": 9657,
-      "sha256": "13df2deb581ef9df9e5be0349bc7cb2ae7e0ad275873700964730459027c1971"
+      "sizeBytes": 9710,
+      "sha256": "8fadf9106eb5ad4b21a6281927b7b87c02ea065965ee076e3f065e77bffdcf89"
     },
     {
       "path": "checklists/CODE_REVIEW.md",
@@ -263,8 +263,8 @@
     },
     {
       "path": "docs/20_IMPLEMENTATION_STATUS.md",
-      "sizeBytes": 12313,
-      "sha256": "05dfc0706d61372be6174dab0d4b914226e8788a31e27233bb64b000cbd06309"
+      "sizeBytes": 12346,
+      "sha256": "aabfe97eefa51ead3b18293d2e8cdc7908dcce49108a6f847441a2c41f6ce202"
     },
     {
       "path": "docs/21_SOURCE_NOTES.md",
@@ -278,8 +278,8 @@
     },
     {
       "path": "docs/backlog.md",
-      "sizeBytes": 7455,
-      "sha256": "9085d8a38b8f6e6ee3d1306a9898b3a557b7432d281357cac0953e0e6392a140"
+      "sizeBytes": 7493,
+      "sha256": "948f75eca783552a3797e65268aa96ddd1e16efe9206495d58de4989b29dd949"
     },
     {
       "path": "e2e/app-shell.spec.ts",
@@ -388,8 +388,8 @@
     },
     {
       "path": "PLANS.md",
-      "sizeBytes": 60136,
-      "sha256": "4f9adc15cdf8512e628b7780dd92b5fbfd9a4c2d10e79ca8bbd9955f74c53455"
+      "sizeBytes": 60201,
+      "sha256": "3718a4ca40279e09e21db86c8bf7404b3ce0cd01fb0f0acbbc9d58ebbcd2352c"
     },
     {
       "path": "playwright.config.ts",
